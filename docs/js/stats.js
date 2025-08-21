@@ -118,6 +118,7 @@
       }
     });
 
+    });
     // Cálculo de médias
     const totalProps = contributions.length;
     const totalArea = contributions.reduce((sum, c) => sum + c.area, 0);
@@ -274,7 +275,16 @@
     if(sortAreaBtn) sortAreaBtn.addEventListener('click',()=>window.webmapStats.updateStats('area'));
     if(sortGreenBtn) sortGreenBtn.addEventListener('click',()=>window.webmapStats.updateStats('areaverd'));
 
+    // Seleciona a div que mostrará as coordenadas (já criada no HTML ou no CSS)
+  var coordsDiv = document.getElementById('coords');
+
+
+  // Evento para atualizar coordenadas
+  map.on('mousemove', function(e) {
+    coordsDiv.innerHTML = 'Lat: ' + e.latlng.lat.toFixed(6) +
+                        '<br>Lng: ' + e.latlng.lng.toFixed(6);
+
     panel.classList.add('hidden');
   });
-
+  
 })();

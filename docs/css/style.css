@@ -181,6 +181,18 @@ html, body {
 @media (max-width:480px){
   #github-logo{ width:38px; height:38px; padding:5px; bottom:12px; }
 }
+
+#coords {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: white;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  pointer-events: none; /* não bloqueia cliques no mapa */
+  z-index: 1000; /* fica sobre o mapa */
+}
 /* Gráficos internos */
 .chart-section { position: relative; margin-bottom: 20px; }
 .chart-section h4 {
