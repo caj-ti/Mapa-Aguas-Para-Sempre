@@ -9,3 +9,5 @@ Project of Webmap for the PSA environmental program "Águas Para Sempre", by Com
 built = (QGIS) (qgis2web) (Leaflet) (mod)
 
 [Access the interactive Webmap](https://kongvinter.github.io/-guasparasempreMAPA/)
+
+<img src="docs/images/happydropwater.png" alt="Dropwater" width="200"/>
