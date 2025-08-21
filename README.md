@@ -5,7 +5,7 @@
 Project of Webmap for the PSA environmental program "Águas Para Sempre", by Companhia Águas de Joinville,City of Joinville, Santa Catarina, Brazil. 2025
 
 [![Águas para Sempre](docs/images/LOGOPSA.png)
-
+<img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" style="max-width:200px; width:100%; height:auto;"/>
 built = (QGIS) (qgis2web) (Leaflet)
 other functions (js. css. html)
 
