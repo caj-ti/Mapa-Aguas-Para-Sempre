@@ -275,6 +275,49 @@
     if(sortAreaBtn) sortAreaBtn.addEventListener('click',()=>window.webmapStats.updateStats('area'));
     if(sortGreenBtn) sortGreenBtn.addEventListener('click',()=>window.webmapStats.updateStats('areaverd'));
 
+    // === CONTROLES DE ROTAÇÃO ===
+const rotateBtn = document.createElement('button');
+rotateBtn.textContent = 'Girar 45°';
+rotateBtn.style.position = 'absolute';
+rotateBtn.style.top = '80px';
+rotateBtn.style.right = '10px';
+rotateBtn.style.zIndex = 1000;
+document.body.appendChild(rotateBtn);
+
+let currentAngle = 0;
+
+// Função para girar o mapa
+function rotateMap(degrees) {
+    currentAngle += degrees;
+    if(currentAngle >= 360) currentAngle -= 360;
+    if(window.map && typeof window.map.setBearing === 'function'){
+        window.map.setBearing(currentAngle); // Plugin RotateMap
+    } else {
+        console.warn('Map rotation não disponível. Verifique se o plugin está carregado.');
+    }
+}
+
+rotateBtn.addEventListener('click', () => rotateMap(45));
+
+// Slider para rotação contínua
+const rotateSlider = document.createElement('input');
+rotateSlider.type = 'range';
+rotateSlider.min = 0;
+rotateSlider.max = 360;
+rotateSlider.value = 0;
+rotateSlider.style.position = 'absolute';
+rotateSlider.style.top = '110px';
+rotateSlider.style.right = '10px';
+rotateSlider.style.zIndex = 1000;
+document.body.appendChild(rotateSlider);
+
+rotateSlider.addEventListener('input', function(){
+    currentAngle = parseInt(this.value);
+    if(window.map && typeof window.map.setBearing === 'function'){
+        window.map.setBearing(currentAngle);
+    }
+});
+  
     // Seleciona a div que mostrará as coordenadas (já criada no HTML ou no CSS)
   var coordsDiv = document.getElementById('coords');
 
