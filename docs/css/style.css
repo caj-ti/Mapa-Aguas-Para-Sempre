@@ -183,15 +183,17 @@ html, body {
 }
 
 #coords {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+  position: fixed;
+  bottom: 16px;       /* mesma altura do logo do GitHub */
+  left: calc(50% + 60px); /* desloca para a direita do logo */
   background: white;
-  padding: 5px;
+  padding: 6px 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  pointer-events: none; /* não bloqueia cliques no mapa */
-  z-index: 1000; /* fica sobre o mapa */
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  pointer-events: none;
+  z-index: 1000;
 }
 /* Gráficos internos */
 .chart-section { position: relative; margin-bottom: 20px; }

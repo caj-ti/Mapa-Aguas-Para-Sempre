@@ -1,15 +1,6 @@
 /// js/stats.js — painel de estatísticas com destaque de camadas únicas
 (function(){
-
-  (function(){
-    const isProduction = window.location.hostname !== 'localhost';
-    if(isProduction){
-      console.log = function(){};
-      console.warn = function(){};
-      console.error = function(){};
-      window.alert = function(){};
-    }
-    
+   
   })();
   function parseNumber(v){
     if (v === null || v === undefined) return 0;
@@ -127,8 +118,7 @@
         layersToHighlight.push(layer);
       }
     });
-
-    });
+    
     // Cálculo de médias
     const totalProps = contributions.length;
     const totalArea = contributions.reduce((sum, c) => sum + c.area, 0);
