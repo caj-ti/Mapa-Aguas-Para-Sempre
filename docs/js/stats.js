@@ -283,8 +283,6 @@
   map.on('mousemove', function(e) {
     coordsDiv.innerHTML = 'Lat: ' + e.latlng.lat.toFixed(6) +
                         '<br>Lng: ' + e.latlng.lng.toFixed(6);
-
-    panel.classList.add('hidden');
   });
   
 })();
