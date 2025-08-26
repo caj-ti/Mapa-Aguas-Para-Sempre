@@ -8,7 +8,7 @@ Project of Webmap for the PSA environmental program "Águas Para Sempre", by Com
 
 <img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="200"/>          <img src="docs/images/logoteste.png" alt="Águas para Sempre" width="400"/>
 
-[Leaflet](https://leafletjs.com/)  QGIS + [qgis2web plugin](https://plugins.qgis.org/plugins/qgis2web/) 
+[Leaflet](https://leafletjs.com/)  QGIS + [qgis2web plugin](https://plugins.qgis.org/plugins/qgis2web/)  / + mod
 
 [Access the interactive Webmap](https://kongvinter.github.io/-guasparasempreMAPA/)
 
