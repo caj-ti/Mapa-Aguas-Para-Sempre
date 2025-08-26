@@ -209,7 +209,12 @@ html, body {
 }
 .expand-btn:hover { opacity: 1; }
 
-
+#scale {
+  position: fixed;
+  bottom: 16px;            /* mesma altura do GitHub logo */
+  left: calc(50% - 90px);  /* ajusta para ficar à esquerda do logo */
+  z-index: 6500;           /* acima do mapa, mas abaixo do GitHub logo */
+}
 /* a escala entra aqui, no fluxo */
 .leaflet-scalebar {
   background: rgba(255,255,255,0.95);
