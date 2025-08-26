@@ -254,32 +254,6 @@
     window.webmapStats.contributions = contributions;
   }
 
-  // Função para atualizar escala
-  function updateScale(map, container) {
-  if(!map || !container) return;
-  container.innerHTML = '';
-
-  const zoom = map.getZoom();
-  const scaleMeters = map.options.crs.scale(zoom); // aproximação
-  const roundedScale = Math.round(scaleMeters / 100) * 100;
-
-  const scaleBar = document.createElement('div');
-  scaleBar.className = 'leaflet-scalebar';
-
-  const segments = document.createElement('div');
-  segments.className = 'scale-segments';
-  const seg = document.createElement('div');
-  seg.className = 'scale-seg dark';
-  segments.appendChild(seg);
-
-  const label = document.createElement('div');
-  label.className = 'scale-label';
-  label.textContent = roundedScale + ' m';
-
-  scaleBar.appendChild(segments);
-  scaleBar.appendChild(label);
-  container.appendChild(scaleBar);
-  }
 
   window.webmapStats={ updateStats, contributions: [] };
 
@@ -322,10 +296,3 @@
   });
   
 }
-
-// Escala
-const scaleContainer = document.getElementById('scale');
-if(map && scaleContainer){
-  updateScale(map, scaleContainer);
-  map.on('zoom', ()=>updateScale(map, scaleContainer));
-  window.addEventListener}
