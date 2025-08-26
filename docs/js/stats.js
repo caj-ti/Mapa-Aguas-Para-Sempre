@@ -267,63 +267,6 @@
     return niceFraction * Math.pow(10, exponent);
   }
   
-  // ---------- CRIA CONTAINER ----------
-  function createScaleContainer() {
-    // evita duplicação
-    let existing = document.querySelector('.leaflet-scalebar');
-    if (existing) return existing;
-  
-    const el = document.createElement('div');
-    el.className = 'leaflet-scalebar';
-    el.innerHTML = `
-      <div class="scale-segments" id="scale-seg-container"></div>
-      <div class="scale-label" id="scale-label">—</div>
-    `;
-  
-    // adiciona dentro do #map-controls (não no body!)
-    const controls = document.getElementById('map-controls');
-    if (controls) controls.appendChild(el);
-  
-    return el;
-  }
-  
-  // ---------- ATUALIZA A ESCALA ----------
-  function updateScale(map, container) {
-    if (!map || !container) return;
-    const segContainer = container.querySelector('#scale-seg-container');
-    const label = container.querySelector('#scale-label');
-  
-    const px = Math.min(150, Math.max(60, Math.round(map.getSize().x * 0.12)));
-    const centerY = Math.round(map.getSize().y / 2);
-    const p1 = L.point(0, centerY);
-    const p2 = L.point(px, centerY);
-    const latlng1 = map.containerPointToLatLng(p1);
-    const latlng2 = map.containerPointToLatLng(p2);
-  
-    const meters = map.distance(latlng1, latlng2);
-    if (!isFinite(meters) || meters <= 0) return;
-  
-    const niceMeters = niceNumber(meters);
-    const ratio = niceMeters / meters;
-    const displayPx = Math.round(px * ratio);
-  
-    const segCount = niceMeters >= 1000 ? 2 : 4;
-    const segPx = Math.max(6, Math.round(displayPx / segCount));
-  
-    segContainer.innerHTML = '';
-    for (let i = 0; i < segCount; i++) {
-      const seg = document.createElement('div');
-      seg.className = 'scale-seg';
-      seg.style.flex = `0 0 ${segPx}px`;
-      if (i % 2 === 0) seg.classList.add('dark');
-      segContainer.appendChild(seg);
-    }
-  
-    let text;
-    if (niceMeters >= 1000) text = `${(niceMeters/1000).toFixed(2).replace(/\.?0+$/,'')} km`;
-    else text = `${niceMeters.toLocaleString('pt-BR')} m`;
-    label.textContent = text;
-  }
 
   document.addEventListener('DOMContentLoaded',function(){
     const btn=document.getElementById("stats-btn");
@@ -351,9 +294,13 @@
                         '<br>Lng: ' + e.latlng.lng.toFixed(6);
   });
   
-  // cria e atualiza escala
-  const container = createScaleContainer();
-  updateScale(map, container);
-  map.on('zoom move resize', ()=> updateScale(map, container));
-  window.addEventListener('resize', ()=> updateScale(map, container));
-  });
+ // Escala
+ const scaleContainer = document.getElementById('scale');
+ if(window.map && scaleContainer){
+   updateScale(window.map, scaleContainer);
+   window.map.on('zoom move resize', ()=> updateScale(window.map, scaleContainer));
+   window.addEventListener('resize', ()=> updateScale(window.map, scaleContainer));
+ }
+});
+
+window.webmapStats={ updateStats, contributions: [] };
