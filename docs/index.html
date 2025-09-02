@@ -12,10 +12,10 @@
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/leaflet.photon.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
-        <!-- Estilo JRPG customizado (painel e botões) -->
+        <!-- css estilo -->
         <link rel="stylesheet" href="css/style.css">
 
-        <!-- Fonte pixel (estética anos 2000 JRPG) -->
+        <!-- Fonte -->
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
         <style>
@@ -26,24 +26,27 @@
             margin: 0;
         }
         </style>
-        <title>Áreas de Propriedades Aderidas ao Programa PSA</title>
+        <title>Mapa do Programa Águas para Sempre</title>
     </head>
     <body>
-        <!-- Botão Estatísticas (posicionado à esquerda conforme seu CSS original) -->
-        <!-- Botão Estatísticas com ícone SVG -->
+        <!-- Botão INFO -->
+        <!-- Botão INFO com ícone SVG -->
         <button id="stats-btn">
             <img src="images/info.svg" alt="Estatísticas">
           </button>
 
         
-          <div id="coords"></div> <!-- apenas referência ao CSS -->
-
-    
+          <div id="coords"></div>
+          <!-- TESTE -->
+          <div id="scale-control" class="scale-control">
+            <div id="scale-bar" class="scale-bar"></div>
+            <div id="scale-text" class="scale-text">0 m</div>
+          </div>
 
           <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
           <script src="stats.js"></script>
   
-         <!-- Mapa (conteúdo qgis2web) -->
+         <!-- Mapa -->
         <div id="map"></div>
         
         <a id="logo-link"
@@ -60,7 +63,7 @@
       title="GitHub — psamap">
       <img id="github-logo" src="images/githublogo.svg" alt="GitHub — psamap">
     </a>
-        <!-- Painel lateral JRPG (escuro, integrado) -->
+        <!-- Painel lateral-->
         <div id="stats-panel" class="hidden stats-panel side-panel">
           <div class="stats-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <h2>Informações</h2>
@@ -207,7 +210,7 @@
         <!-- Chart.js (biblioteca) -->
             <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
-        <!-- script de estatísticas (versão adaptada) -->
+        <!-- script stats -->
             <script src="js/stats.js"></script>
 
             <script>

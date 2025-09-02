@@ -275,6 +275,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if(sortAreaBtn) sortAreaBtn.addEventListener('click',()=>window.webmapStats.updateStats('area'));
   if(sortGreenBtn) sortGreenBtn.addEventListener('click',()=>window.webmapStats.updateStats('areaverd'));
 
+
   // Seleciona a div que mostrará as coordenadas (já criada no HTML ou no CSS)
 var coordsDiv = document.getElementById('coords');
 
@@ -284,5 +285,114 @@ map.on('mousemove', function(e) {
   coordsDiv.innerHTML = 'Lat: ' + e.latlng.lat.toFixed(6) +
                       '<br>Lng: ' + e.latlng.lng.toFixed(6);
 });
+  setTimeout(() => {
+    const map = window.map || window._map;
+    if (map) {
+      // Atualizar escala no carregamento
+      updateScaleLeaflet();
+      
+      // Atualizar escala quando o zoom mudar
+      map.on('zoomend moveend', updateScaleLeaflet);
+      
+      // Atualizar escala periodicamente (opcional)
+      setInterval(updateScaleLeaflet, 1000);
+    }
+  }, 1000);
+// Função para calcular e atualizar a barra de escala
+function updateScale() {
+  const map = window.map || window._map;
+  if (!map) return;
+  
+  const scaleBar = document.getElementById('scale-bar');
+  const scaleText = document.getElementById('scale-text');
+  if (!scaleBar || !scaleText) return;
 
-})();
+  // Obter o centro do mapa e calcular distância
+  const center = map.getCenter();
+  const zoom = map.getZoom();
+  
+  // Calcular pixels por metro no zoom atual
+  const earthRadius = 6371000; // Raio da Terra em metros
+  const pixelsPerDegree = 256 * Math.pow(2, zoom) / 360;
+  const metersPerPixel = (2 * Math.PI * earthRadius * Math.cos(center.lat * Math.PI / 180)) / (256 * Math.pow(2, zoom));
+  
+  // Definir larguras padrão para a barra (em pixels)
+  const standardWidths = [50, 100, 150, 200];
+  let bestWidth = standardWidths[0];
+  let distance = bestWidth * metersPerPixel;
+  
+  // Encontrar a melhor representação
+  for (let width of standardWidths) {
+    const testDistance = width * metersPerPixel;
+    if (testDistance < 1000 && testDistance > 10) {
+      bestWidth = width;
+      distance = testDistance;
+      break;
+    }
+  }
+  
+  // Formatar o texto da escala
+  let scaleLabel;
+  if (distance >= 1000) {
+    scaleLabel = (distance / 1000).toFixed(distance >= 10000 ? 0 : 1) + ' km';
+  } else {
+    scaleLabel = Math.round(distance) + ' m';
+  }
+  
+  // Atualizar elementos DOM
+  scaleBar.style.width = bestWidth + 'px';
+  scaleText.textContent = scaleLabel;
+}
+
+// Função alternativa mais precisa usando Leaflet nativo
+function updateScaleLeaflet() {
+  const map = window.map || window._map;
+  if (!map) return;
+  
+  const scaleBar = document.getElementById('scale-bar');
+  const scaleText = document.getElementById('scale-text');
+  if (!scaleBar || !scaleText) return;
+
+  // Usar método do Leaflet para calcular escala
+  const bounds = map.getBounds();
+  const centerLat = bounds.getCenter().lat;
+  
+  // Calcular distância por pixel
+  const pointA = map.containerPointToLatLng([0, map.getSize().y / 2]);
+  const pointB = map.containerPointToLatLng([100, map.getSize().y / 2]);
+  const distance = pointA.distanceTo(pointB);
+  
+  // Definir largura da barra e texto
+  let barWidth = 100;
+  let scaleDistance = distance;
+  let unit = 'm';
+  
+  if (distance >= 1000) {
+    scaleDistance = distance / 1000;
+    unit = 'km';
+    
+    // Arredondar para valores "limpos"
+    if (scaleDistance > 10) {
+      scaleDistance = Math.round(scaleDistance);
+    } else {
+      scaleDistance = Math.round(scaleDistance * 10) / 10;
+    }
+  } else {
+    scaleDistance = Math.round(distance);
+  }
+  
+  // Ajustar largura proporcionalmente
+  barWidth = Math.round((scaleDistance * (unit === 'km' ? 1000 : 1) / distance) * 100);
+  
+  // Aplicar o padrão xadrez preto e branco
+  scaleBar.style.width = barWidth + 'px';
+  scaleBar.style.background = `linear-gradient(90deg, 
+    #000000 0%, #000000 25%,     
+    #ffffff 25%, #ffffff 50%,    
+    #000000 50%, #000000 75%,    
+    #ffffff 75%, #ffffff 100%    
+  )`;
+  
+  scaleText.textContent = scaleDistance + ' ' + unit;
+}
+});
