@@ -10,28 +10,26 @@ function parseNumber(v){
   return isNaN(n) ? 0 : n;
 }
 
-function getTargetLayers(map) {
-  const layers = [];
+function getTargetLayers(map) { 
+  const layers = []; 
   const seenIds = new Set();
-
-  function traverse(layer){
+   function traverse(layer){ 
     if (!layer) return;
-    if (layer.feature && layer.feature.properties) {
+     if (layer.feature && layer.feature.properties) {
       const props = layer.feature.properties;
-      const id = props.id || props.name;
+            const id = props.id || props.name; 
       if (id && !seenIds.has(id) && 
-          ('Área' in props || 'Area' in props || 'AREA' in props) && 
-          ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props)) {
-        layers.push(layer);
-        seenIds.add(id);
-      }
-    }
-    if (layer._layers) Object.values(layer._layers).forEach(traverse);
-  }
-
-  map.eachLayer(traverse);
-  return layers;
-}
+        ('Área' in props || 'Area' in props || 'AREA' in props) &&
+        ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props)) { 
+          layers.push(layer);
+          seenIds.add(id);
+        } 
+      } 	
+      if (layer._layers) Object.values(layer._layers).forEach(traverse); 
+      } 
+    
+    map.eachLayer(traverse);
+    return layers; }
 
 function findLayerById(map, targetId){
   let found = null;
@@ -344,7 +342,7 @@ function updateScale() {
   scaleText.textContent = scaleLabel;
 }
 
-// Função alternativa mais precisa usando Leaflet nativo
+// Função alternativa
 function updateScaleLeaflet() {
   const map = window.map || window._map;
   if (!map) return;

@@ -1,0 +1,1 @@
+var json_ETACubato_25 = {"type":"FeatureCollection","name":"ETACubato_25","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"id":null,"Localizaç":"ETA Cubatão"},"geometry":{"type":"Point","coordinates":[-48.939068104314558,-26.180928251491757]}}]}
