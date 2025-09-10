@@ -20,7 +20,8 @@ function getTargetLayers(map) {
             const id = props.id || props.name; 
       if (id && !seenIds.has(id) && 
         ('Área' in props || 'Area' in props || 'AREA' in props) &&
-        ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props)) { 
+        ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props) && props.grupo && props.grupo.includes("Propriedades Aderidas")
+      ){ 
           layers.push(layer);
           seenIds.add(id);
         } 
