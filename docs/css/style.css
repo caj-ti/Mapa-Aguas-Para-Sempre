@@ -5,6 +5,7 @@
   --text-color: #111;
   --btn-hover: #e0e0e0;
 }
+ 
 
 /* Regras globais */
 html, body {
@@ -23,10 +24,34 @@ html, body {
   z-index: 0;
 }
 
+/* ocultar a caixa de info gerada pelo leaflet/qgis2web */
+.info.leaflet-control,
+.info.leaflet-control * ,
+h2.__web-inspector-hide-shortcut__ {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#map-header {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px;
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000000;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
 /* Botão INFO */
 #stats-btn {
   position: absolute;
-  top: 150px;
+  top: 100px;
   left: 10px;
   z-index: 1000;
   background: var(--accent);
@@ -65,8 +90,8 @@ html, body {
   max-height: 70vh;
   padding: 24px;
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  background: var(--panel-bg);
-  color: var(--text-color);
+  background: white;
+  color: black;
   border-radius: 12px;
   overflow-y: auto;
   box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 0 30px rgba(0,0,0,0.05);
@@ -144,6 +169,25 @@ html, body {
   -webkit-user-drag: none;
   opacity: 0.95;
   filter: drop-shadow(0 6px 18px rgba(0,0,0,0.12));
+}
+
+/* sobrescreve o ícone padrão do Leaflet */
+.leaflet-control-layers-toggle {
+  width: 34px;
+  height: 34px;
+  background-image: url("../images/layers1.svg") !important; /* sobe uma pasta */
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 28px 28px !important;
+  background-color: transparent !important;
+  border: none !important;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+
+.leaflet-control-measure-toggle {
+  display: none !important;
 }
 
 /* Responsivo logo */

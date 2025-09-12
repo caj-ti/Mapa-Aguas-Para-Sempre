@@ -118,7 +118,7 @@ function updateStats(orderBy = null){
     }
   });
   
-  // Cálculo de médias
+  // Cálculo de médias (aderidas)
   const totalProps = contributions.length;
   const totalArea = contributions.reduce((sum, c) => sum + c.area, 0);
   const totalGreen = contributions.reduce((sum, c) => sum + c.areaverd, 0);
@@ -185,7 +185,7 @@ function updateStats(orderBy = null){
     });
   }
 
-  // Construir gráficos
+  // graficos pie (aderidas)
   function buildChart(canvasId, values, labels, chartRefName){
     const el = document.getElementById(canvasId);
     if (!el) return;
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded',function(){
 var coordsDiv = document.getElementById('coords');
 
 
-// Evento para atualizar coordenadas
+// atualização de coords 
 map.on('mousemove', function(e) {
   coordsDiv.innerHTML = 'Lat: ' + e.latlng.lat.toFixed(6) +
                       '<br>Lng: ' + e.latlng.lng.toFixed(6);
