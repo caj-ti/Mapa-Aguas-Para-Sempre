@@ -80,6 +80,7 @@ h2.__web-inspector-hide-shortcut__ {
   max-height: 40px;
   display: block;
 }
+
 /* painel lateral */
 #stats-panel {
   position: absolute;
@@ -89,23 +90,69 @@ h2.__web-inspector-hide-shortcut__ {
   max-width: 520px;
   max-height: 70vh;
   padding: 24px;
+  box-sizing: border-box;
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
   background: white;
   color: black;
   border-radius: 12px;
   overflow-y: auto;
+  overflow-x: hidden;
   box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 0 30px rgba(0,0,0,0.05);
   backdrop-filter: blur(6px);
   z-index: 3000;
 }
 
+/* Botão de fechar */
+#close-panel {
+  position: absolute; /* fixa no canto do painel */
+  top: 8px; /* distância do topo */
+  right: 8px; /* distância da direita */
+  width: 28px; /* tamanho do botão */
+  height: 28px; /* tamanho do botão */
+  padding: 0; /* remove padding */
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Imagem SVG */
+#close-panel img {
+  width: 18px; /* tamanho do X */
+  height: 18px;
+  display: block;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  pointer-events: none;
+}
+
+/* Hover do botão */
+#close-panel:hover img {
+  transform: rotate(90deg) scale(1.1); /* animação divertida */
+  filter: brightness(0.7); /* escurece levemente */
+}
+
+/* Normalizar filhos para não causarem overflow lateral */
+#stats-panel > * {
+  box-sizing: border-box;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 /* Cabeçalhos e textos */
-#stats-panel h2, #stats-panel h4 {
+#stats-panel h2,
+#stats-panel h4 {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 12px 0;
 }
-#stats-panel p, #stats-panel li {
+
+#stats-panel p,
+#stats-panel li {
   font-size: 14px;
   line-height: 1.6;
 }
@@ -120,6 +167,7 @@ h2.__web-inspector-hide-shortcut__ {
   cursor: pointer;
   transition: background 0.2s ease, transform 0.12s ease;
 }
+
 #stats-panel button:hover {
   background: var(--btn-hover);
   transform: translateY(-2px);
@@ -129,28 +177,90 @@ h2.__web-inspector-hide-shortcut__ {
 #stats-panel::-webkit-scrollbar {
   width: 8px;
 }
+
 #stats-panel::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 4px;
 }
+
 #stats-panel::-webkit-scrollbar-track {
   background: rgba(255,255,255,0.1);
 }
 
 /* Canvas interno */
-#stats-panel canvas { 
+#stats-panel canvas {
   background: transparent;
-  border-radius: 6px; 
+  border-radius: 6px;
 }
 
 /* Responsividade */
 @media (max-width:900px){
-  #stats-btn{ left:12px; top:6vh; padding:10px 12px; }
-  #stats-panel{ left:8px; width: calc(100% - 16px); top: 60px; max-height: 60vh; border-radius:8px; }
+  #stats-btn{
+    left:12px;
+    top:6vh;
+    padding:10px 12px;
+  }
+  #stats-panel{
+    left:8px;
+    width: calc(100% - 16px);
+    top: 60px;
+    max-height: 60vh;
+    border-radius:8px;
+  }
 }
 
 /* Classe utilitária */
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
+
+/* Container do select */
+#group-select {
+  appearance: none; /* Remove estilo nativo do navegador */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 10px 40px 10px 15px; /* Espaçamento interno */
+  font-size: 14px;
+  font-family: 'Inter', sans-serif; /* Fonte moderna */
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.0);
+  border: 1px solid #000;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  width: 100%; /* ocupa todo o espaço do container */
+  box-sizing: border-box;
+  position: relative;
+}
+
+
+
+/* Container da seta */
+#group-select-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Seta */
+#group-select-container::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+/* Quando o select está em foco (aberto) */
+#group-select:focus + #group-select-container::after {
+  transform: translateY(-50%) rotate(-135deg); /* seta aponta para cima */
+}
 
 /* Logo fixa fora do painel */
 #logo-link {

@@ -68,48 +68,58 @@
       title="GitHub — psamap">
       <img id="github-logo" src="images/githublogo.svg" alt="GitHub — psamap">
     </a>
-        <!-- Painel lateral-->
-        <div id="stats-panel" class="hidden stats-panel side-panel">
-          <div class="stats-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <h2>Informações</h2>
-            <button id="close-panel">Fechar</button>
+    
+<!-- Painel lateral-->
+<div id="stats-panel" class="hidden stats-panel side-panel" role="region" aria-label="Painel de informações">
+    <div class="stats-header" style="display:block; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <h2 style="margin:0;">Informações</h2>
+    <div id="group-select-container">
+      <select id="group-select">
+        <option value="Propriedades Aderidas">Propriedades Aderidas</option>
+        <option value="Processo">Propriedades em Processo</option>
+        <option value="interessadas">Propriedades Interessadas</option>
+      </select>
+    </div>
+
+    <button id="close-panel" aria-label="Fechar painel">
+        <img src="images/close.svg" alt="Fechar">
+    </button>
+
+    <div class="stats-content">
+      <p><strong>Propriedades:</strong> <span id="total-props">0</span></p>
+      <p><strong>Área total:</strong> <span id="total-area">0</span> ha</p>
+      <p><strong>Área verde total:</strong> <span id="total-green">0</span> ha</p>
+
+         <!-- Resumo de médias -->
+   <div id="stats-summary" style="margin-top:10px; font-size:14px; opacity:0.95;">
+    <p id="avg-area"><strong>Área média:</strong> — ha</p>
+    <p id="avg-green"><strong>Área Verde média:</strong> — ha</p>
+ </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+          <div style="flex:1 1 240px; position:relative;">
+            <h4>Contribuição por Área</h4>
+            <img src="images/expandgraf.svg" class="expand-btn" data-target="chart-area" 
+                 alt="Expandir gráfico" 
+                 style="position:absolute; top:4px; right:4px; width:20px; height:20px; cursor:pointer; z-index:10;">
+            <canvas id="chart-area" style="width:100%;height:180px;display:block;border-radius:6px;padding:4px"></canvas>
           </div>
+        
+          <div style="flex:1 1 240px; position:relative;">
+            <h4>Contribuição por Área Verde</h4>
+            <img src="images/expandgraf.svg" class="expand-btn" data-target="chart-areaverd" 
+                 alt="Expandir gráfico" 
+                 style="position:absolute; top:4px; right:4px; width:20px; height:20px; cursor:pointer; z-index:10;">
+            <canvas id="chart-areaverd" style="width:100%;height:180px;display:block;border-radius:6px;padding:4px"></canvas>
+          </div>
+        </div>
 
-          <div class="stats-content">
-            <p><strong>Propriedades aderidas:</strong> <span id="total-props">0</span></p>
-            <p><strong>Área total:</strong> <span id="total-area">0</span> ha</p>
-            <p><strong>Área verde total:</strong> <span id="total-green">0</span> ha</p>
+      <div class="list-controls" style="margin-top:10px;">
+       <button id="sort-green" style="margin-right:6px;">Ordenar por Área Verde</button>
+       <button id="sort-total">Ordenar por Área Total</button>
+      </div>
 
-            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
-                <div style="flex:1 1 240px; position:relative;">
-                  <h4>Contribuição por Área</h4>
-                  <img src="images/expandgraf.svg" class="expand-btn" data-target="chart-area" 
-                       alt="Expandir gráfico" 
-                       style="position:absolute; top:4px; right:4px; width:20px; height:20px; cursor:pointer; z-index:10;">
-                  <canvas id="chart-area" style="width:100%;height:180px;display:block;border-radius:6px;padding:4px"></canvas>
-                </div>
-              
-                <div style="flex:1 1 240px; position:relative;">
-                  <h4>Contribuição por Área Verde</h4>
-                  <img src="images/expandgraf.svg" class="expand-btn" data-target="chart-areaverd" 
-                       alt="Expandir gráfico" 
-                       style="position:absolute; top:4px; right:4px; width:20px; height:20px; cursor:pointer; z-index:10;">
-                  <canvas id="chart-areaverd" style="width:100%;height:180px;display:block;border-radius:6px;padding:4px"></canvas>
-                </div>
-              </div>
-
-            <div class="list-controls" style="margin-top:10px;">
-             <button id="sort-green" style="margin-right:6px;">Ordenar por Área Verde</button>
-             <button id="sort-total">Ordenar por Área Total</button>
-            </div>
-
-            <ul id="props-list" style="margin-top:10px; padding-left:18px;"></ul>
-
-            <!-- Resumo de médias -->
-         <div id="stats-summary" style="margin-top:10px; font-size:14px; opacity:0.95;">
-            <p id="avg-area"><strong>Área média:</strong> — ha</p>
-            <p id="avg-green"><strong>Média Área Verde:</strong> — ha</p>
-         </div>
+      <ul id="props-list" style="margin-top:10px; padding-left:18px;"></ul>
 
         <div id="map">
         </div>

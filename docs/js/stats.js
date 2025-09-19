@@ -10,17 +10,20 @@ function parseNumber(v){
   return isNaN(n) ? 0 : n;
 }
 
-function getTargetLayers(map) { 
+function getTargetLayers(map, selectedGroup) { 
   const layers = []; 
   const seenIds = new Set();
+  if (!map) return layers;
    function traverse(layer){ 
     if (!layer) return;
      if (layer.feature && layer.feature.properties) {
       const props = layer.feature.properties;
             const id = props.id || props.name; 
+            const grupo = props.grupo ? String(props.grupo).toLowerCase() : '';
       if (id && !seenIds.has(id) && 
         ('Área' in props || 'Area' in props || 'AREA' in props) &&
-        ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props) && props.grupo && props.grupo.includes("Propriedades Aderidas")
+        ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props) &&
+        grupo === String(selectedGroup).toLowerCase()
       ){ 
           layers.push(layer);
           seenIds.add(id);
@@ -93,7 +96,9 @@ function updateStats(orderBy = null){
   const map = window.map || window._map || null;
   if (!map) return;
 
-  const features = getTargetLayers(map);
+  const selectedGroup = document.getElementById('group-select').value;
+
+  const features = getTargetLayers(map, selectedGroup);
 
   highlightedLayers.forEach(layer => {
     if (layer._originalStyle && layer.setStyle) layer.setStyle(layer._originalStyle);
@@ -111,27 +116,40 @@ function updateStats(orderBy = null){
     const area = parseNumber(props['Área'] ?? props['Area'] ?? props['AREA']);
     const areaverd = parseNumber(props['Área Verd'] ?? props['Area Verd'] ?? props['AREA_VERD']);
 
-    if (area > 0 || areaverd > 0) {
-      contributions.push({ id, area, areaverd });
-      seenIds.add(id);
-      layersToHighlight.push(layer);
-    }
-  });
+    const validArea = (area !== null && area > 0);
+      const validGreen = (areaverd !== null && areaverd > 0);
+      if (validArea || validGreen){
+        contributions.push({ id: String(id), area: area, areaverd: areaverd });
+        seenIds.add(String(id));
+        layersToHighlight.push(layer);
+      }
+    });
   
-  // Cálculo de médias (aderidas)
-  const totalProps = contributions.length;
-  const totalArea = contributions.reduce((sum, c) => sum + c.area, 0);
-  const totalGreen = contributions.reduce((sum, c) => sum + c.areaverd, 0);
+   // Cálculo de médias (aderidas) 
   const avgAreaEl = document.getElementById('avg-area');
   const avgGreenEl = document.getElementById('avg-green');
 
-  if(totalProps > 0) {
-    avgAreaEl.innerHTML = `<strong>Área média:</strong> ${(totalArea / totalProps).toFixed(2)} ha`;
-    avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> ${(totalGreen / totalProps).toFixed(2)} ha`;
-  } else {
-    avgAreaEl.innerHTML = `<strong>Área média:</strong> —`;
-    avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> —`;
-  }
+  // soma e contagem ignorando null
+  const totalAreaSum = contributions.reduce((sum, c) => sum + (c.area != null ? c.area : 0), 0);
+  const totalGreenSum = contributions.reduce((sum, c) => sum + (c.areaverd != null ? c.areaverd : 0), 0);
+  const countAreaNonNull = contributions.reduce((n, c) => n + (c.area != null ? 1 : 0), 0);
+  const countGreenNonNull = contributions.reduce((n, c) => n + (c.areaverd != null ? 1 : 0), 0);
+
+// Atualiza médias no painel
+if (avgAreaEl) avgAreaEl.innerHTML = `<strong>Área média:</strong> ${countAreaNonNull ? (totalAreaSum / countAreaNonNull).toFixed(2) : '—'} ha`;
+if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> ${countGreenNonNull ? (totalGreenSum / countGreenNonNull).toFixed(2) : '—'} ha`;
+
+
+  // Highlight das layers
+  layersToHighlight.forEach(layer => {
+    if (layer.setStyle) {
+      if (!layer._originalStyle) layer._originalStyle = {...(layer.options || {})};
+      try {
+        layer.setStyle({ color:'#FF0000', weight:3, fillColor:'#FF0000', fillOpacity:0.3 });
+      } catch(e){}
+      highlightedLayers.push(layer);
+    }
+  });
 
   // Highlight das layers
   layersToHighlight.forEach(layer => {
@@ -145,8 +163,8 @@ function updateStats(orderBy = null){
   });
 
   // Ordenar
-  if(orderBy === 'area') contributions.sort((a,b) => b.area - a.area);
-  else if(orderBy === 'areaverd') contributions.sort((a,b) => b.areaverd - a.areaverd);
+  if(orderBy === 'area') contributions.sort((a,b) => (b.area || 0) - (a.area || 0));
+  else if(orderBy === 'areaverd') contributions.sort((a,b) => (b.areaverd || 0) - (a.areaverd || 0));
 
   // Atualizar painel
   const totalPropsEl = document.getElementById('total-props');
@@ -162,15 +180,18 @@ function updateStats(orderBy = null){
     if (chartArea){ chartArea.destroy(); chartArea=null; }
     if (chartAreaVerd){ chartAreaVerd.destroy(); chartAreaVerd=null; }
     window.webmapStats.contributions = [];
+    // atualizar médias resumo
+    const avgAreaEl = document.getElementById('avg-area');
+    const avgGreenEl = document.getElementById('avg-green');
+    if (avgAreaEl) avgAreaEl.innerHTML = `<strong>Área média:</strong> —`;
+    if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> —`;
     return;
   }
+ 
 
   if (totalPropsEl) totalPropsEl.parentElement.style.display = '';
   if (totalAreaEl) totalAreaEl.parentElement.style.display = '';
   if (totalGreenEl) totalGreenEl.parentElement.style.display = '';
-
-  const totalAreaSum = contributions.reduce((sum,c)=>sum+c.area,0);
-  const totalGreenSum = contributions.reduce((sum,c)=>sum+c.areaverd,0);
 
   if (totalPropsEl) totalPropsEl.textContent = String(contributions.length);
   if (totalAreaEl) totalAreaEl.textContent = totalAreaSum.toLocaleString('pt-BR');
@@ -183,6 +204,20 @@ function updateStats(orderBy = null){
       li.textContent = `ID: ${c.id} — Área: ${c.area.toLocaleString('pt-BR')} | Área Verd: ${c.areaverd.toLocaleString('pt-BR')}`;
       propsListEl.appendChild(li);
     });
+  }
+
+  if (countAreaNonNull > 0){
+   const avgArea = totalAreaSum / countAreaNonNull;
+   if (avgAreaEl) avgAreaEl.innerHTML = `<strong>Área média:</strong> ${avgArea.toFixed(2)} ha`;
+  } else {
+   if (avgAreaEl) avgAreaEl.innerHTML = `<strong>Área média:</strong> —`;
+  }
+
+  if (countGreenNonNull > 0){
+   const avgGreen = totalGreenSum / countGreenNonNull;
+   if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> ${avgGreen.toFixed(2)} ha`;
+  } else {
+   if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> —`;
   }
 
   // graficos pie (aderidas)
@@ -222,9 +257,12 @@ function updateStats(orderBy = null){
   }
 
   document.querySelectorAll('.expand-btn').forEach(btn=>{
+    if (btn._stats_bound) return;
+      btn._stats_bound = true;
     btn.addEventListener('click', function(){
       const targetId = this.getAttribute('data-target');
       const originalCanvas = document.getElementById(targetId);
+      if(!originalCanvas) return;
       const overlay = document.createElement('div');
       overlay.className='chart-overlay';
       const newCanvas=document.createElement('canvas');
@@ -232,7 +270,7 @@ function updateStats(orderBy = null){
       document.body.appendChild(overlay);
 
       const originalChart = Chart.getChart(originalCanvas);
-      if(!originalChart) return;
+      if(!originalChart) { overlay.remove(); return; }
       const data = JSON.parse(JSON.stringify(originalChart.data));
       const options = JSON.parse(JSON.stringify(originalChart.options));
       if(options.type==='pie'||options.type==='doughnut'){
@@ -248,8 +286,8 @@ function updateStats(orderBy = null){
   });
 
   const labels = contributions.map(c=>c.id);
-  const valuesArea = contributions.map(c=>c.area);
-  const valuesAreaVerd = contributions.map(c=>c.areaverd);
+  const valuesArea = contributions.map(c=> c.area !== null ? c.area : 0);
+  const valuesAreaVerd = contributions.map(c=> c.areaverd !== null ? c.areaverd : 0);
   buildChart('chart-area', valuesArea, labels, 'chart-area');
   buildChart('chart-areaverd', valuesAreaVerd, labels, 'chart-areaverd');
 
@@ -264,6 +302,12 @@ document.addEventListener('DOMContentLoaded',function(){
   const closeBtn=document.getElementById("close-panel");
   const sortAreaBtn=document.getElementById("sort-total");
   const sortGreenBtn=document.getElementById("sort-green");
+  const groupSelect = document.getElementById('group-select');
+
+  if (groupSelect){
+    groupSelect.addEventListener('change', ()=> window.webmapStats.updateStats());
+  }
+
   if(!btn || !panel) return;
 
   btn.addEventListener('click',()=>{
@@ -273,6 +317,12 @@ document.addEventListener('DOMContentLoaded',function(){
   if(closeBtn) closeBtn.addEventListener('click',()=>panel.classList.add('hidden'));
   if(sortAreaBtn) sortAreaBtn.addEventListener('click',()=>window.webmapStats.updateStats('area'));
   if(sortGreenBtn) sortGreenBtn.addEventListener('click',()=>window.webmapStats.updateStats('areaverd'));
+
+  document.getElementById('group-select').addEventListener('change', () => {
+  window.webmapStats.updateStats();
+  });
+
+   
 
 
   // Seleciona a div que mostrará as coordenadas (já criada no HTML ou no CSS)
