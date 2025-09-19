@@ -151,17 +151,6 @@ if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> ${c
     }
   });
 
-  // Highlight das layers
-  layersToHighlight.forEach(layer => {
-    if (layer.setStyle) {
-      if (!layer._originalStyle) layer._originalStyle = {...(layer.options || {})};
-      try {
-        layer.setStyle({ color:'#FF0000', weight:3, fillColor:'#FF0000', fillOpacity:0.3 });
-      } catch(e){}
-      highlightedLayers.push(layer);
-    }
-  });
-
   // Ordenar
   if(orderBy === 'area') contributions.sort((a,b) => (b.area || 0) - (a.area || 0));
   else if(orderBy === 'areaverd') contributions.sort((a,b) => (b.areaverd || 0) - (a.areaverd || 0));
