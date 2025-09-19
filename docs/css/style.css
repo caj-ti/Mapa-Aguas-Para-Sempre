@@ -234,8 +234,6 @@ h2.__web-inspector-hide-shortcut__ {
   position: relative;
 }
 
-
-
 /* Container da seta */
 #group-select-container {
   position: relative;
@@ -281,6 +279,46 @@ h2.__web-inspector-hide-shortcut__ {
   filter: drop-shadow(0 6px 18px rgba(0,0,0,0.12));
 }
 
+/* Estilo do bloco geral da legenda */
+.leaflet-control-layers {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+}
+
+/* Estilo dos cabeçalhos dos grupos de camadas */
+.leaflet-layerstree-header-pointer {
+  background-color: #1d2125;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+/* Estilo dos itens individuais */
+.leaflet-layerstree-header-label {
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  margin: 2px 0;
+  border-radius: 4px;
+}
+
+.leaflet-layerstree-header-label:hover {
+  background-color: rgba(14, 54, 139, 0.1);
+}
+
+/* Estilo das imagens de legenda */
+.leaflet-layerstree-header-name img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  object-fit: contain;
+}
+
 /* sobrescreve o ícone padrão do Leaflet */
 .leaflet-control-layers-toggle {
   width: 34px;
@@ -315,6 +353,7 @@ h2.__web-inspector-hide-shortcut__ {
   display:inline-block;
   text-decoration:none;
 }
+
 #github-logo{
   width:44px;
   height:44px;
@@ -326,12 +365,14 @@ h2.__web-inspector-hide-shortcut__ {
   border:1px solid #333;
   box-shadow: 0 6px 18px rgba(0,0,0,0.10);
 }
+
 #github-link:focus #github-logo,
 #github-link:hover #github-logo{
   transform: translateY(-3px);
   box-shadow: 0 12px 28px rgba(0,0,0,0.14);
   border-color: rgba(3,102,214,0.18);
 }
+
 @media (max-width:480px){
   #github-logo{ width:38px; height:38px; padding:5px; bottom:12px; }
 }
