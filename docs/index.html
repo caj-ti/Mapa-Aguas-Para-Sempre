@@ -51,7 +51,9 @@
           <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
           <script src="stats.js"></script>
   
-         <!-- Mapa -->
+          <div id="compass-container">
+            <img id=""compass" src="images/compass2.svg">
+          </div>
         <div id="map"></div>
 
         <a id="logo-link"
@@ -72,7 +74,7 @@
 <!-- Painel lateral-->
 <div id="stats-panel" class="hidden stats-panel side-panel" role="region" aria-label="Painel de informações">
     <div class="stats-header" style="display:block; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <h2 style="margin:0;">Informações</h2>
+      <h2 style="margin:0;">Painel de Acompanhamento</h2>
     <div id="group-select-container">
       <select id="group-select">
         <option value="Propriedades Aderidas">Propriedades Aderidas</option>
@@ -269,8 +271,15 @@
           closeBtn.addEventListener('click', hide);
           document.addEventListener('keydown', function(e){ if (e.key === 'Escape') hide(); });
 
-          document.getElementById('sort-green').addEventListener('click', function(){ if (window.webmapStats && window.webmapStats.sortBy) window.webmapStats.sortBy('areaverd'); });
-          document.getElementById('sort-total').addEventListener('click', function(){ if (window.webmapStats && window.webmapStats.sortBy) window.webmapStats.sortBy('area'); });
+          document.getElementById('sort-green').addEventListener('click', function(){ 
+          if (window.webmapStats && typeof window.webmapStats.updateStats === 'function') 
+          window.webmapStats.updateStats('areaverd'); 
+        });
+         document.getElementById('sort-total').addEventListener('click', function(){ 
+         if (window.webmapStats && typeof window.webmapStats.updateStats === 'function') 
+         window.webmapStats.updateStats('area'); 
+        });
+
         })();
 
         // add class to format popup if it contains media

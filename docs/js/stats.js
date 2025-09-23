@@ -151,17 +151,6 @@ if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> ${c
     }
   });
 
-  // Highlight das layers
-  layersToHighlight.forEach(layer => {
-    if (layer.setStyle) {
-      if (!layer._originalStyle) layer._originalStyle = {...(layer.options || {})};
-      try {
-        layer.setStyle({ color:'#FF0000', weight:3, fillColor:'#FF0000', fillOpacity:0.3 });
-      } catch(e){}
-      highlightedLayers.push(layer);
-    }
-  });
-
   // Ordenar
   if(orderBy === 'area') contributions.sort((a,b) => (b.area || 0) - (a.area || 0));
   else if(orderBy === 'areaverd') contributions.sort((a,b) => (b.areaverd || 0) - (a.areaverd || 0));
@@ -322,9 +311,6 @@ document.addEventListener('DOMContentLoaded',function(){
   window.webmapStats.updateStats();
   });
 
-   
-
-
   // Seleciona a div que mostrará as coordenadas (já criada no HTML ou no CSS)
 var coordsDiv = document.getElementById('coords');
 
@@ -383,7 +369,7 @@ function updateScale() {
   // Formatar o texto da escala
   let scaleLabel;
   if (distance >= 1000) {
-    scaleLabel = (distance / 1000).toFixed(distance >= 10000 ? 0 : 1) + ' km';
+    scaleLabel = Math.round(distance / 1000) + ' km';
   } else {
     scaleLabel = Math.round(distance) + ' m';
   }
@@ -413,22 +399,15 @@ function updateScaleLeaflet() {
   
   // Definir largura da barra e texto
   let barWidth = 100;
-  let scaleDistance = distance;
-  let unit = 'm';
-  
-  if (distance >= 1000) {
-    scaleDistance = distance / 1000;
+  let scaleDistance, unit;
+
+if (distance >= 1000) {
+    scaleDistance = Math.round(distance / 1000); // sempre inteiro em km
     unit = 'km';
-    
-    // Arredondar para valores "limpos"
-    if (scaleDistance > 10) {
-      scaleDistance = Math.round(scaleDistance);
-    } else {
-      scaleDistance = Math.round(scaleDistance * 10) / 10;
-    }
-  } else {
-    scaleDistance = Math.round(distance);
-  }
+} else {
+    scaleDistance = Math.round(distance); // sempre inteiro em metros
+    unit = 'm';
+}
   
   // Ajustar largura proporcionalmente
   barWidth = Math.round((scaleDistance * (unit === 'km' ? 1000 : 1) / distance) * 100);

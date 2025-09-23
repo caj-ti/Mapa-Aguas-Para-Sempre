@@ -97,7 +97,7 @@ h2.__web-inspector-hide-shortcut__ {
   border-radius: 12px;
   overflow-y: auto;
   overflow-x: hidden;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 0 30px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(6px);
   z-index: 3000;
 }
@@ -288,6 +288,22 @@ h2.__web-inspector-hide-shortcut__ {
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
 }
 
+/* Conteúdo interno redimensionável */
+.leaflet-control-layers-list {
+  max-height: 60vh;          /* altura máxima do painel */
+  overflow-y: auto;           /* ativa scroll vertical */
+  padding-right: 4px;         /* espaço para a scrollbar */
+
+  /* Novo: redimensionável pelo usuário */
+  resize: both;               /* permite redimensionar horizontal e vertical */
+  overflow: auto;             /* mantém scroll interno */
+  min-width: 200px;
+  min-height: 150px;
+  max-width: 90vw;
+  max-height: 90vh;
+  border: 2px solid #1d2125; /* borda visível para puxar */
+}
+
 /* Estilo dos cabeçalhos dos grupos de camadas */
 .leaflet-layerstree-header-pointer {
   background-color: #1d2125;
@@ -323,7 +339,7 @@ h2.__web-inspector-hide-shortcut__ {
 .leaflet-control-layers-toggle {
   width: 34px;
   height: 34px;
-  background-image: url("../images/layers1.svg") !important; /* sobe uma pasta */
+  background-image: url("../images/layers1.svg") !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-size: 28px 28px !important;
@@ -333,10 +349,11 @@ h2.__web-inspector-hide-shortcut__ {
   box-sizing: border-box;
 }
 
-
 .leaflet-control-measure-toggle {
   display: none !important;
 }
+
+
 
 /* Responsivo logo */
 @media (max-width:700px){
@@ -346,7 +363,7 @@ h2.__web-inspector-hide-shortcut__ {
 /*Git logo*/
 #github-link{
   position:fixed;
-  left:50%;
+  left:10%;
   bottom:16px;
   transform:translateX(-50%);
   z-index:10000;
@@ -377,6 +394,43 @@ h2.__web-inspector-hide-shortcut__ {
   #github-logo{ width:38px; height:38px; padding:5px; bottom:12px; }
 }
 
+#compass-container {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 10000;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 8px;
+  border: 1px solid #333;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#compass-container:hover {
+  transform: translateX(-50%) translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+  border-color: rgba(3,102,214,0.18);
+}
+
+@media (max-width:700px){
+  #compass-container {
+    width: 36px;
+    height: 36px;
+    bottom: 8px;
+  }
+}
+#compass {
+  max-width: 80%;   /* ocupa até 80% da caixa */
+  max-height: 80%;  /* nunca passa do container */
+  height: auto;
+  width: auto;
+  display: block;
+}
 /* Barra de escala personalizada */
 .scale-control {
   position: fixed;
