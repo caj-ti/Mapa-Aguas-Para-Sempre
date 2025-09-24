@@ -88,40 +88,126 @@
     </button>
 
     <div class="stats-content">
-      <p><strong>Propriedades:</strong> <span id="total-props">0</span></p>
-      <p><strong>Área total:</strong> <span id="total-area">0</span> ha</p>
-      <p><strong>Área verde total:</strong> <span id="total-green">0</span> ha</p>
-
-         <!-- Resumo de médias -->
-   <div id="stats-summary" style="margin-top:10px; font-size:14px; opacity:0.95;">
-    <p id="avg-area"><strong>Área média:</strong> — ha</p>
-    <p id="avg-green"><strong>Área Verde média:</strong> — ha</p>
- </div>
-
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
-          <div style="flex:1 1 240px; position:relative;">
-            <h4>Contribuição por Área</h4>
-            <img src="images/expandgraf.svg" class="expand-btn" data-target="chart-area" 
-                 alt="Expandir gráfico" 
-                 style="position:absolute; top:4px; right:4px; width:20px; height:20px; cursor:pointer; z-index:10;">
-            <canvas id="chart-area" style="width:100%;height:180px;display:block;border-radius:6px;padding:4px"></canvas>
+        <!-- Lista unificada de dados estatísticos -->
+        <div class="stats-list">
+          <div class="stats-item">
+            <span class="stats-label"><strong>Propriedades:</strong></span>
+            <span class="stats-value" id="total-props">0</span>
           </div>
-        
-          <div style="flex:1 1 240px; position:relative;">
-            <h4>Contribuição por Área Verde</h4>
-            <img src="images/expandgraf.svg" class="expand-btn" data-target="chart-areaverd" 
-                 alt="Expandir gráfico" 
-                 style="position:absolute; top:4px; right:4px; width:20px; height:20px; cursor:pointer; z-index:10;">
-            <canvas id="chart-areaverd" style="width:100%;height:180px;display:block;border-radius:6px;padding:4px"></canvas>
+          
+          <div class="stats-item">
+            <span class="stats-label"><strong>Área total:</strong></span>
+            <span class="stats-value" id="total-area">0</span>
+            <span class="stats-unit">ha</span>
+          </div>
+          
+          <div class="stats-item">
+            <span class="stats-label"><strong>Área verde total:</strong></span>
+            <span class="stats-value" id="total-green">0</span>
+            <span class="stats-unit">ha</span>
+          </div>
+          
+          <div class="stats-divider"></div>
+          
+          <div class="stats-item">
+            <span class="stats-label" id="avg-area"><strong>Área média:</strong> — ha</span>
+          </div>
+          
+          <div class="stats-item">
+            <span class="stats-label" id="avg-green"><strong>Área Verde média:</strong> — ha</span>
+          </div>
+          
+          <div class="stats-divider"></div>
+          
+          <div class="stats-item">
+            <span class="stats-label"><strong>Área contratada:</strong></span>
+            <span class="stats-value">1.250</span>
+            <span class="stats-unit">ha</span>
+          </div>
+          
+          <div class="stats-item">
+            <span class="stats-label"><strong>Valor médio/ha:</strong></span>
+            <span class="stats-value">R$ 2.500,00</span>
+            <span class="stats-unit">/ha</span>
           </div>
         </div>
-
-      <div class="list-controls" style="margin-top:10px;">
-       <button id="sort-green" style="margin-right:6px;">Ordenar por Área Verde</button>
-       <button id="sort-total">Ordenar por Área Total</button>
       </div>
+      
+      <style>
+      .stats-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .stats-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        border-left: 3px solid #007bff;
+        font-size: 14px;
+      }
+      
+      .stats-label {
+        color: #333;
+        flex: 1;
+      }
+      
+      .stats-value {
+        font-weight: 700;
+        color: #007bff;
+        margin-right: 4px;
+        min-width: 60px;
+        text-align: right;
+      }
+      
+      .stats-unit {
+        color: #6c757d;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      
+      .stats-divider {
+        height: 1px;
+        background-color: #dee2e6;
+        margin: 4px 0;
+      }
+      
+      /* Cores diferenciadas */
+      .stats-item:nth-child(1) { border-left-color: #28a745; }
+      .stats-item:nth-child(2) { border-left-color: #ffc107; }
+      .stats-item:nth-child(3) { border-left-color: #20c997; }
+      .stats-item:nth-child(5) { border-left-color: #fd7e14; }
+      .stats-item:nth-child(6) { border-left-color: #6f42c1; }
+      .stats-item:nth-child(8) { border-left-color: #dc3545; }
+      .stats-item:nth-child(9) { border-left-color: #17a2b8; }
+      
+      .stats-item:hover {
+        background-color: #e9ecef;
+        transform: translateX(2px);
+        transition: all 0.2s ease;
+      }
+      </style>
 
-      <ul id="props-list" style="margin-top:10px; padding-left:18px;"></ul>
+ <div class="list-controls" style="margin-top:10px; display:none;">
+        <button id="sort-green" style="margin-right:6px;">Ordenar por Área Verde</button>
+        <button id="sort-total">Ordenar por Área Total</button>
+   </div>
+   <table id="props-table" style="margin-top:10px; border-collapse: collapse; width: 100%;">
+    <thead>
+      <tr>
+        <th style="border: 1px solid #ccc; padding:4px;">ID</th>
+        <th style="border: 1px solid #ccc; padding:4px;">Área (ha)</th>
+        <th style="border: 1px solid #ccc; padding:4px;">Área Verde (ha)</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
         <div id="map">
         </div>
