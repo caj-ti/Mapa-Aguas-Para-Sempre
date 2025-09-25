@@ -12,8 +12,9 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background: radial-gradient(circle at 20% 10%, rgba(245,214,186,0.1), transparent 10%), linear-gradient(180deg, var(--bg-1), #f0e8d0 60%);
+  font-family: 'Open Sans', sans-serif;
+  background: radial-gradient(circle at 20% 10%, rgba(245,214,186,0.1), transparent 10%),
+              linear-gradient(180deg, var(--bg-1), #f0e8d0 60%);
 }
 
 /* Mapa */
@@ -40,7 +41,7 @@ h2.__web-inspector-hide-shortcut__ {
   transform: translateX(-50%);
   background-color: rgba(255, 255, 255, 0.8);
   padding: 10px 20px;
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 24px;
   font-weight: bold;
   color: #000000;
@@ -48,50 +49,75 @@ h2.__web-inspector-hide-shortcut__ {
   z-index: 1000;
 }
 
-/* Botão INFO */
-#stats-btn {
+.button-group {
+  display: flex;
+  flex-direction: column; /* botões um embaixo do outro */
+  gap: 10px;
   position: absolute;
-  top: 100px;
+  top: 100px; /* posição inicial do grupo */
   left: 10px;
   z-index: 1000;
-  background: var(--accent);
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 10px;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.12s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Estilo comum para todos os botões do grupo */
+.button-group button {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  height: 44px; /* altura fixa */
+  width: 140px; /* largura fixa para sincronizar */
+  border: none;
+  border-radius: 8px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.12s ease;
 }
 
-/* efeito click */
+/* Estilo dos ícones */
+.button-group button img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+/* Botão Painel */
+#stats-btn {
+  background: #000;
+  color: #fff;
+}
+
 #stats-btn:hover {
-  background: var(--btn-hover);
-  transform: translateY(-2px);
+  background: #222;
 }
 
-/* SVG responsivo */
-#stats-btn img {
-  width: 2em;    
-  height: 2em;   
-  max-width: 40px; /* limitador */
-  max-height: 40px;
-  display: block;
+/* Botão Gráfico */
+#chart-btn {
+  background: #fff;
+  color: #000;
 }
+
+#chart-btn:hover {
+  background: #f0f0f0;
+}
+
+
 
 /* painel lateral */
 #stats-panel {
   position: absolute;
   top: 90px;
   left: 10px;
-  width: 360px;
+  width: 460px;
   max-width: 520px;
   max-height: 70vh;
   padding: 24px;
   box-sizing: border-box;
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   background: white;
   color: black;
   border-radius: 12px;
@@ -144,7 +170,16 @@ h2.__web-inspector-hide-shortcut__ {
 }
 
 /* Cabeçalhos e textos */
-#stats-panel h2,
+#stats-panel h2 {font-size: 20px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 16px 0;
+  padding-bottom: 6px;    
+  border-bottom: 2px solid #e5e5e5;
+  letter-spacing: 0.5px;
+}
+
+
 #stats-panel h4 {
   font-size: 16px;
   font-weight: 600;
@@ -157,7 +192,7 @@ h2.__web-inspector-hide-shortcut__ {
   line-height: 1.6;
 }
 
-/* Botões internos do painel */
+
 #stats-panel button {
   background: var(--accent);
   border: 1px solid #ccc;
@@ -219,17 +254,20 @@ h2.__web-inspector-hide-shortcut__ {
   appearance: none; /* Remove estilo nativo do navegador */
   -webkit-appearance: none;
   -moz-appearance: none;
-  padding: 10px 40px 10px 15px; /* Espaçamento interno */
-  font-size: 14px;
-  font-family: 'Inter', sans-serif; /* Fonte moderna */
-  color: #333;
-  background-color: rgba(255, 255, 255, 0.0);
-  border: 1px solid #000;
-  border-radius: 8px;
-  outline: none;
+
+  width: 100%;
+  padding: 12px 40px 12px 16px; 
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  color: #0f0f0f;
+
+  background-color: #fff; /* Fundo branco */
+  border: 2px solid transparent; /* Inicialmente sem borda visível */
+  border-left: 6px solid #ffffff; /* Borda lateral colorida */
+  border-radius: 8px; /* Cantos levemente arredondados */
+
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  width: 100%; /* ocupa todo o espaço do container */
+  transition: border-color 0.3s ease; /* Transição suave */
   box-sizing: border-box;
   position: relative;
 }
@@ -240,32 +278,30 @@ h2.__web-inspector-hide-shortcut__ {
   width: 100%;
 }
 
-/* Seta */
+/* Seta fixa */
 #group-select-container::after {
-  content: '';
+  content: '▼';
+  font-size: 18px;
   position: absolute;
   right: 12px;
-  top: 50%;
-  transform: translateY(-50%) rotate(0deg);
-  width: 10px;
-  height: 10px;
-  border-right: 2px solid #000;
-  border-bottom: 2px solid #000;
-  pointer-events: none;
-  transition: transform 0.3s ease;
+  top: 50%; 
+  transform: translateY(-50%); 
+  color: #000000; 
+  pointer-events: none; 
 }
 
-/* Quando o select está em foco (aberto) */
-#group-select:focus + #group-select-container::after {
-  transform: translateY(-50%) rotate(-135deg); /* seta aponta para cima */
+#group-select:hover, 
+#group-select:focus { border-color: #030303; 
+   outline: none;
 }
 
-/* Logo fixa fora do painel */
+
+
 #logo-link {
   position: fixed;
   left: 12px;
   bottom: 12px;
-  z-index: 2000; /* acima do painel */
+  z-index: 2000; 
   display: inline-block;
   pointer-events: auto;
 }
@@ -279,7 +315,7 @@ h2.__web-inspector-hide-shortcut__ {
   filter: drop-shadow(0 6px 18px rgba(0,0,0,0.12));
 }
 
-/* Estilo do bloco geral da legenda */
+/* Bloco geral da legenda */
 .leaflet-control-layers {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
@@ -290,31 +326,29 @@ h2.__web-inspector-hide-shortcut__ {
 
 /* Conteúdo interno redimensionável */
 .leaflet-control-layers-list {
-  max-height: 60vh;          /* altura máxima do painel */
-  overflow-y: auto;           /* ativa scroll vertical */
-  padding-right: 4px;         /* espaço para a scrollbar */
-
-  /* Novo: redimensionável pelo usuário */
-  resize: both;               /* permite redimensionar horizontal e vertical */
-  overflow: auto;             /* mantém scroll interno */
+  max-height: 60vh;       /* altura máxima do painel */
+  overflow-y: auto;       /* scroll vertical */
+  padding-right: 4px;     /* espaço para scrollbar */
+  resize: both;           /* redimensionar horizontal e vertical */
+  overflow: auto;         /* mantém scroll interno */
   min-width: 200px;
   min-height: 150px;
   max-width: 90vw;
   max-height: 90vh;
-  border: 2px solid #1d2125; /* borda visível para puxar */
+  border: 2px solid #1d2125; /* borda para puxar */
 }
 
-/* Estilo dos cabeçalhos dos grupos de camadas */
+/* Cabeçalhos dos grupos de camadas */
 .leaflet-layerstree-header-pointer {
   background-color: #1d2125;
-  color: white;
+  color: #fff;
   padding: 5px;
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 5px;
 }
 
-/* Estilo dos itens individuais */
+/* Itens individuais */
 .leaflet-layerstree-header-label {
   display: flex;
   align-items: center;
@@ -327,7 +361,7 @@ h2.__web-inspector-hide-shortcut__ {
   background-color: rgba(14, 54, 139, 0.1);
 }
 
-/* Estilo das imagens de legenda */
+/* Imagens de legenda */
 .leaflet-layerstree-header-name img {
   width: 20px;
   height: 20px;
@@ -335,24 +369,21 @@ h2.__web-inspector-hide-shortcut__ {
   object-fit: contain;
 }
 
-/* sobrescreve o ícone padrão do Leaflet */
+/* Ícone da legenda (sobrescreve o padrão do Leaflet) */
 .leaflet-control-layers-toggle {
   width: 34px;
   height: 34px;
-  background-image: url("../images/layers1.svg") !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
+  background: transparent url("../images/layers1.svg") no-repeat center !important;
   background-size: 28px 28px !important;
-  background-color: transparent !important;
   border: none !important;
   display: inline-block;
   box-sizing: border-box;
 }
 
+/* Remove botão de medição */
 .leaflet-control-measure-toggle {
   display: none !important;
 }
-
 
 
 /* Responsivo logo */
@@ -496,6 +527,7 @@ h2.__web-inspector-hide-shortcut__ {
   pointer-events: none;
   z-index: 1000;
 }
+
 /* Gráficos internos */
 .chart-section { position: relative; margin-bottom: 20px; }
 .chart-section h4 {
@@ -531,4 +563,75 @@ h2.__web-inspector-hide-shortcut__ {
 #stats-summary p {
   margin: 4px 0;
   font-weight: 500;
+}
+
+/* Painel de gráficos — mesmo estilo do #stats-panel (posicionado à direita por padrão) */
+#chart-panel {
+  position: absolute;
+  top: 90px;
+  right: 10px;               /* posicionado à direita para não sobrepor o painel lateral */
+  width: 460px;
+  max-width: 520px;
+  max-height: 70vh;
+  padding: 24px;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+  background: white;
+  color: black;
+  border-radius: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  z-index: 3000;
+}
+
+/* Normalizar filhos */
+#chart-panel > * { box-sizing: border-box; max-width:100%; margin-left:0; margin-right:0; }
+
+/* Cabeçalho */
+#chart-panel h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 16px 0;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e5e5e5;
+  letter-spacing: 0.5px;
+}
+
+/* Botão fechar (reaproveite o mesmo estilo se quiser) */
+#chart-panel .close-chart {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display:flex; align-items:center; justify-content:center;
+  z-index:9999;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+#chart-panel .close-chart img { width:18px; height:18px; display:block; pointer-events:none; }
+
+/* Canvas interno */
+#chart-panel canvas { background: transparent; border-radius:6px; width:100% !important; height:320px; }
+
+/* Controls */
+#chart-panel .chart-controls { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
+
+/* Responsividade (mesma lógica do painel lateral) */
+@media (max-width:900px){
+  #chart-panel{
+    left:8px;
+    right:8px;
+    width: calc(100% - 16px);
+    top: 60px;
+    max-height: 60vh;
+    border-radius:8px;
+  }
+  #chart-panel canvas { height: 260px; }
 }

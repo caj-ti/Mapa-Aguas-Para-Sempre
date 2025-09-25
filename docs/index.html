@@ -17,7 +17,8 @@
         <link rel="stylesheet" href="css/style.css">
 
         
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
 
         <style>
         html, body, #map {
@@ -32,15 +33,20 @@
         <body>
             <div id="map-header">Mapa do Programa Águas para Sempre</div>
             <div id="map"></div>
-        
-        
-        <!-- Botão INFO -->
-        <!-- Botão INFO com ícone SVG -->
-        <button id="stats-btn">
-            <img src="images/info.svg" alt="Estatísticas">
-          </button>
+            
+            <div class="button-group">
+                <button id="stats-btn">
+                  <img src="images/qui.svg" alt="Estatísticas">
+                  <span class="btn-text">Painel</span>
+                </button>
+              
+                <button id="chart-btn">
+                  <img src="images/chartchar.svg" alt="Gráfico">
+                  <span class="btn-text">Gráficos</span>
+                </button>
+              </div>
 
-        
+
           <div id="coords"></div>
           <!-- TESTE -->
           <div id="scale-control" class="scale-control">
@@ -50,7 +56,7 @@
 
           <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
           <script src="stats.js"></script>
-  
+          <script src="chartsQ.js"></script>
           <div id="compass-container">
             <img id=""compass" src="images/compass2.svg">
           </div>
@@ -96,13 +102,13 @@
           </div>
           
           <div class="stats-item">
-            <span class="stats-label"><strong>Área total:</strong></span>
+            <span class="stats-label"><strong>Área total das propriedades:</strong></span>
             <span class="stats-value" id="total-area">0</span>
             <span class="stats-unit">ha</span>
           </div>
           
           <div class="stats-item">
-            <span class="stats-label"><strong>Área verde total:</strong></span>
+            <span class="stats-label"><strong>Área verde total das propriedades:</strong></span>
             <span class="stats-value" id="total-green">0</span>
             <span class="stats-unit">ha</span>
           </div>
@@ -110,11 +116,11 @@
           <div class="stats-divider"></div>
           
           <div class="stats-item">
-            <span class="stats-label" id="avg-area"><strong>Área média:</strong> — ha</span>
+            <span class="stats-label" id="avg-area"><strong>Média da área total:</strong> — ha</span>
           </div>
           
           <div class="stats-item">
-            <span class="stats-label" id="avg-green"><strong>Área Verde média:</strong> — ha</span>
+            <span class="stats-label" id="avg-green"><strong>Média da área verde total:</strong> — ha</span>
           </div>
           
           <div class="stats-divider"></div>
@@ -160,7 +166,7 @@
       
       .stats-value {
         font-weight: 700;
-        color: #007bff;
+        color: #000000;
         margin-right: 4px;
         min-width: 60px;
         text-align: right;
@@ -179,13 +185,13 @@
       }
       
       /* Cores diferenciadas */
-      .stats-item:nth-child(1) { border-left-color: #28a745; }
-      .stats-item:nth-child(2) { border-left-color: #ffc107; }
-      .stats-item:nth-child(3) { border-left-color: #20c997; }
-      .stats-item:nth-child(5) { border-left-color: #fd7e14; }
-      .stats-item:nth-child(6) { border-left-color: #6f42c1; }
-      .stats-item:nth-child(8) { border-left-color: #dc3545; }
-      .stats-item:nth-child(9) { border-left-color: #17a2b8; }
+      .stats-item:nth-child(1) { border-left-color: #ffffff; }
+      .stats-item:nth-child(2) { border-left-color: #ffffff; }
+      .stats-item:nth-child(3) { border-left-color: #ffffff; }
+      .stats-item:nth-child(5) { border-left-color: #ffffff; }
+      .stats-item:nth-child(6) { border-left-color: #ffffff; }
+      .stats-item:nth-child(8) { border-left-color: #ffffff; }
+      .stats-item:nth-child(9) { border-left-color: #ffffff; }
       
       .stats-item:hover {
         background-color: #e9ecef;
@@ -208,6 +214,7 @@
     </thead>
     <tbody></tbody>
   </table>
+
 
         <div id="map">
         </div>

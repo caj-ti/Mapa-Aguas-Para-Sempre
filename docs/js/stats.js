@@ -1,11 +1,11 @@
 (function(){
   'use strict';
   
-  // Variáveis globais encapsuladas
+  
   let highlightedLayers = [];
   let contributions = [];
   
-  // Utility functions
+  
   function parseNumber(v){
     if (v === null || v === undefined) return 0;
     if (typeof v === 'number') return v;
@@ -134,7 +134,7 @@
     const selectedGroup = groupSelectEl.value;
     const features = getTargetLayers(map, selectedGroup);
 
-    // Limpar highlights anteriores
+    
     highlightedLayers.forEach(layer => {
       if (layer._originalStyle && layer.setStyle) {
         try {
@@ -172,13 +172,13 @@
       }
     });
   
-    // Calcular totais e médias
+    
     const totalAreaSum = contributions.reduce((sum, c) => sum + (c.area != null ? c.area : 0), 0);
     const totalGreenSum = contributions.reduce((sum, c) => sum + (c.areaverd != null ? c.areaverd : 0), 0);
     const countAreaNonNull = contributions.reduce((n, c) => n + (c.area != null ? 1 : 0), 0);
     const countGreenNonNull = contributions.reduce((n, c) => n + (c.areaverd != null ? 1 : 0), 0);
 
-    // Atualizar elementos DOM com verificação
+    
     const avgAreaEl = document.getElementById('avg-area');
     const avgGreenEl = document.getElementById('avg-green');
     
@@ -190,7 +190,7 @@
       avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> ${countGreenNonNull ? (totalGreenSum / countGreenNonNull).toFixed(2) : '—'} ha`;
     }
 
-    // Highlight das layers
+    
     layersToHighlight.forEach(layer => {
       if (layer.setStyle) {
         if (!layer._originalStyle) {
@@ -210,16 +210,16 @@
       }
     });
 
-    // Ordenar se necessário
+    
     if(orderBy === 'area') {
       contributions.sort((a,b) => (b.area || 0) - (a.area || 0));
     } else if(orderBy === 'areaverd') {
       contributions.sort((a,b) => (b.areaverd || 0) - (a.areaverd || 0));
     }
 
-    // Atualizar painel de estatísticas
+   
     updateStatsPanel(contributions, totalAreaSum, totalGreenSum);
-  } // ✅ Função fechada corretamente
+  }
 
   function updateStatsPanel(contributions, totalAreaSum, totalGreenSum) {
       const totalPropsEl = document.getElementById('total-props');
@@ -228,7 +228,7 @@
       const propsTableEl = document.getElementById('props-table');
 
     if (contributions.length === 0){
-      // Ocultar elementos quando não há dados
+
       [totalPropsEl, totalAreaEl, totalGreenEl].forEach(el => {
         if (el && el.parentElement) el.parentElement.style.display = 'none';
       });
@@ -238,13 +238,13 @@
         if (tbody) tbody.innerHTML = '';
       }
       
-      // Atualizar médias
+    
       const avgAreaEl = document.getElementById('avg-area');
       const avgGreenEl = document.getElementById('avg-green');
       if (avgAreaEl) avgAreaEl.innerHTML = `<strong>Área média:</strong> —`;
-      if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> —`;
+      if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Área Verde Média:</strong> —`;
     }
-    // Mostrar elementos quando há dados
+    
     [totalPropsEl, totalAreaEl, totalGreenEl].forEach(el => {
       if (el && el.parentElement) el.parentElement.style.display = '';
     });
@@ -257,7 +257,7 @@
     if (propsTableEl){
       const tbody = propsTableEl.querySelector('tbody');
       if (tbody) {
-        tbody.innerHTML = ''; // Limpar conteúdo anterior
+        tbody.innerHTML = '';
         
         contributions.forEach(c => {
           const tr = document.createElement('tr');
@@ -266,7 +266,7 @@
           tr.style.cursor = 'pointer';
           tr.style.transition = 'background-color 0.2s';
           
-          // Hover effect
+        
           tr.addEventListener('mouseenter', () => {
             tr.style.backgroundColor = '#f0f0f0';
           });
@@ -280,7 +280,6 @@
             <td style="border: 1px solid #ccc; padding: 4px; font-size: 12px; text-align: right;">${c.area.toLocaleString('pt-BR')}</td>
             <td style="border: 1px solid #ccc; padding: 4px; font-size: 12px; text-align: right;">${c.areaverd.toLocaleString('pt-BR')}</td>
           `;
-          
          
           tr.addEventListener('click', () => {
             const map = window.map || window._map;
@@ -288,7 +287,7 @@
               const layer = findLayerById(map, c.id);
               if (layer) {
                 focusOnLayer(map, layer);
-                // Visual feedback do clique
+                
                 tr.style.backgroundColor = '#d4edda';
                 setTimeout(() => {
                   tr.style.backgroundColor = '';
@@ -314,12 +313,12 @@
     if (!scaleBar || !scaleText) return;
 
     try {
-      // Usar método do Leaflet para calcular escala
+      
       const pointA = map.containerPointToLatLng([0, map.getSize().y / 2]);
       const pointB = map.containerPointToLatLng([100, map.getSize().y / 2]);
       const distance = pointA.distanceTo(pointB);
       
-      // Definir largura da barra e texto
+      
       let barWidth = 100;
       let scaleDistance, unit;
 
@@ -331,10 +330,10 @@
         unit = 'm';
       }
       
-      // Ajustar largura proporcionalmente
+      
       barWidth = Math.round((scaleDistance * (unit === 'km' ? 1000 : 1) / distance) * 100);
       
-      // Aplicar o padrão xadrez preto e branco
+    
       scaleBar.style.width = barWidth + 'px';
       scaleBar.style.background = `linear-gradient(90deg, 
         #000000 0%, #000000 25%,     
@@ -365,14 +364,13 @@
     const map = window.map || window._map;
     if (!map) return;
     
-    // Atualizar escala no carregamento
+    
     updateScaleLeaflet();
     
-    // Atualizar escala quando o zoom/posição mudar
+    
     map.on('zoomend moveend', updateScaleLeaflet);
   }
 
-  // Função principal de inicialização
   function initialize() {
     const btn = document.getElementById("stats-btn");
     const panel = document.getElementById("stats-panel");
@@ -381,7 +379,6 @@
     const sortGreenBtn = document.getElementById("sort-green");
     const groupSelect = document.getElementById('group-select');
 
-    // Event listeners para o painel
     if (btn && panel) {
       btn.addEventListener('click', () => {
         panel.classList.toggle('hidden');
@@ -403,19 +400,18 @@
       sortGreenBtn.addEventListener('click', () => updateStats('areaverd'));
     }
 
-    // ✅ Event listener único para mudança de grupo
+    
     if (groupSelect) {
       groupSelect.addEventListener('change', () => updateStats());
     }
 
-    // Configurar displays de coordenadas e escala
+    
     setupCoordinatesDisplay();
     
-    // Aguardar um pouco para garantir que o mapa esteja carregado
+    
     setTimeout(setupScaleBar, 1000);
   }
 
-  // ✅ Expor funções necessárias globalmente
   window.webmapStats = {
     updateStats: updateStats,
     findLayerById: findLayerById,
@@ -423,11 +419,11 @@
     initialize: initialize
   };
 
-  // Inicializar quando DOM estiver pronto
+  
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initialize);
   } else {
-    // DOM já está carregado
+    
     initialize();
   }
 
