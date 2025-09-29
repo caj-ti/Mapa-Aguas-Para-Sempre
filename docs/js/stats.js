@@ -178,16 +178,22 @@
     const countAreaNonNull = contributions.reduce((n, c) => n + (c.area != null ? 1 : 0), 0);
     const countGreenNonNull = contributions.reduce((n, c) => n + (c.areaverd != null ? 1 : 0), 0);
 
-    
+    window.totalAreaSum  = totalAreaSum;
+    window.totalGreenSum = totalGreenSum;
+    window.manualValue   = window.manualValue ?? 0;
+    document.dispatchEvent(new CustomEvent('stats:ready', {
+      detail: { totalAreaSum, totalGreenSum, manualValue: window.manualValue }
+    }));
+
     const avgAreaEl = document.getElementById('avg-area');
     const avgGreenEl = document.getElementById('avg-green');
     
     if (avgAreaEl) {
-      avgAreaEl.innerHTML = `<strong>Área média:</strong> ${countAreaNonNull ? (totalAreaSum / countAreaNonNull).toFixed(2) : '—'} ha`;
+      avgAreaEl.innerHTML = `<strong>Média da área média:</strong> ${countAreaNonNull ? (totalAreaSum / countAreaNonNull).toFixed(2) : '—'} ha`;
     }
     
     if (avgGreenEl) {
-      avgGreenEl.innerHTML = `<strong>Média Área Verde:</strong> ${countGreenNonNull ? (totalGreenSum / countGreenNonNull).toFixed(2) : '—'} ha`;
+      avgGreenEl.innerHTML = `<strong>Média da área Verde:</strong> ${countGreenNonNull ? (totalGreenSum / countGreenNonNull).toFixed(2) : '—'} ha`;
     }
 
     

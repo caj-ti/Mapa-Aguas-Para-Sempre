@@ -19,7 +19,6 @@
         
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
-
         <style>
         html, body, #map {
             width: 100%;
@@ -45,10 +44,10 @@
                   <span class="btn-text">Gráficos</span>
                 </button>
               </div>
-
+              
 
           <div id="coords"></div>
-          <!-- TESTE -->
+
           <div id="scale-control" class="scale-control">
             <div id="scale-bar" class="scale-bar"></div>
             <div id="scale-text" class="scale-text">0 m</div>
@@ -56,7 +55,6 @@
 
           <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
           <script src="stats.js"></script>
-          <script src="chartsQ.js"></script>
           <div id="compass-container">
             <img id=""compass" src="images/compass2.svg">
           </div>
@@ -76,8 +74,15 @@
       title="GitHub — psamap">
       <img id="github-logo" src="images/githublogo.svg" alt="GitHub — psamap">
     </a>
-    
-<!-- Painel lateral-->
+
+<div id="painelchart" class="hidden panel" role="dialog" aria-hidden="true" tabindex="-1">
+    <button id="close-painelchart" type="button" class="close-panel">
+        <img src="images/close.svg" alt="Fechar">
+    </button>
+        <h2 style="margin:0;" >Painel de Gráficos</h2>
+        <canvas id="myChart"></canvas>
+</div>
+
 <div id="stats-panel" class="hidden stats-panel side-panel" role="region" aria-label="Painel de informações">
     <div class="stats-header" style="display:block; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <h2 style="margin:0;">Painel de Acompanhamento</h2>
@@ -94,7 +99,7 @@
     </button>
 
     <div class="stats-content">
-        <!-- Lista unificada de dados estatísticos -->
+        
         <div class="stats-list">
           <div class="stats-item">
             <span class="stats-label"><strong>Propriedades:</strong></span>
@@ -184,7 +189,6 @@
         margin: 4px 0;
       }
       
-      /* Cores diferenciadas */
       .stats-item:nth-child(1) { border-left-color: #ffffff; }
       .stats-item:nth-child(2) { border-left-color: #ffffff; }
       .stats-item:nth-child(3) { border-left-color: #ffffff; }
@@ -214,7 +218,7 @@
     </thead>
     <tbody></tbody>
   </table>
-
+</div>
 
         <div id="map">
         </div>
@@ -328,7 +332,7 @@
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-        // remove popup's row if "visible-with-data"
+        
         function removeEmptyRowsFromPopupContent(content, feature) {
          var tempDiv = document.createElement('div');
          tempDiv.innerHTML = content;
@@ -345,12 +349,11 @@
 
         </script>
 
-<!-- Chart.js (biblioteca) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
-<!-- script stats -->
-    <script src="js/stats.js"></script>
 
+    <script src="js/stats.js"></script>
+    <script src="js/chartsQ.js"></script>
     <script>
         (function(){
           const openBtn = document.getElementById('stats-btn');
@@ -375,13 +378,12 @@
 
         })();
 
-        // add class to format popup if it contains media
 		function addClassToPopupIfMedia(content, popup) {
 			var tempDiv = document.createElement('div');
 			tempDiv.innerHTML = content;
 			if (tempDiv.querySelector('td img')) {
 				popup._contentNode.classList.add('media');
-					// Delay to force the redraw
+		
 					setTimeout(function() {
 						popup.update();
 					}, 10);
