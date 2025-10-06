@@ -172,7 +172,7 @@
       }
     });
   
-    
+    ///calculo soma+media das qtd propriedades ,áreas t áreas v
     const totalAreaSum = contributions.reduce((sum, c) => sum + (c.area != null ? c.area : 0), 0);
     const totalGreenSum = contributions.reduce((sum, c) => sum + (c.areaverd != null ? c.areaverd : 0), 0);
     const countAreaNonNull = contributions.reduce((n, c) => n + (c.area != null ? 1 : 0), 0);
@@ -185,18 +185,38 @@
       detail: { totalAreaSum, totalGreenSum, manualValue: window.manualValue }
     }));
 
-    const avgAreaEl = document.getElementById('avg-area');
-    const avgGreenEl = document.getElementById('avg-green');
-    
-    if (avgAreaEl) {
-      avgAreaEl.innerHTML = `<strong>Média da área média:</strong> ${countAreaNonNull ? (totalAreaSum / countAreaNonNull).toFixed(2) : '—'} ha`;
-    }
-    
-    if (avgGreenEl) {
-      avgGreenEl.innerHTML = `<strong>Média da área Verde:</strong> ${countGreenNonNull ? (totalGreenSum / countGreenNonNull).toFixed(2) : '—'} ha`;
-    }
+  const fmt = v =>
+    v == null
+      ? '—'
+      : Number(v).toLocaleString('pt-BR', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+  
+  function setAverageElement(el, label, value) {
+    if (!el) return;
+  
+    el.textContent = ''; 
+    el.style.display = 'flex';
+    el.style.justifyContent = 'space-between';
+  
+    const strongLabel = document.createElement('strong');
+    strongLabel.textContent = label;
+    el.appendChild(strongLabel);
+  
+    el.appendChild(document.createTextNode(' ')); 
 
-    
+    const valueSpan = document.createElement('span');
+    valueSpan.innerHTML = `<strong>${fmt(value)}</strong><span style="font-weight:normal;font-size:0.8em;margin-left:0.4em;padding:0;">ha</span>`;
+    el.appendChild(valueSpan);
+  }
+  
+  const avgArea  = countAreaNonNull  ? totalAreaSum  / countAreaNonNull  : null;
+  const avgGreen = countGreenNonNull ? totalGreenSum / countGreenNonNull : null;
+  
+setAverageElement(document.getElementById('avg-area'),  'Média das áreas das propriedades:', avgArea);
+setAverageElement(document.getElementById('avg-green'), 'Média da área verde das propriedades:', avgGreen);
+
     layersToHighlight.forEach(layer => {
       if (layer.setStyle) {
         if (!layer._originalStyle) {
@@ -216,7 +236,6 @@
       }
     });
 
-    
     if(orderBy === 'area') {
       contributions.sort((a,b) => (b.area || 0) - (a.area || 0));
     } else if(orderBy === 'areaverd') {
@@ -324,7 +343,7 @@
       const pointB = map.containerPointToLatLng([100, map.getSize().y / 2]);
       const distance = pointA.distanceTo(pointB);
       
-      
+      ///escala 
       let barWidth = 100;
       let scaleDistance, unit;
 
@@ -336,9 +355,7 @@
         unit = 'm';
       }
       
-      
       barWidth = Math.round((scaleDistance * (unit === 'km' ? 1000 : 1) / distance) * 100);
-      
     
       scaleBar.style.width = barWidth + 'px';
       scaleBar.style.background = `linear-gradient(90deg, 
@@ -353,7 +370,7 @@
       console.warn('Erro ao atualizar escala:', e);
     }
   }
-
+///coordenadas no mapa 
   function setupCoordinatesDisplay() {
     const map = window.map || window._map;
     const coordsDiv = document.getElementById('coords');
@@ -361,8 +378,7 @@
     if (!map || !coordsDiv) return;
 
     map.on('mousemove', function(e) {
-      coordsDiv.innerHTML = 'Lat: ' + e.latlng.lat.toFixed(6) +
-                          '<br>Lng: ' + e.latlng.lng.toFixed(6);
+      coordsDiv.innerHTML = 'Lat: ' + e.latlng.lat.toFixed(6) + '<br>Lng: ' + e.latlng.lng.toFixed(6);
     });
   }
 
@@ -434,3 +450,12 @@
   }
 
 })();
+
+window.addEventListener('load', () => {
+  const popup = document.getElementById('popup');
+  const btn = document.getElementById('close-popup');
+
+  popup.style.display = 'block';
+
+  btn.addEventListener('click', () => popup.style.display = 'none');
+});

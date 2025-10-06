@@ -75,11 +75,51 @@
       <img id="github-logo" src="images/githublogo.svg" alt="GitHub — psamap">
     </a>
 
+<div id="popup">
+        <div id="popup-content">
+          <h2>Bem-vindo ao Mapa do Programa Águas Para Sempre</h2>
+          <p>
+         Este mapa exibe os limites territoriais e as propriedades associadas ao Programa
+         Águas para Sempre na região rural de Joinville e Garuva, para análise e apresentação. As propriedades são classificadas em:
+          <strong>Aderidas</strong>, <strong>Em processo de adesão</strong> e
+          <strong>Interessadas / Manifestaram interesse</strong>.
+    </p>
+    <p>
+         O botão <span class="fakePainel-btn">
+            <img src="images/qui.svg" alt="Painel">
+            Painel
+          </span> mostra os dados agregados do grupo selecionado.
+         A seleção considera apenas propriedades ativas no mapa. Propriedades desmarcadas
+         na legenda não entram nos cálculos. Propriedades selecionadas são destacadas em vermelho.
+         Passar o cursor sobre uma feição altera apenas a visualização e não os cálculos.
+    </p>
+     <p>
+         O botão <span class="fakeGrafícos-btn">
+            <img src="images/chartchar.svg" alt="Painel">Grafícos 
+        </span> exibe os gráficos disponíveis.
+         <p> 
+         O mapa é atualizado conforme necessário para refletir o estado atual do programa.
+         <p></p>
+    </p>
+    <button id="close-popup" aria-label="Fechar popup">
+        <img src="images/close.svg" alt="Fechar">
+        </button>
+    </div>
+</div>
+
 <div id="painelchart" class="hidden panel" role="dialog" aria-hidden="true" tabindex="-1">
     <button id="close-painelchart" type="button" class="close-panel">
         <img src="images/close.svg" alt="Fechar">
     </button>
-        <h2 style="margin:0;" >Painel de Gráficos</h2>
+        <h2 style="margin:0;">Painel de Gráficos</h2>
+
+        <div id="chartSelectPanel" style="margin-top:10px;">
+            <select id="chartSelect">
+            <option value="comparacao" data-icon="images/compar.svg">Comparação Total</option>
+            <option value="linha" data-icon="images/linhatemp.svg">Linha do Tempo das Adesões</option>
+          </select>
+        </div>
+
         <canvas id="myChart"></canvas>
 </div>
 
@@ -93,7 +133,7 @@
         <option value="interessadas">Propriedades Interessadas</option>
       </select>
     </div>
-
+    
     <button id="close-panel" aria-label="Fechar painel">
         <img src="images/close.svg" alt="Fechar">
     </button>
