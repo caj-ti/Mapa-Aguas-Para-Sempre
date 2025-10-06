@@ -36,7 +36,7 @@ h2.__web-inspector-hide-shortcut__ {
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px 20px;
+  padding: 16px 27px;
   font-family: 'Open Sans', sans-serif;
   font-size: 24px;
   font-weight: bold;
@@ -60,12 +60,12 @@ h2.__web-inspector-hide-shortcut__ {
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  height: 44px;
-  width: 140px;
+  height: 50px;
+  width: 150px;
   border: none;
   border-radius: 8px;
   font-family: 'Open Sans', sans-serif;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   line-height: 1.2;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -74,8 +74,8 @@ h2.__web-inspector-hide-shortcut__ {
 }
 
 .button-group button img {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
 }
 
@@ -101,9 +101,9 @@ h2.__web-inspector-hide-shortcut__ {
   position: absolute;
   top: 90px;
   left: 10px;
-  width: 460px;
+  width: 500px;
   max-width: 520px;
-  max-height: 70vh;
+  max-height: 75vh;
   padding: 24px;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
@@ -396,8 +396,8 @@ h2.__web-inspector-hide-shortcut__ {
   bottom: 16px;
   transform: translateX(-50%);
   z-index: 10000;
-  width: 44px;
-  height: 44px;
+  width: 58px;
+  height: 58px;
   background: rgba(255, 255, 255, 0.92);
   border-radius: 8px;
   border: 1px solid #333;
@@ -435,16 +435,16 @@ h2.__web-inspector-hide-shortcut__ {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid #333;
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 11px 15px;
   font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   z-index: 1000;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .scale-bar {
-  height: 8px;
+  height: 10px;
   min-width: 100px;
   margin-bottom: 2px;
   border: 1px solid #333;
@@ -478,12 +478,14 @@ h2.__web-inspector-hide-shortcut__ {
   }
 }
 
+
+
 #coords {
   position: fixed;
   bottom: 16px;       
   left: calc(50% + 60px); 
   background: white;
-  padding: 6px 10px;
+  padding: 10px 14px;
   border: 1px solid #333;
   border-radius: 6px;
   font-size: 13px;
@@ -638,12 +640,13 @@ h2.__web-inspector-hide-shortcut__ {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-size: 1.1rem;
   background: #fff;
   color: #000;
   padding: 24px;
-  width: 460px;
+  width: 500px;
   max-width: 90%;
-  max-height: 70vh;
+  max-height: 80vh;
   overflow-y: auto;
   border-radius: 12px;
   font-family: 'Open Sans', sans-serif;
@@ -653,8 +656,8 @@ h2.__web-inspector-hide-shortcut__ {
   position: absolute;
   top: 8px;
   right: 8px;
-  width: 32px;    
-  height: 32px;
+  width: 34px;    
+  height: 34px;
   padding: 0;
   border: none;
   background: transparent;
@@ -665,8 +668,8 @@ h2.__web-inspector-hide-shortcut__ {
 }
 
 #close-popup img {
-  width: 16px;     
-  height: 16px;
+  width: 20px;     
+  height: 20px;
   max-width: 100%;
   display: block;
   line-height: 0;
