@@ -36,7 +36,7 @@ h2.__web-inspector-hide-shortcut__ {
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 17px 28px;
+  padding: 18px 28px;
   font-family: 'Open Sans', sans-serif;
   font-size: 30px;
   font-weight: bold;
@@ -154,7 +154,7 @@ h2.__web-inspector-hide-shortcut__ {
   margin-right: 0;
 }
 
-#stats-panel h2 {font-size: 20px;
+#stats-panel h2 {font-size: 30px;
   font-weight: 600;
   color: #222;
   margin: 0 0 16px 0;
@@ -164,14 +164,14 @@ h2.__web-inspector-hide-shortcut__ {
 }
 
 #stats-panel h4 {
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 600;
   margin: 0 0 12px 0;
 }
 
 #stats-panel p,
 #stats-panel li {
-  font-size: 14px;
+  font-size: 20px;
   line-height: 1.6;
 }
 
@@ -234,8 +234,8 @@ h2.__web-inspector-hide-shortcut__ {
   -moz-appearance: none;
 
   width: 100%;
-  padding: 12px 40px 12px 16px; 
-  font-size: 16px;
+  padding: 14px 42px 14px 18px; 
+  font-size: 22px;
   font-family: 'Open Sans', sans-serif;
   color: #0f0f0f;
 
@@ -280,7 +280,7 @@ h2.__web-inspector-hide-shortcut__ {
   pointer-events: auto;
 }
 #logo-link img#map-logo {
-  width: 110px;
+  width: 130px;
   height: auto;
   display: block;
   user-select: none;
@@ -368,11 +368,11 @@ h2.__web-inspector-hide-shortcut__ {
 }
 
 #github-logo{
-  width:44px;
-  height:44px;
+  width:50px;
+  height:50px;
   display:block;
   object-fit:contain;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.9);
   padding:6px;
   border-radius:8px;
   border:1px solid #333;
@@ -398,7 +398,7 @@ h2.__web-inspector-hide-shortcut__ {
   z-index: 10000;
   width: 58px;
   height: 58px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   border: 1px solid #333;
   box-shadow: 0 6px 18px rgba(0,0,0,0.10);
@@ -468,7 +468,7 @@ h2.__web-inspector-hide-shortcut__ {
   .scale-control {
     bottom: 12px;
     left: calc(50% - 120px);
-    font-size: 11px;
+    font-size: 16px;
     padding: 4px 8px;
   }
   
@@ -484,11 +484,12 @@ h2.__web-inspector-hide-shortcut__ {
   position: fixed;
   bottom: 16px;       
   left: calc(50% + 60px); 
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   padding: 10px 14px;
   border: 1px solid #333;
   border-radius: 6px;
-  font-size: 13px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   pointer-events: none;
   z-index: 1000;
@@ -498,9 +499,9 @@ h2.__web-inspector-hide-shortcut__ {
   position: absolute;
   top: 90px;
   left: 10px;
-  width: 460px;
+  width: 500px;
   max-width: 520px;
-  max-height: 70vh;
+  max-height: 80vh;
   padding: 24px;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
@@ -561,7 +562,7 @@ h2.__web-inspector-hide-shortcut__ {
 }
 
 #painelchart h2{
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 600;
   color: #000000;
   margin: 0 0 16px 0;

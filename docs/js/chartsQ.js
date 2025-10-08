@@ -114,6 +114,95 @@
       });
     }
 
+    const pagamentosRaw = [
+      {date:'04/10/2023', amount:'R$ 1.877,31'},
+      {date:'02/10/2023', amount:'R$ 571,63'},
+      {date:'02/10/2023', amount:'R$ 2.276,99'},
+      {date:'24/09/2024', amount:'R$ 1.821,42'},
+      {date:'24/09/2024', amount:'R$ 790,58'},
+      {date:'24/09/2024', amount:'R$ 3.265,17'},
+      {date:'13/06/2024', amount:'R$ 6.531,23'},
+      {date:'12/12/2024', amount:'R$ 1.773,35'},
+      {date:'15/05/2025', amount:'R$ 7.815,93'},
+      {date:'18/03/2025', amount:'R$ 549,19'},
+      {date:'26/05/2025', amount:'R$ 5.469,10'},
+      {date:'11/09/2025', amount:'R$ 1.427,81'},
+      {date:'11/09/2025', amount:'R$ 10.361,25'},
+      {date:'11/09/2025', amount:'R$ 589,88'}
+    ];
+    
+    function parseBRNumber(s){
+      if (!s && s !== 0) return 0;
+      return parseFloat(String(s).replace(/[R$\s\.]/g,'').replace(',','.')) || 0;
+    }
+    function parseBRDate(d){
+      const p = String(d).trim().split('/');
+      return new Date(+p[2], +p[1]-1, +p[0]);
+    }
+    
+    // Agrega por ano
+    function agruparPagamentosPorAno(){
+      const mapa = {};
+      pagamentosRaw.forEach(r => {
+        const dt = parseBRDate(r.date);
+        const ano = String(dt.getFullYear());
+        mapa[ano] = (mapa[ano] || 0) + parseBRNumber(r.amount);
+      });
+      const anos = Object.keys(mapa).sort((a,b)=> +a - +b);
+      return {
+        labels: anos,
+        valores: anos.map(a => +mapa[a].toFixed(2))
+      };
+    }
+    
+    function desenharPagamentos(ctx){
+      const {labels, valores} = agruparPagamentosPorAno();
+      return new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets:[{
+            label: 'Pagamentos por ano (R$)',
+            data: valores,
+            borderColor: 'rgb(15,92,143)',
+            backgroundColor: 'rgba(15,92,143,0.15)',
+            tension: 0.25,
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            fill: true
+          }]
+        },
+        options:{
+          responsive:true,
+          plugins:{
+            legend:{position:'bottom'},
+            tooltip:{
+              callbacks:{
+                label: function(ctx){
+                  const v = Number(ctx.parsed.y || 0);
+                  return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+                }
+              }
+            }
+          },
+          scales:{
+            y:{
+              beginAtZero:true,
+              ticks:{
+                callback: function(value){
+                  return Number(value).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+                }
+              },
+              title:{display:true,text:'R$'}
+            },
+            x:{
+              title:{display:true,text:'Ano'}
+            }
+          }
+        }
+      });
+    }
+
     function abrir(){
       restoreFocusTo = document.activeElement;
       panel.classList.remove('hidden');
@@ -136,6 +225,8 @@
         chartInstance = desenharComparacao(ctx);
       } else if (currentChartType === "linha"){
         chartInstance = desenharLinhaTempo(ctx);
+      } else if (currentChartType === "pagamentos"){
+        chartInstance = desenharPagamentos(ctx);
       }
     }
 
