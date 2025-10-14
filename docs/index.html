@@ -1,3 +1,9 @@
+
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- Copiar o codigo daqui -->
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -43,8 +49,12 @@
                   <img src="images/chartchar.svg" alt="Gráfico">
                   <span class="btn-text">Gráficos</span>
                 </button>
-              </div>
-              
+            
+                <button id="details-btn">
+                  <img src="images/detalhes.svg" alt="Sobre o Mapa">
+                  <span class="btn-text">Detalhes</span>
+                </button>
+            </div>
 
           <div id="coords"></div>
 
@@ -170,7 +180,9 @@
           </div>
           
           <div class="stats-divider"></div>
-          
+
+<!--Os dados da área contratada e do valor médio/ha deverão ser  atualizados manualmente trocando o numero na parte !!!!!! <span class="stats-value" !!!!!!!! -->
+
           <div class="stats-item">
             <span class="stats-label"><strong>Área contratada:</strong></span>
             <span class="stats-value">155,30</span>
@@ -184,7 +196,7 @@
           </div>
         </div>
       </div>
-      
+
       <style>
       .stats-list {
         display: flex;
@@ -260,8 +272,9 @@
     <tbody></tbody>
   </table>
 </div>
-
-
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- Até aqui-->
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
@@ -389,7 +402,9 @@
         }
 
         </script>
-
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- Copiar daqui-->
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
 
@@ -418,6 +433,11 @@
         });
 
         })();
+
+////////////////////////////////////////////////////////////////////////////////////
+//Até Aqui/////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
 
         function removeEmptyRowsFromPopupContent(content, feature) {
          var tempDiv = document.createElement('div');

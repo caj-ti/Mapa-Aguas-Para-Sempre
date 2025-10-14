@@ -97,6 +97,15 @@ h2.__web-inspector-hide-shortcut__ {
   background: #f0f0f0;
 }
 
+#details-btn{
+background: #fff;
+  color: #000;
+}
+
+#details-btn:hover {
+  background: #f0f0f0;
+}
+
 #stats-panel {
   position: absolute;
   top: 90px;

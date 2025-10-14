@@ -454,8 +454,13 @@ setAverageElement(document.getElementById('avg-green'), 'Média da área verde d
 window.addEventListener('load', () => {
   const popup = document.getElementById('popup');
   const btn = document.getElementById('close-popup');
-
+  const btnDetails = document.getElementById('details-btn');
   popup.style.display = 'block';
 
   btn.addEventListener('click', () => popup.style.display = 'none');
+  
+
+btnDetails.addEventListener('click', () => {
+  popup.style.display = 'block';
+  });
 });

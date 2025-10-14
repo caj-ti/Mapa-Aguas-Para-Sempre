@@ -1,3 +1,9 @@
+// js. que controla o painel de gráficos, ele é dependente do calculo do stats.js e dos dados manuais
+// Para novos gráficos seguir o mesmo padrão de codigo
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Função de criação do painel de gráficos
 (function(){
   'use strict';
 
@@ -39,6 +45,10 @@
     let chartInstance = null;
     let currentChartType = "comparacao";
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Aqui sera preciso atualizar com a nova data de adesão da propriedades aderida/////
+// Linha do tempo das adesões
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const datasAdesao = [
       "29/08/2022","29/08/2022","29/08/2022","19/05/2023","24/11/2023",
       "06/03/2024","28/05/2024","24/09/2024","24/09/2024","07/10/2024",
@@ -46,7 +56,8 @@
       "20/12/2024","20/12/2024","22/04/2025","22/04/2025","22/04/2025",
       "24/04/2025","24/04/2025","21/07/2025","25/07/2025","30/07/2025"
     ];
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Função especifica para o gráfico de comparação 
     function desenharComparacao(ctx){
       const total = Number(window.totalAreaSum) || 0;
       const green = Number(window.totalGreenSum) || 0;
@@ -92,6 +103,10 @@
       });
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Função de criação da linha do tempo das adesões
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
     function desenharLinhaTempo(ctx){
       const {labels, valores} = contarAcumulado(datasAdesao);
       return new Chart(ctx, {
@@ -113,7 +128,9 @@
         }
       });
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
+// Será preciso atualizar essa parte para o gráfico de pagamentos por ano do programa adicionando a data e o valor do pagamento seguindo o mesmo padrão
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
     const pagamentosRaw = [
       {date:'04/10/2023', amount:'R$ 1.877,31'},
       {date:'02/10/2023', amount:'R$ 571,63'},
@@ -130,7 +147,9 @@
       {date:'11/09/2025', amount:'R$ 10.361,25'},
       {date:'11/09/2025', amount:'R$ 589,88'}
     ];
-    
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     function parseBRNumber(s){
       if (!s && s !== 0) return 0;
       return parseFloat(String(s).replace(/[R$\s\.]/g,'').replace(',','.')) || 0;
@@ -140,7 +159,7 @@
       return new Date(+p[2], +p[1]-1, +p[0]);
     }
     
-    // Agrega por ano
+// Função de criação do gráfico de pagamentos p/ano
     function agruparPagamentosPorAno(){
       const mapa = {};
       pagamentosRaw.forEach(r => {
@@ -202,7 +221,9 @@
         }
       });
     }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Funções gerais do graficos e da escolha
     function abrir(){
       restoreFocusTo = document.activeElement;
       panel.classList.remove('hidden');
