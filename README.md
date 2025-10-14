@@ -8,31 +8,31 @@
 
 ---
 
-## 🔹 Sobre o Projeto
+## Sobre o Projeto
 Projeto de Webmap para o programa ambiental **"Águas Para Sempre"**, desenvolvido para a **Companhia Águas de Joinville**, **City of Joinville, Santa Catarina, Brasil (2025)**.  
 
 ---
 
-## 🔹 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 - [Leaflet](https://leafletjs.com/)  
 - QGIS + [qgis2web plugin](https://plugins.qgis.org/plugins/qgis2web/)  
 - HTML5, CSS3, JavaScript  
 
 ---
 
-## 🔹 Visualização
+## Visualização
 Acesse o Webmap interativo:  
 [**Abrir Webmap**](https://kongvinter.github.io/-guasparasempreMAPA/)
 
 ---
 
-## 🔹 Logos e Imagens
+## Logos e Imagens
 
 <img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="200"/>  <img src="docs/images/logoteste.png" alt="Logo teste" width="400"/>  
 
 ---
 
-## 🔹 Como Executar Localmente
+## Como Executar Localmente
 1. Clone este repositório:  
    ```bash
    git clone https://github.com/kongvinter/-guasparasempreMAPA.git
