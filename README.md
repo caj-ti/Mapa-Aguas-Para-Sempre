@@ -22,7 +22,7 @@ Projeto de Webmap para o programa ambiental **"Águas Para Sempre"**, desenvolvi
 
 ## Visualização
 Acesse o Webmap interativo:  
-[**Abrir Webmap**](https://kongvinter.github.io/-guasparasempreMAPA/)
+[**Abrir Webmap**](https://caj-ti.github.io/Mapa-Aguas-Para-Sempre/)
 
 ---
 
@@ -35,5 +35,5 @@ Acesse o Webmap interativo:
 ## Como Executar Localmente
 1. Clone este repositório:  
    ```bash
-   git clone https://github.com/kongvinter/-guasparasempreMAPA.git
+   git clone https://github.com/kongvinter/-guasparasempreMAPA.git](https://caj-ti.github.io/Mapa-Aguas-Para-Sempre/
 
