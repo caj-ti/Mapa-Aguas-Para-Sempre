@@ -28,7 +28,7 @@ Acesse o Webmap interativo:
 
 ## Logos e Imagens
 
-<img src="docs/images/logoecaj.png" alt="Logo teste" width="1000"/>
+<img src="docs/images/versaofinallogos.png" alt="Logo teste" width="1000"/>
 
 ---
 
