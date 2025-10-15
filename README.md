@@ -28,10 +28,10 @@ Acesse o Webmap interativo:
 
 ## Logos e Imagens
 
-<p align="center">
+<div style="display:flex; align-items:center; justify-content:center; gap:20px;">
   <img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="200"/>
   <img src="docs/images/logoverdadeira.png" alt="Logo teste" width="800"/>
-</p>
+</div>
 
 ---
 
