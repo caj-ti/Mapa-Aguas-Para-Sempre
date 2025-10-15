@@ -27,9 +27,12 @@ Acesse o Webmap interativo:
 ---
 
 ## Logos e Imagens
+
 <p align="center">
-<img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="200"/>  <img src="docs/images/logoverdadeira.png" alt="Logo teste" width="800"/>
+  <img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="200"/>
+  <img src="docs/images/logoverdadeira.png" alt="Logo teste" width="800"/>
 </p>
+
 ---
 
 ## Como Executar Localmente
