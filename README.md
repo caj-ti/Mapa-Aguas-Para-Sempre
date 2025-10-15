@@ -35,5 +35,5 @@ Acesse o Webmap interativo:
 ## Como Executar Localmente
 1. Clone este repositório:  
    ```bash
-   git clone https://github.com/kongvinter/-guasparasempreMAPA.git](https://caj-ti.github.io/Mapa-Aguas-Para-Sempre/
+   git clone https://caj-ti.github.io/Mapa-Aguas-Para-Sempre/
 
