@@ -31,7 +31,7 @@ Acesse o Webmap interativo:
 <img src="docs/images/logoverdadeira.png" alt="Logo teste" width="800"/>
 
 <div style="text-align:center;">
-  <img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="1000"/>
+  <img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="500"/>
 </div>  
 
 
