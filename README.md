@@ -9,7 +9,7 @@
 ---
 
 ## Sobre o Projeto
-Projeto de Webmap para o programa ambiental **"Águas Para Sempre"**, desenvolvido para a **Companhia Águas de Joinville**, **City of Joinville, Santa Catarina, Brasil (2025)**.  
+Projeto de Webmap para o programa ambiental **"Águas Para Sempre"**, desenvolvido para a **Companhia Águas de Joinville**, **Joinville, Santa Catarina, Brasil (2025)**.  
 
 ---
 
@@ -28,7 +28,13 @@ Acesse o Webmap interativo:
 
 ## Logos e Imagens
 
-<img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="200"/>  <img src="docs/images/logoreales.png" alt="Logo teste" width="800"/>
+<img src="docs/images/logoverdadeira.png" alt="Logo teste" width="1000"/>
+
+<div style="text-align:center;">
+  <img src="docs/images/LOGOPSA.png" alt="Águas para Sempre" width="500"/>
+</div>  
+
+
 
 ---
 
