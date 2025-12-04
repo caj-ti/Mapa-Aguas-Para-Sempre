@@ -1,6 +1,3 @@
-// Código completo com ajustes para cálculo correto de área
-// Adicione esta função após as declarações iniciais
-
 (function(){
   'use strict';
   
@@ -796,16 +793,53 @@ setAverageElement(document.getElementById('avg-green'), 'Média da área verde d
 
 })();
 
-window.addEventListener('load', () => {
+// CÓDIGO DO POPUP CORRIGIDO - O PROBLEMA ESTAVA AQUI
+document.addEventListener('DOMContentLoaded', function() {
   const popup = document.getElementById('popup');
-  const btn = document.getElementById('close-popup');
-  const btnDetails = document.getElementById('details-btn');
-  popup.style.display = 'block';
-
-  btn.addEventListener('click', () => popup.style.display = 'none');
+  const closePopupBtn = document.getElementById('close-popup');
+  const detailsBtn = document.getElementById('details-btn');
   
-
-btnDetails.addEventListener('click', () => {
-  popup.style.display = 'block';
+  // Verificar se os elementos existem
+  if (!popup || !closePopupBtn) return;
+  
+  // Função para mostrar o popup
+  function mostrarPopup() {
+    popup.style.display = 'block';
+  }
+  
+  // Função para esconder o popup
+  function esconderPopup() {
+    popup.style.display = 'none';
+  }
+  
+  // Mostrar popup inicialmente (apenas uma vez)
+  // Usar localStorage para lembrar se já foi fechado
+  const popupFechado = localStorage.getItem('popupFechado');
+  
+  if (!popupFechado) {
+    // Mostrar após pequeno delay para garantir que a página carregou
+    setTimeout(mostrarPopup, 500);
+  }
+  
+  // Configurar botão de fechar
+  closePopupBtn.addEventListener('click', function() {
+    esconderPopup();
+    // Salvar no localStorage que o usuário fechou o popup
+    localStorage.setItem('popupFechado', 'true');
+  });
+  
+  // Configurar botão de detalhes (se existir)
+  if (detailsBtn) {
+    detailsBtn.addEventListener('click', function() {
+      mostrarPopup();
+    });
+  }
+  
+  // Fechar popup ao clicar fora do conteúdo
+  popup.addEventListener('click', function(e) {
+    if (e.target === popup) {
+      esconderPopup();
+      localStorage.setItem('popupFechado', 'true');
+    }
   });
 });
