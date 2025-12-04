@@ -58,7 +58,7 @@
 //Função especifica para o gráfico de comparação 
     function desenharComparacao(ctx){
       // VALOR FIXO - Atualize manualmente conforme necessário
-      const total = 36608; // Área total do programa em hectares
+      const total = 36608.07 // Área total do programa em hectares
       
       const green = Number(window.totalGreenSum) || 0;
       const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
