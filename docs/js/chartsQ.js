@@ -57,9 +57,40 @@
       "24/04/2025","24/04/2025","21/07/2025","25/07/2025","30/07/2025","19/11/2025"
     ];
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Função especifica para o gráfico de comparação 
+// Função de criação do gráfico de comparação 
     function desenharComparacao(ctx){
-      const total = Number(window.totalAreaSum) || 0;
+      // Calcular área total automaticamente a partir do shapefile
+      let total = 0;
+      if (typeof LimitedoPrograma_2 !== 'undefined' && LimitedoPrograma_2.features) {
+        // Importar a biblioteca de área se disponível
+        if (typeof area !== 'undefined') {
+          // Usar turf.js se disponível
+          const features = LimitedoPrograma_2.features;
+          total = features.reduce((sum, feature) => {
+            try {
+              if (feature.geometry && feature.geometry.type === 'Polygon') {
+                const geomArea = area(feature);
+                return sum + (geomArea / 10000); // Converter m² para hectares
+              }
+              return sum;
+            } catch (e) {
+              console.warn('Erro ao calcular área:', e);
+              return sum;
+            }
+          }, 0);
+          
+          // Arredondar para 2 casas decimais
+          total = Math.round(total * 100) / 100;
+        } else {
+          // Fallback: cálculo aproximado se turf.js não estiver disponível
+          console.warn('Biblioteca de área não disponível. Usando fallback.');
+          total = calcularAreaAproximada(LimitedoPrograma_2);
+        }
+      } else {
+        // Fallback para o valor atual se o shape não estiver carregado
+        total = Number(window.totalAreaSum) || 0;
+      }
+
       const green = Number(window.totalGreenSum) || 0;
       const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
         item.querySelector('.stats-label')?.textContent.includes('Área contratada')
@@ -76,7 +107,7 @@
         data: {
           labels: ['Propriedade'],
           datasets: [
-            { label:'Área Total', data:[total], backgroundColor:'rgba(15,92,143,0.6)' },
+            { label:'Área Total do Programa', data:[total], backgroundColor:'rgba(15,92,143,0.6)' },
             { label:'Área Verde total', data:[green], backgroundColor:'rgba(104,218,82,0.6)' },
             { label:'Área Contratada', data:[contracted], backgroundColor:'rgba(252,186,121,0.6)' }
           ]
@@ -101,6 +132,37 @@
           }
         }
       });
+    }
+
+    // Função fallback para cálculo aproximado de área
+    function calcularAreaAproximada(geojsonData) {
+      if (!geojsonData || !geojsonData.features) return 0;
+      
+      let areaTotal = 0;
+      const R = 6378137; // Raio da Terra em metros
+      
+      geojsonData.features.forEach(feature => {
+        if (feature.geometry && feature.geometry.type === 'Polygon') {
+          const coords = feature.geometry.coordinates[0]; // Anel exterior
+          if (coords.length < 3) return;
+          
+          let area = 0;
+          for (let i = 0; i < coords.length; i++) {
+            const j = (i + 1) % coords.length;
+            const xi = coords[i][0] * Math.PI / 180;
+            const yi = coords[i][1] * Math.PI / 180;
+            const xj = coords[j][0] * Math.PI / 180;
+            const yj = coords[j][1] * Math.PI / 180;
+            
+            area += xi * yj - xj * yi;
+          }
+          
+          area = Math.abs(area) * R * R / 2;
+          areaTotal += area / 10000; // Converter para hectares
+        }
+      });
+      
+      return Math.round(areaTotal * 100) / 100;
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
