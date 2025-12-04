@@ -2,7 +2,6 @@
 // Para novos gráficos seguir o mesmo padrão de codigo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 // Função de criação do painel de gráficos
 (function(){
   'use strict';
@@ -23,7 +22,6 @@
         contagem[chave] = (contagem[chave] || 0) + 1;
     });
 
-    
     const ordenadas = Object.keys(contagem).sort();
 
     let soma = 0;
@@ -57,40 +55,11 @@
       "24/04/2025","24/04/2025","21/07/2025","25/07/2025","30/07/2025","19/11/2025"
     ];
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Função de criação do gráfico de comparação 
+//Função especifica para o gráfico de comparação 
     function desenharComparacao(ctx){
-      // Calcular área total automaticamente a partir do shapefile
-      let total = 0;
-      if (typeof LimitedoPrograma_2 !== 'undefined' && LimitedoPrograma_2.features) {
-        // Importar a biblioteca de área se disponível
-        if (typeof area !== 'undefined') {
-          // Usar turf.js se disponível
-          const features = LimitedoPrograma_2.features;
-          total = features.reduce((sum, feature) => {
-            try {
-              if (feature.geometry && feature.geometry.type === 'Polygon') {
-                const geomArea = area(feature);
-                return sum + (geomArea / 10000); // Converter m² para hectares
-              }
-              return sum;
-            } catch (e) {
-              console.warn('Erro ao calcular área:', e);
-              return sum;
-            }
-          }, 0);
-          
-          // Arredondar para 2 casas decimais
-          total = Math.round(total * 100) / 100;
-        } else {
-          // Fallback: cálculo aproximado se turf.js não estiver disponível
-          console.warn('Biblioteca de área não disponível. Usando fallback.');
-          total = calcularAreaAproximada(LimitedoPrograma_2);
-        }
-      } else {
-        // Fallback para o valor atual se o shape não estiver carregado
-        total = Number(window.totalAreaSum) || 0;
-      }
-
+      // VALOR FIXO - Atualize manualmente conforme necessário
+      const total = 13600; // Área total do programa em hectares
+      
       const green = Number(window.totalGreenSum) || 0;
       const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
         item.querySelector('.stats-label')?.textContent.includes('Área contratada')
@@ -134,37 +103,6 @@
       });
     }
 
-    // Função fallback para cálculo aproximado de área
-    function calcularAreaAproximada(geojsonData) {
-      if (!geojsonData || !geojsonData.features) return 0;
-      
-      let areaTotal = 0;
-      const R = 6378137; // Raio da Terra em metros
-      
-      geojsonData.features.forEach(feature => {
-        if (feature.geometry && feature.geometry.type === 'Polygon') {
-          const coords = feature.geometry.coordinates[0]; // Anel exterior
-          if (coords.length < 3) return;
-          
-          let area = 0;
-          for (let i = 0; i < coords.length; i++) {
-            const j = (i + 1) % coords.length;
-            const xi = coords[i][0] * Math.PI / 180;
-            const yi = coords[i][1] * Math.PI / 180;
-            const xj = coords[j][0] * Math.PI / 180;
-            const yj = coords[j][1] * Math.PI / 180;
-            
-            area += xi * yj - xj * yi;
-          }
-          
-          area = Math.abs(area) * R * R / 2;
-          areaTotal += area / 10000; // Converter para hectares
-        }
-      });
-      
-      return Math.round(areaTotal * 100) / 100;
-    }
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Função de criação da linha do tempo das adesões
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,47 +129,43 @@
       });
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
-// Será preciso atualizar essa parte para o gráfico de pagamentos por ano do programa adicionando a data e o valor do pagamento seguindo o mesmo padrão
+// Gráfico de pagamentos por ano do programa
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
     const pagamentosRaw = [
-  { date: '04/10/2023', amount: 'R$ 1.877,31' },
-  { date: '02/10/2023', amount: 'R$ 571,63' },
-  { date: '02/10/2023', amount: 'R$ 2.276,99' },
-  { date: '24/09/2024', amount: 'R$ 1.821,42' },
-  { date: '24/09/2024', amount: 'R$ 790,58' },
-  { date: '24/09/2024', amount: 'R$ 3.265,17' },
-  { date: '13/06/2024', amount: 'R$ 6.531,23' },
-  { date: '12/12/2024', amount: 'R$ 1.773,35' },
-  { date: '19/09/2025', amount: 'R$ 663,19' },
-  { date: '19/09/2025', amount: 'R$ 1.915,58' },
-  { date: '19/09/2025', amount: 'R$ 2.108,94' },
-  { date: '04/06/2025', amount: 'R$ 7.815,93' },
-  { date: '26/11/2025', amount: 'R$ 1.586,27' },
-  { date: '06/03/2025', amount: 'R$ 549,19' },
-  { date: '28/05/2025', amount: 'R$ 5.469,12' },
-  { date: '19/09/2025', amount: 'R$ 1.427,82' },
-  { date: '19/09/2025', amount: 'R$ 10.361,25' },
-  { date: '19/09/2025', amount: 'R$ 589,88' },
-  { date: '04/11/2025', amount: 'R$ 3.748,68' }
-];
+      { date: '04/10/2023', amount: 'R$ 1.877,31' },
+      { date: '02/10/2023', amount: 'R$ 571,63' },
+      { date: '02/10/2023', amount: 'R$ 2.276,99' },
+      { date: '24/09/2024', amount: 'R$ 1.821,42' },
+      { date: '24/09/2024', amount: 'R$ 790,58' },
+      { date: '24/09/2024', amount: 'R$ 3.265,17' },
+      { date: '13/06/2024', amount: 'R$ 6.531,23' },
+      { date: '12/12/2024', amount: 'R$ 1.773,35' },
+      { date: '19/09/2025', amount: 'R$ 663,19' },
+      { date: '19/09/2025', amount: 'R$ 1.915,58' },
+      { date: '19/09/2025', amount: 'R$ 2.108,94' },
+      { date: '04/06/2025', amount: 'R$ 7.815,93' },
+      { date: '26/11/2025', amount: 'R$ 1.586,27' },
+      { date: '06/03/2025', amount: 'R$ 549,19' },
+      { date: '28/05/2025', amount: 'R$ 5.469,12' },
+      { date: '19/09/2025', amount: 'R$ 1.427,82' },
+      { date: '19/09/2025', amount: 'R$ 10.361,25' },
+      { date: '19/09/2025', amount: 'R$ 589,88' },
+      { date: '04/11/2025', amount: 'R$ 3.748,68' }
+    ];
 
-const convertAmount = (amountString) => {
-  const numberString = amountString
-    .replace('R$ ', '')
-    .replace(/\./g, '')
-    .replace(',', '.');
-  return parseFloat(numberString);
-};
-
-const total = pagamentosRaw.reduce((sum, item) => sum + convertAmount(item.amount), 0);
-console.log('Total:', total.toFixed(2)); 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    function convertAmount(amountString) {
+      const numberString = amountString
+        .replace('R$ ', '')
+        .replace(/\./g, '')
+        .replace(',', '.');
+      return parseFloat(numberString);
+    }
+    
     function parseBRNumber(s){
       if (!s && s !== 0) return 0;
       return parseFloat(String(s).replace(/[R$\s\.]/g,'').replace(',','.')) || 0;
     }
+    
     function parseBRDate(d){
       const p = String(d).trim().split('/');
       return new Date(+p[2], +p[1]-1, +p[0]);
@@ -355,6 +289,7 @@ console.log('Total:', total.toFixed(2));
         renderizarGrafico();
     });
   }
+  
   function init(){
     const btn = $(ID_BTN);
     const panel = $(ID_PANEL);
