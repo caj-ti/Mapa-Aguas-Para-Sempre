@@ -132,27 +132,37 @@
 // Será preciso atualizar essa parte para o gráfico de pagamentos por ano do programa adicionando a data e o valor do pagamento seguindo o mesmo padrão
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
     const pagamentosRaw = [
-      {date:'04/10/2023', amount:'R$ 1.877,31'},
-      {date:'02/10/2023', amount:'R$ 571,63'},
-      {date:'02/10/2023', amount:'R$ 2.276,99'},
-      {date:'24/09/2024', amount:'R$ 1.821,42'},
-      {date:'24/09/2024', amount:'R$ 790,58'},
-      {date:'24/09/2024', amount:'R$ 3.265,17'},
-      {date:'13/06/2024', amount:'R$ 6.531,23'},
-      {date:'12/12/2024', amount:'R$ 1.773,35'},
-      {date:'19/09/2025', amount:'R$ 663,19'},
-      {date:'19/09/2025', amount:'R$ 1.915,58'},
-      {date:'19/09/2025', amount:'R$ 2.108,94'},
-      {date:'04/06/2025', amount:'R$ 7.815,93'},
-      {date:'26/11/2025', amount:'R$ 1.586,27'},
-      {date:'06/03/2025', amount:'R$ 549,19'},
-      {date:'28/05/2025', amount:'R$ 5.469,12'},
-      {date:'19/09/2025', amount:'R$ 1.427,82'},
-      {date:'19/09/2025', amount:'R$ 10.361,25'},
-      {date:'19/09/2025', amount:'R$ 589,88'},
-      {date:'04/11/2025', amount:'R$ 3.748,68'},
+  { date: '04/10/2023', amount: 'R$ 1.877,31' },
+  { date: '02/10/2023', amount: 'R$ 571,63' },
+  { date: '02/10/2023', amount: 'R$ 2.276,99' },
+  { date: '24/09/2024', amount: 'R$ 1.821,42' },
+  { date: '24/09/2024', amount: 'R$ 790,58' },
+  { date: '24/09/2024', amount: 'R$ 3.265,17' },
+  { date: '13/06/2024', amount: 'R$ 6.531,23' },
+  { date: '12/12/2024', amount: 'R$ 1.773,35' },
+  { date: '19/09/2025', amount: 'R$ 663,19' },
+  { date: '19/09/2025', amount: 'R$ 1.915,58' },
+  { date: '19/09/2025', amount: 'R$ 2.108,94' },
+  { date: '04/06/2025', amount: 'R$ 7.815,93' },
+  { date: '26/11/2025', amount: 'R$ 1.586,27' },
+  { date: '06/03/2025', amount: 'R$ 549,19' },
+  { date: '28/05/2025', amount: 'R$ 5.469,12' },
+  { date: '19/09/2025', amount: 'R$ 1.427,82' },
+  { date: '19/09/2025', amount: 'R$ 10.361,25' },
+  { date: '19/09/2025', amount: 'R$ 589,88' },
+  { date: '04/11/2025', amount: 'R$ 3.748,68' }
+];
 
-    ];
+const convertAmount = (amountString) => {
+  const numberString = amountString
+    .replace('R$ ', '')
+    .replace(/\./g, '')
+    .replace(',', '.');
+  return parseFloat(numberString);
+};
+
+const total = pagamentosRaw.reduce((sum, item) => sum + convertAmount(item.amount), 0);
+console.log('Total:', total.toFixed(2)); 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
