@@ -78,7 +78,8 @@
           datasets: [
             { label:'Área Total do Programa', data:[total], backgroundColor:'rgba(15,92,143,0.6)' },
             { label:'Área Verde total', data:[green], backgroundColor:'rgba(104,218,82,0.6)' },
-            { label:'Área Contratada', data:[contracted], backgroundColor:'rgba(252,186,121,0.6)' }
+            { label:'Área Contratada', data:[contracted], backgroundColor:'rgba(252,186,121,0.6)' },
+            { label:'Área Total Contratada', data:[contractedtotal], backgroundColor:'rgba(251, 255, 0, 1)' }
           ]
         },
         options: {
