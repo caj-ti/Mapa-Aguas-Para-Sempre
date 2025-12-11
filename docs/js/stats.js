@@ -5,7 +5,7 @@
   let contributions = [];
  
   // Valor fixo da Área Total Contratada
-  const FIXED_CONTRACTED_TOTAL = 3047.39698; // "3047,39698 ha" convertido para número
+  const FIXED_CONTRACTED_TOTAL = 3050.26088; //PARA AREA CONTRATADA TOTAL
  
   function parseNumber(v){
     if (v === null || v === undefined) return 0;

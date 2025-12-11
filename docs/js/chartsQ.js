@@ -52,15 +52,15 @@
         "06/03/2024","28/05/2024","24/09/2024","24/09/2024","07/10/2024",
         "04/11/2024","20/12/2024","20/12/2024","20/12/2024","20/12/2024",
         "20/12/2024","20/12/2024","22/04/2025","22/04/2025","22/04/2025",
-        "24/04/2025","24/04/2025","21/07/2025","25/07/2025","30/07/2025","19/11/2025"
+        "24/04/2025","24/04/2025","21/07/2025","25/07/2025","30/07/2025","19/11/2025","04/12/2025"
       ];
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Função especifica para o gráfico de comparação 
       function desenharComparacao(ctx){
         // VALOR FIXO - Atualize manualmente conforme necessário
-        const total = 36608.07 // Área total do programa em hectares
+        const total = 36608.07 // Área total do programa EDITAL EM HECTARES
         
-        const green = Number(window.totalGreenSum) || 2990;
+        const green = Number(window.totalGreenSum) || 2901.0519;
         const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
           item.querySelector('.stats-label')?.textContent.includes('Área contratada')
         )?.querySelector('.stats-value');
@@ -70,7 +70,7 @@
             contratadaEl.textContent.replace(/\./g, '').replace(',', '.')
           ) || 0;
         }
- const contractedtotal = 3047.39798;
+ const contractedtotal = 3050.26088; //AREA TOTAL DAS ADERIDAS
         return new Chart(ctx, {
           type: 'bar',
           data: {
