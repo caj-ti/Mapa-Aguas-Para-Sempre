@@ -150,15 +150,15 @@
     function desenharComparacaoCredenciado(ctx){
       // Dados das propriedades credenciadas (aderidas)
       // Usar valores do stats.js se disponíveis, caso contrário usar valores padrão
-      const totalCredenciado = Number(window.totalAreaSum) || 2982.9146; // Área total das propriedades credenciadas
+      const totalCredenciado = Number(window.totalAreaSum) || 30164.30; // Área total das propriedades credenciadas
       const greenCredenciado = Number(window.totalGreenSum) || 2901.0519; // Área verde total das propriedades credenciadas
       
       // Obter área contratada das propriedades credenciadas
-      let contractedCredenciado = 162.209; // Valor padrão
+      let contractedCredenciado = 30164.30; // Valor padrão
       try {
         // Primeiro tenta buscar do stats.js
         if (window.webmapStats && window.webmapStats.statsData) {
-          contractedCredenciado = window.webmapStats.statsData.contracted || 162.209;
+          contractedCredenciado = window.webmapStats.statsData.contracted || 30164.30;
         } else {
           // Tenta buscar do painel de stats
           const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
@@ -167,12 +167,12 @@
           if (contratadaEl) {
             contractedCredenciado = parseFloat(
               contratadaEl.textContent.replace(/\./g, '').replace(',', '.')
-            ) || 162.209;
+            ) || 30164.30;
           }
         }
       } catch (e) {
         // Usar valor padrão se houver erro
-        contractedCredenciado = 162.209;
+        contractedCredenciado = 30164.30;
       }
 
       return new Chart(ctx, {
