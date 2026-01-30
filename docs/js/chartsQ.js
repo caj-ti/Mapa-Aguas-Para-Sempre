@@ -103,7 +103,7 @@
               backgroundColor:'rgba(15,92,143,0.6)' 
             },
             { 
-              label:'Área verde estimada do Programa', 
+              label:'Área verde total estimada do Programa', 
               data:[greenPrograma], 
               backgroundColor:'rgba(104,218,82,0.6)' 
             },
@@ -186,7 +186,7 @@
               backgroundColor:'rgba(54, 162, 235, 0.6)' 
             },
             { 
-              label:'Área verde das propriedades credenciadas', 
+              label:'Área verde total das propriedades credenciadas', 
               data:[greenCredenciado], 
               backgroundColor:'rgba(75, 192, 192, 0.6)' 
             },
