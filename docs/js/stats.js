@@ -200,7 +200,7 @@ try {
       programa: {
         total: 36608.07,
         verde: 30164.30,
-        contratada: 1800.00
+        contratada: 162.209
       }
     };
     console.log('chartFixedValues criado no stats.js com valores padrão');

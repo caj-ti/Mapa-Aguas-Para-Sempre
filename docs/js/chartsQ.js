@@ -53,7 +53,7 @@
     programa: {
       total: 36608.07,      // Área total do programa (editais)
       verde: 30164.30,      // Área verde total estimada do programa
-      contratada: 1800.00   // Área total contratada do programa (será sobrescrita)
+      contratada: 162.209   // Área total contratada do programa (será sobrescrita)
     }
   };
   // ================================================
