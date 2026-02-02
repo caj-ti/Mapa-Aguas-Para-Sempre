@@ -39,24 +39,9 @@
   }
 
   function createPanelController(btn, panel, closeBtn){
-  let restoreFocusTo = null;
-  let chartInstance = null;
-  let currentChartType = "comparacaoGeral";
-
-  // ============ ADICIONAR ESTE OBJETO ============
-  window.chartFixedValues = {
-    credenciado: {
-      total: 2982.9212,     // Área total das propriedades credenciadas
-      verde: 2900.55,       // Área verde total das propriedades credenciadas
-      contratada: 162.209   // Área contratada das propriedades credenciadas
-    },
-    programa: {
-      total: 36608.07,      // Área total do programa (editais)
-      verde: 30164.30,      // Área verde total estimada do programa
-      contratada: 1800.00   // Área total contratada do programa (será sobrescrita)
-    }
-  };
-  // ================================================
+    let restoreFocusTo = null;
+    let chartInstance = null;
+    let currentChartType = "comparacaoGeral";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Aqui sera preciso atualizar com a nova data de adesão da propriedades aderida/////
@@ -71,62 +56,64 @@
     ];
     
     // Inicializar variáveis globais para evitar erros
-   
+    window.totalAreaSum = window.totalAreaSum || 2982.9212;
+    window.totalGreenSum = window.totalGreenSum || 2900.55;
     
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Função específica para o gráfico de comparação GERAL do Programa
 // DADOS DO PROGRAMA COMPLETO (editais + propriedades)
     function desenharComparacaoGeral(ctx){
-  // USAR VALORES FIXOS DO OBJETO GLOBAL
-  const totalPrograma = window.chartFixedValues.programa.total;
-  const greenPrograma = window.chartFixedValues.programa.verde;
-  
-  // Apenas a área contratada pode ser dinâmica (buscar do stats.js)
-  let contractedPrograma = window.chartFixedValues.programa.contratada;
-  
-  try {
-    if (window.webmapStats && window.webmapStats.statsData) {
-      contractedPrograma = window.webmapStats.statsData.contracted || window.chartFixedValues.programa.contratada;
-    } else {
-      const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
-        item.querySelector('.stats-label')?.textContent.includes('Área contratada')
-      )?.querySelector('.stats-value');
+      // VALORES DO PROGRAMA COMPLETO - Área total dos editais
+      const totalPrograma = 36608.07; // Área total do programa EM HECTARES (valor do edital)
       
-      if (contratadaEl) {
-        contractedPrograma = parseFloat(
-          contratadaEl.textContent.replace(/\./g, '').replace(',', '.')
-        ) || window.chartFixedValues.programa.contratada;
-      }
-    }
-  } catch (e) {
-    contractedPrograma = window.chartFixedValues.programa.contratada;
-  }
-  
-  // Atualizar o valor no objeto global (para consistência)
-  window.chartFixedValues.programa.contratada = contractedPrograma;
-  
-  return new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Programa Completo (Editais + Propriedades)'],
-      datasets: [
-        { 
-          label:'Área total do Programa (Editais)', 
-          data:[totalPrograma], 
-          backgroundColor:'rgba(15,92,143,0.6)' 
-        },
-        { 
-          label:'Área verde total estimada do Programa', 
-          data:[greenPrograma], 
-          backgroundColor:'rgba(104,218,82,0.6)' 
-        },
-        { 
-          label:'Área Total Contratada do Programa', 
-          data:[contractedPrograma], 
-          backgroundColor:'rgba(252,186,121,0.6)' 
+      // Para o programa geral, usamos estimativas ou valores reais diferentes
+      // ESTIMATIVA: Área verde total do programa (propriedades + áreas protegidas)
+      const greenPrograma = 30164.30; // Estimativa - valor diferente das propriedades credenciadas
+      
+      // Área total contratada do programa (todas as propriedades contratadas)
+      let contractedPrograma = 1800.00; // Valor estimado do programa total
+      try {
+        // Primeiro tenta buscar do stats.js
+        if (window.webmapStats && window.webmapStats.statsData) {
+          contractedPrograma = window.webmapStats.statsData.contracted || 1800.00;
+        } else {
+          // Tenta buscar do painel de stats
+          const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
+            item.querySelector('.stats-label')?.textContent.includes('Área contratada')
+          )?.querySelector('.stats-value');
+          if (contratadaEl) {
+            contractedPrograma = parseFloat(
+              contratadaEl.textContent.replace(/\./g, '').replace(',', '.')
+            ) || 1800.00;
+          }
         }
-      ]
-    },
+      } catch (e) {
+        // Usar valor padrão se houver erro
+        contractedPrograma = 1800.00;
+      }
+
+      return new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Programa Completo (Editais + Propriedades)'],
+          datasets: [
+            { 
+              label:'Área total do Programa (Editais)', 
+              data:[totalPrograma], 
+              backgroundColor:'rgba(15,92,143,0.6)' 
+            },
+            { 
+              label:'Área verde total estimada do Programa', 
+              data:[greenPrograma], 
+              backgroundColor:'rgba(104,218,82,0.6)' 
+            },
+            { 
+              label:'Área Total Contratada do Programa', 
+              data:[contractedPrograma], 
+              backgroundColor:'rgba(252,186,121,0.6)' 
+            }
+          ]
+        },
         options: {
           responsive:true,
           plugins: {
@@ -161,60 +148,84 @@
 // Função específica para o gráfico de comparação CREDENCIADO
 // DADOS DAS PROPRIEDADES CREDENCIADAS (ADERIDAS) APENAS
     function desenharComparacaoCredenciado(ctx){
-  // USAR VALORES FIXOS DO OBJETO GLOBAL - NÃO BUSCAR DO STATS.JS
-  const valores = window.chartFixedValues.credenciado;
-  
-  return new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Propriedades Credenciadas'],
-      datasets: [
-        { 
-          label:'Área total das propriedades credenciadas', 
-          data:[valores.total], 
-          backgroundColor:'rgba(54, 162, 235, 0.6)' 
-        },
-        { 
-          label:'Área verde total das propriedades credenciadas', 
-          data:[valores.verde], 
-          backgroundColor:'rgba(75, 192, 192, 0.6)' 
-        },
-        { 
-          label:'Área contratada das propriedades credenciadas', 
-          data:[valores.contratada], 
-          backgroundColor:'rgba(255, 159, 64, 0.6)' 
-        }
-      ]
-    },
-    options: {
-      responsive:true,
-      plugins: {
-        legend:{position:'bottom'},
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const value = Number(context.raw) || 0;
-              const pct = valores.total ? ((value / valores.total) * 100).toFixed(1) + '%' : '0.0%';
-              return `${context.dataset.label}: ${value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ha (${pct} da Área Total Credenciada)`;
-            }
+      // Dados das propriedades credenciadas (aderidas)
+      // Usar valores do stats.js se disponíveis, caso contrário usar valores padrão
+      const totalCredenciado = Number(window.totalAreaSum) || 2982.9212; // Área total das propriedades credenciadas
+      const greenCredenciado = Number(window.totalGreenSum) || 2900.55; // Área verde total das propriedades credenciadas
+      
+      // Obter área contratada das propriedades credenciadas
+      let contractedCredenciado = 162.209; // Valor padrão
+      try {
+        // Primeiro tenta buscar do stats.js
+        if (window.webmapStats && window.webmapStats.statsData) {
+          contractedCredenciado = window.webmapStats.statsData.contracted || 162.209;
+        } else {
+          // Tenta buscar do painel de stats
+          const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
+            item.querySelector('.stats-label')?.textContent.includes('Área contratada')
+          )?.querySelector('.stats-value');
+          if (contratadaEl) {
+            contractedCredenciado = parseFloat(
+              contratadaEl.textContent.replace(/\./g, '').replace(',', '.')
+            ) || 162.209;
           }
         }
-      },
-      scales: {
-        x:{stacked:false},
-        y:{
-          beginAtZero:true,
-          title:{display:true,text:'hectares (ha)'},
-          ticks: {
-            callback: function(value) {
-              return value.toLocaleString('pt-BR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
-            }
-          }
-        }
+      } catch (e) {
+        // Usar valor padrão se houver erro
+        contractedCredenciado = 162.209;
       }
+
+      return new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Propriedades Credenciadas'],
+          datasets: [
+            { 
+              label:'Área total das propriedades credenciadas', 
+              data:[totalCredenciado], 
+              backgroundColor:'rgba(54, 162, 235, 0.6)' 
+            },
+            { 
+              label:'Área verde total das propriedades credenciadas', 
+              data:[greenCredenciado], 
+              backgroundColor:'rgba(75, 192, 192, 0.6)' 
+            },
+            { 
+              label:'Área contratada das propriedades credenciadas', 
+              data:[contractedCredenciado], 
+              backgroundColor:'rgba(255, 159, 64, 0.6)' 
+            }
+          ]
+        },
+        options: {
+          responsive:true,
+          plugins: {
+            legend:{position:'bottom'},
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const value = Number(context.raw) || 0;
+                  const pct = totalCredenciado ? ((value / totalCredenciado) * 100).toFixed(1) + '%' : '0.0%';
+                  return `${context.dataset.label}: ${value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ha (${pct} da Área Total Credenciada)`;
+                }
+              }
+            }
+          },
+          scales: {
+            x:{stacked:false},
+            y:{
+              beginAtZero:true,
+              title:{display:true,text:'hectares (ha)'},
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString('pt-BR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+                }
+              }
+            }
+          }
+        }
+      });
     }
-  });
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Função de criação da linha do tempo das adesões

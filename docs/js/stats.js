@@ -186,6 +186,46 @@
     window.totalGreenSum = totalGreenSum;
     window.totalContractedSum = totalContractedSum;
     window.manualValue = window.manualValue ?? 0;
+    // ============ PASSO 5: SINCRONIZAR COM VALORES FIXOS DO GRÁFICO ============
+try {
+  // Verificar se o objeto de valores fixos existe (criado pelo chartsq.js)
+  if (!window.chartFixedValues) {
+    // Se não existe, criar com valores padrão
+    window.chartFixedValues = {
+      credenciado: {
+        total: 2982.9212,
+        verde: 2900.55,
+        contratada: 162.209
+      },
+      programa: {
+        total: 36608.07,
+        verde: 30164.30,
+        contratada: 1800.00
+      }
+    };
+    console.log('chartFixedValues criado no stats.js com valores padrão');
+  } else {
+    console.log('chartFixedValues já existe, usando valores:', window.chartFixedValues);
+  }
+  
+  // OPÇÃO 1: Sobrescrever os valores calculados com os fixos (RECOMENDADO)
+  // Comente esta seção se quiser manter os valores calculados dinâmicos
+  /*
+  window.totalAreaSum = window.chartFixedValues.credenciado.total;
+  window.totalGreenSum = window.chartFixedValues.credenciado.verde;
+  console.log('Valores sobrescritos com valores fixos do gráfico');
+  */
+  
+  // OPÇÃO 2: Apenas logar a diferença (para debug)
+  console.log('Comparação de valores:');
+  console.log('- Calculado vs Fixo - Área total:', totalAreaSum, 'vs', window.chartFixedValues.credenciado.total);
+  console.log('- Calculado vs Fixo - Área verde:', totalGreenSum, 'vs', window.chartFixedValues.credenciado.verde);
+  console.log('- Calculado vs Fixo - Área contratada:', totalContractedSum, 'vs', window.chartFixedValues.credenciado.contratada);
+  
+} catch (error) {
+  console.warn('Erro ao sincronizar com valores fixos:', error);
+}
+// ===========================================================================
     
     // Usando o valor fixo para Área Total Contratada
     const contractedtotal = FIXED_CONTRACTED_TOTAL;
