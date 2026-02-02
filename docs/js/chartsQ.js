@@ -56,8 +56,8 @@
     ];
     
     // Inicializar variáveis globais para evitar erros
-    window.totalAreaSum = window.totalAreaSum || 3050.26088;
-    window.totalGreenSum = window.totalGreenSum || 2901.0519;
+    window.totalAreaSum = window.totalAreaSum || 2982.9212;
+    window.totalGreenSum = window.totalGreenSum || 2900.55;
     
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Função específica para o gráfico de comparação GERAL do Programa
@@ -150,8 +150,8 @@
     function desenharComparacaoCredenciado(ctx){
       // Dados das propriedades credenciadas (aderidas)
       // Usar valores do stats.js se disponíveis, caso contrário usar valores padrão
-      const totalCredenciado = Number(window.totalAreaSum) || 2982.9146; // Área total das propriedades credenciadas
-      const greenCredenciado = Number(window.totalGreenSum) || 2901.0519; // Área verde total das propriedades credenciadas
+      const totalCredenciado = Number(window.totalAreaSum) || 2982.9212; // Área total das propriedades credenciadas
+      const greenCredenciado = Number(window.totalGreenSum) || 2900.55; // Área verde total das propriedades credenciadas
       
       // Obter área contratada das propriedades credenciadas
       let contractedCredenciado = 162.209; // Valor padrão
