@@ -161,6 +161,19 @@
 // Função específica para o gráfico de comparação CREDENCIADO
 // DADOS DAS PROPRIEDADES CREDENCIADAS (ADERIDAS) APENAS
     function desenharComparacaoCredenciado(ctx){
+  console.log('=== DESENHANDO GRÁFICO CREDENCIADO ===');
+  console.log('Valores fixos disponíveis:', window.chartFixedValues);
+  
+  // USAR VALORES FIXOS DO OBJETO GLOBAL
+  const totalCredenciado = window.chartFixedValues.credenciado.total;
+  const greenCredenciado = window.chartFixedValues.credenciado.verde;
+  const contractedCredenciado = window.chartFixedValues.credenciado.contratada;
+  
+  console.log('Valores usados no gráfico:', {
+    total: totalCredenciado,
+    verde: greenCredenciado,
+    contratada: contractedCredenciado
+  });
   // USAR VALORES FIXOS DO OBJETO GLOBAL - NÃO BUSCAR DO STATS.JS
   const valores = window.chartFixedValues.credenciado;
   
