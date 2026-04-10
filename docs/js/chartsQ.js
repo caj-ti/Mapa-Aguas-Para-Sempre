@@ -46,14 +46,14 @@
   // ============ ADICIONAR ESTE OBJETO ============
   window.chartFixedValues = {
     credenciado: {
-      total: 2982.9212,     // Área total das propriedades credenciadas
-      verde: 2900.55,       // Área verde total das propriedades credenciadas
-      contratada: 162.209   // Área contratada das propriedades credenciadas
+      total: 2979.51,     // Área total das propriedades credenciadas
+      verde: 2958.79,       // Área verde total das propriedades credenciadas
+      contratada: 159.28   // Área contratada das propriedades credenciadas
     },
     programa: {
       total: 36608.07,      // Área total do programa (editais)
       verde: 30164.30,      // Área verde total estimada do programa
-      contratada: 162.209   // Área total contratada do programa (será sobrescrita)
+      contratada: 159.28   // Área total contratada do programa (será sobrescrita)
     }
   };
   // ================================================
@@ -63,11 +63,12 @@
 // Linha do tempo das adesões
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const datasAdesao = [
-      "29/08/2022","29/08/2022","29/08/2022","19/05/2023","24/11/2023",
-      "06/03/2024","28/05/2024","24/09/2024","24/09/2024","07/10/2024",
-      "04/11/2024","20/12/2024","20/12/2024","20/12/2024","20/12/2024",
-      "20/12/2024","20/12/2024","22/04/2025","22/04/2025","22/04/2025",
-      "24/04/2025","24/04/2025","21/07/2025","25/07/2025","30/07/2025","19/11/2025","04/12/2025"
+      "25/08/2022","29/08/2022","12/05/2023",
+      "24/11/2023","18/01/2024","28/05/2024",
+      "24/09/2024","30/09/2024","31/10/2024",
+      "20/12/2024","07/04/2025","24/04/2025",
+      "21/07/2025","25/07/2025","30/07/2025",
+      "19/11/2025","04/12/2025"
     ];
     
     // Inicializar variáveis globais para evitar erros
