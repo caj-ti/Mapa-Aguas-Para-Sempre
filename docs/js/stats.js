@@ -15,6 +15,26 @@
     return isNaN(n) ? 0 : n;
   }
  
+  // Índices de layerName por grupo — baseados no overlaysTree do index.html
+  // "Propriedades Aderidas"        → layer_XXXXX_68  até  layer_XXXXX_94  (27 camadas)
+  // "Propriedades em Processo"     → layer_XXXXX_60  até  layer_XXXXX_67  (8 camadas)
+  // "Propriedades Interessadas"    → layer_XXXXX_24  até  layer_XXXXX_59
+  const GROUP_LAYER_INDICES = {
+    'propriedades aderidas': { min: 68, max: 94 },
+    'processo':              { min: 60, max: 67 },
+    'interessadas':          { min: 24, max: 59 }
+  };
+
+  function layerBelongsToGroup(layer, selectedGroup) {
+    const key = String(selectedGroup).toLowerCase();
+    const range = GROUP_LAYER_INDICES[key];
+    if (!range) return false;
+    const layerName = layer.options && layer.options.layerName;
+    if (!layerName) return false;
+    const idx = parseInt(layerName.split('_').pop(), 10);
+    return !isNaN(idx) && idx >= range.min && idx <= range.max;
+  }
+
   function getTargetLayers(map, selectedGroup) {
     const layers = [];
     const seenIds = new Set();
@@ -26,13 +46,11 @@
       if (layer.feature && layer.feature.properties) {
         const props = layer.feature.properties;
         const id = props.id || props.name;
-        const grupo = props.grupo ? String(props.grupo).toLowerCase() : '';
        
-        // Somente propriedades ADERIDAS: devem pertencer ao grupo selecionado E ter campos de área
         if (
           id &&
           !seenIds.has(id) &&
-          grupo === String(selectedGroup).toLowerCase() &&
+          layerBelongsToGroup(layer, selectedGroup) &&
           (
             'Área' in props || 'Area' in props || 'AREA' in props ||
             'Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props
