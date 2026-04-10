@@ -29,8 +29,8 @@
         const grupo = props.grupo ? String(props.grupo).toLowerCase() : '';
        
         if (id && !seenIds.has(id) &&
-          ('Área' in props || 'Area' in props || 'AREA' in props) &&
-          ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props) &&
+          ('Área' in props || 'Area' in props || 'AREA' in props) ||
+          ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props) ||
           grupo === String(selectedGroup).toLowerCase()
         ){
           layers.push(layer);
