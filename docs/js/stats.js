@@ -28,10 +28,15 @@
         const id = props.id || props.name;
         const grupo = props.grupo ? String(props.grupo).toLowerCase() : '';
        
-        if (id && !seenIds.has(id) &&
-          ('Área' in props || 'Area' in props || 'AREA' in props) ||
-          ('Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props) ||
-          grupo === String(selectedGroup).toLowerCase()
+        // Somente propriedades ADERIDAS: devem pertencer ao grupo selecionado E ter campos de área
+        if (
+          id &&
+          !seenIds.has(id) &&
+          grupo === String(selectedGroup).toLowerCase() &&
+          (
+            'Área' in props || 'Area' in props || 'AREA' in props ||
+            'Área Verd' in props || 'Area Verd' in props || 'AREA_VERD' in props
+          )
         ){
           layers.push(layer);
           seenIds.add(id);
