@@ -47,7 +47,7 @@
   window.chartFixedValues = {
     credenciado: {
       total: 2979.51,     // Área total das propriedades credenciadas
-      verde: 2958.79,       // Área verde total das propriedades credenciadas
+      verde: 2965.36,       // Área verde total das propriedades credenciadas
       contratada: 159.28   // Área contratada das propriedades credenciadas
     },
     programa: {
