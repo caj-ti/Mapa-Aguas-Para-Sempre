@@ -218,6 +218,8 @@ body.panel-open #map {
 
 /* ── Cabeçalho do mapa ───────────────────────────────────────── */
 #map-header {
+  display: none !important;
+  display: none !important;
   position: absolute;
   top: 20px;
   left: 50%;
@@ -338,41 +340,32 @@ body.panel-open #map {
 
 /* Botão primário — Painel */
 #stats-btn {
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-color);
-  box-shadow:
-    var(--btn-primary-shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: #66FFFF;
+  color: #0a2a1a;
+  box-shadow: 0 10px 28px rgba(102,255,255,0.45);
 }
 
 #stats-btn:hover {
-  box-shadow:
-    0 18px 44px rgba(18, 100, 50, 0.58),
-    0 6px 14px rgba(0,0,0,0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(102,255,255,0.65);
+  transform: translateY(-4px);
   filter: brightness(1.06);
 }
 
 /* Botões secundários */
 #chart-btn,
 #details-btn {
-  background: var(--btn-secondary-bg);
-  color: var(--btn-secondary-color);
-  border: 1px solid rgba(60, 115, 80, 0.2);
-  box-shadow:
-    var(--btn-secondary-shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+  background: #66FFFF;
+  color: #0a2a1a;
+  border: 1px solid rgba(0,180,180,0.4);
+  box-shadow: 0 6px 18px rgba(102,255,255,0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
 #chart-btn:hover,
 #details-btn:hover {
-  background: rgba(255, 255, 255, 1);
-  box-shadow:
-    0 16px 38px rgba(10, 42, 22, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+  background: #4de8e8;
+  box-shadow: 0 14px 32px rgba(102,255,255,0.55);
   transform: translateY(-5px);
   border-color: rgba(60, 115, 80, 0.32);
 }
@@ -1180,8 +1173,8 @@ body.panel-open #map {
 .leaflet-control-layers {
   background: rgba(252, 247, 238, 0.99) !important;
   border-radius: 20px !important;
-  box-shadow:
-    0 18px 44px rgba(10, 40, 20, 0.22) !important,
+ box-shadow:
+    0 18px 44px rgba(10, 40, 20, 0.22),
     inset 0 1px 0 rgba(255,255,255,0.98) !important;
   padding: 14px !important;
   font-family: 'DM Sans', sans-serif !important;
@@ -1273,6 +1266,444 @@ body.panel-open #map {
 }
 .leaflet-control-layers-list::-webkit-scrollbar-track { background: transparent; }
 
+
+/* ================================================================
+   CORES DAS CAMADAS — Menu lateral direito (Leaflet LayersTree)
+   ================================================================
+   Adicione as classes abaixo nos elementos do menu no seu HTML/JS:
+     .layer-aderidas      → Verde  (propriedades aderidas)
+     .layer-processo      → Amarelo (em processo de adesão)
+     .layer-interessadas  → Roxo   (interessadas / manifesto)
+     Demais camadas       → Azul claro #66FFFF
+   ================================================================ */
+
+/* Todas as camadas-base recebem azul claro por padrão */
+.leaflet-layerstree-header-pointer {
+  background: #66FFFF !important;
+  color: #0a2a1a !important;
+  box-shadow: 0 4px 12px rgba(102, 255, 255, 0.4) !important;
+}
+
+.leaflet-layerstree-header-pointer:hover {
+  background: #4de8e8 !important;
+}
+
+/* ADERIDAS — Verde */
+.leaflet-layerstree-header-pointer.layer-aderidas {
+  background: linear-gradient(145deg, #1f9450 0%, #126134 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(18, 100, 50, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-aderidas:hover {
+  filter: brightness(1.12) !important;
+}
+
+/* EM PROCESSO DE ADESÃO — Amarelo âmbar */
+.leaflet-layerstree-header-pointer.layer-processo {
+  background: linear-gradient(145deg, #e0a800 0%, #a87200 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(200, 150, 0, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-processo:hover {
+  filter: brightness(1.1) !important;
+}
+
+/* INTERESSADAS / MANIFESTO — Roxo */
+.leaflet-layerstree-header-pointer.layer-interessadas {
+  background: linear-gradient(145deg, #7b2fa8 0%, #531a78 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(100, 30, 150, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-interessadas:hover {
+  filter: brightness(1.1) !important;
+}
+
+/* Labels de camada — cor de fundo sutil por categoria */
+.layer-aderidas     > .leaflet-layerstree-header-label,
+.layer-aderidas     .leaflet-layerstree-header-label {
+  border-left: 3px solid #1f9450;
+}
+.layer-processo     > .leaflet-layerstree-header-label,
+.layer-processo     .leaflet-layerstree-header-label {
+  border-left: 3px solid #e0a800;
+}
+.layer-interessadas > .leaflet-layerstree-header-label,
+.layer-interessadas .leaflet-layerstree-header-label {
+  border-left: 3px solid #7b2fa8;
+}
+
+/* Bolinhas coloridas no início de cada label de camada */
+.leaflet-layerstree-header-label::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+  background: #66FFFF;
+  box-shadow: 0 0 0 2px rgba(102, 255, 255, 0.3);
+}
+.layer-aderidas .leaflet-layerstree-header-label::before {
+  background: #1f9450;
+  box-shadow: 0 0 0 2px rgba(31, 148, 80, 0.3);
+}
+.layer-processo .leaflet-layerstree-header-label::before {
+  background: #e0a800;
+  box-shadow: 0 0 0 2px rgba(224, 168, 0, 0.3);
+}
+.layer-interessadas .leaflet-layerstree-header-label::before {
+  background: #7b2fa8;
+  box-shadow: 0 0 0 2px rgba(123, 47, 168, 0.3);
+}
+
+/* ================================================================
+   CHECKBOX "Seleção Visível" — Painel de Acompanhamento
+   ================================================================
+   Estrutura HTML sugerida (ao lado do título do Painel):
+
+   <label class="toggle-selecao" title="Mostrar/ocultar contorno de seleção">
+     <input type="checkbox" id="toggle-selecao" checked>
+     <span class="toggle-track">
+       <span class="toggle-thumb"></span>
+     </span>
+     <span class="toggle-label">Seleção visível</span>
+   </label>
+
+   Script JS sugerido (no final do body):
+   document.getElementById('toggle-selecao')
+     ?.addEventListener('change', function() {
+       document.body.classList.toggle('show-selection', this.checked);
+     });
+   // Ativa por padrão se checkbox começa checked
+   if (document.getElementById('toggle-selecao')?.checked)
+     document.body.classList.add('show-selection');
+   ================================================================ */
+
+/* Contêiner do toggle */
+.toggle-selecao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+/* Esconde o checkbox nativo */
+.toggle-selecao input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Track do toggle */
+.toggle-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: rgba(150, 150, 150, 0.25);
+  border-radius: 20px;
+  border: 1.5px solid rgba(150, 150, 150, 0.3);
+  transition: background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  flex-shrink: 0;
+}
+
+.toggle-selecao input:checked ~ .toggle-track {
+  background: rgba(220, 50, 40, 0.18);
+  border-color: rgba(220, 50, 40, 0.5);
+  box-shadow: 0 0 0 3px rgba(220, 50, 40, 0.12);
+}
+
+/* Bolinha do toggle */
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  background: #aaa;
+  border-radius: 50%;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.22s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+
+.toggle-selecao input:checked ~ .toggle-track .toggle-thumb {
+  transform: translateX(16px);
+  background: #dc3228;
+  box-shadow: 0 1px 6px rgba(220, 50, 40, 0.4);
+}
+
+/* Texto do toggle */
+.toggle-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.toggle-selecao input:checked ~ .toggle-track + .toggle-label,
+.toggle-selecao:has(input:checked) .toggle-label {
+  color: #dc3228;
+}
+
+/* Hover no label inteiro */
+.toggle-selecao:hover .toggle-track {
+  box-shadow: 0 0 0 4px rgba(150, 150, 150, 0.1);
+}
+
+/* ── CONTORNO VERMELHO nas feições selecionadas ──────────────── */
+/*
+  O contorno vermelho aparece APENAS quando body.show-selection está ativo.
+  As feições selecionadas recebem a classe .selected-feature (via JS no click).
+  Veja o script no comment acima para referência.
+*/
+
+/* Oculto por padrão */
+.leaflet-interactive.selected-feature path,
+path.selected-feature,
+.leaflet-interactive.selected-feature {
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+/* Ativado com body.show-selection */
+body.show-selection .leaflet-interactive.selected-feature,
+body.show-selection .leaflet-interactive.selected-feature path,
+body.show-selection path.selected-feature {
+  stroke: #e53030 !important;
+  stroke-width: 3px !important;
+  stroke-opacity: 1 !important;
+  filter: drop-shadow(0 0 5px rgba(229, 48, 48, 0.55)) !important;
+  paint-order: stroke fill !important;
+}
+
+/* Pulse sutil no contorno selecionado */
+@keyframes selectionPulse {
+  0%, 100% { stroke-opacity: 1; }
+  50%       { stroke-opacity: 0.55; }
+}
+
+body.show-selection .leaflet-interactive.selected-feature {
+  animation: selectionPulse 2s ease-in-out infinite;
+}
+
+
+/* ================================================================
+   CORES DAS CAMADAS — Menu lateral direito (Leaflet LayersTree)
+   ================================================================
+   IMPORTANTE: CSS sozinho não consegue selecionar elementos por
+   texto visível. Para que as cores funcionem, adicione o JS abaixo
+   ao final do seu <body> (após o Leaflet carregar):
+
+   <script>
+   (function applyLayerColors() {
+     // Mapeia texto → classe CSS
+     const colorMap = [
+       { text: 'Propriedades Aderidas',              cls: 'layer-aderidas'     },
+       { text: 'Propriedades em Processo de Adesão', cls: 'layer-processo'     },
+       { text: 'Propriedades interessadas',          cls: 'layer-interessadas' },
+       { text: 'Manifesto',                          cls: 'layer-interessadas' },
+     ];
+     function colorize() {
+       document.querySelectorAll('.leaflet-layerstree-header-pointer')
+         .forEach(el => {
+           const txt = el.textContent.trim();
+           const match = colorMap.find(m => txt.includes(m.text));
+           el.classList.remove('layer-aderidas','layer-processo','layer-interessadas');
+           if (match) el.classList.add(match.cls);
+           else el.classList.add('layer-outras');
+         });
+     }
+     colorize();
+     new MutationObserver(colorize).observe(
+       document.body, { childList: true, subtree: true }
+     );
+   })();
+   </script>
+   ================================================================ */
+
+/* BASE: todas as camadas → #66FFFF */
+.leaflet-layerstree-header-pointer {
+  background: #66FFFF !important;
+  color: #0a2a1a !important;
+  box-shadow: 0 4px 12px rgba(0, 200, 200, 0.35) !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+}
+.leaflet-layerstree-header-pointer:hover {
+  background: #33dddd !important;
+  filter: brightness(1.06) !important;
+}
+
+/* ADERIDAS → #33FF33 verde vivo */
+.leaflet-layerstree-header-pointer.layer-aderidas {
+  background: #33FF33 !important;
+  color: #082408 !important;
+  box-shadow: 0 4px 14px rgba(51, 255, 51, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-aderidas:hover {
+  background: #22dd22 !important;
+}
+
+/* EM PROCESSO → #FFFF33 amarelo */
+.leaflet-layerstree-header-pointer.layer-processo {
+  background: #FFFF33 !important;
+  color: #2a2400 !important;
+  box-shadow: 0 4px 14px rgba(255, 255, 51, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-processo:hover {
+  background: #e0e020 !important;
+}
+
+/* INTERESSADAS / MANIFESTO → #9999FF roxo suave */
+.leaflet-layerstree-header-pointer.layer-interessadas {
+  background: #9999FF !important;
+  color: #10082a !important;
+  box-shadow: 0 4px 14px rgba(153, 153, 255, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-interessadas:hover {
+  background: #7777ee !important;
+}
+
+/* Marcador colorido nos labels das camadas */
+.leaflet-layerstree-header-label {
+  display: flex;
+  align-items: center;
+}
+.leaflet-layerstree-header-label::before {
+  content: '';
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+  background: #66FFFF;
+  box-shadow: 0 0 0 2px rgba(102,255,255,0.3);
+}
+.layer-aderidas     .leaflet-layerstree-header-label::before { background: #33FF33; box-shadow: 0 0 0 2px rgba(51,255,51,0.3); }
+.layer-processo     .leaflet-layerstree-header-label::before { background: #FFFF33; box-shadow: 0 0 0 2px rgba(255,255,51,0.3); }
+.layer-interessadas .leaflet-layerstree-header-label::before { background: #9999FF; box-shadow: 0 0 0 2px rgba(153,153,255,0.3); }
+
+/* ================================================================
+   CHECKBOX "Seleção Visível" — dentro do Painel de Acompanhamento
+   ================================================================
+   Por que não consigo injetar automaticamente no painel:
+   O #stats-panel é gerado/populado por JavaScript (qgis2web/Leaflet).
+   O CSS não pode inserir elementos interativos — só o JS pode fazer isso.
+
+   SOLUÇÃO: cole este JS no final do seu <body>:
+
+   <script>
+   (function injectSelecaoToggle() {
+     function inject() {
+       const h2 = document.querySelector('#stats-panel h2');
+       if (!h2 || document.getElementById('toggle-selecao')) return;
+       const lbl = document.createElement('label');
+       lbl.className = 'toggle-selecao';
+       lbl.title = 'Mostrar/ocultar contorno de seleção';
+       lbl.innerHTML = `
+         <input type="checkbox" id="toggle-selecao" checked>
+         <span class="toggle-track"><span class="toggle-thumb"></span></span>
+         <span class="toggle-label">Seleção visível</span>`;
+       h2.appendChild(lbl);
+       document.getElementById('toggle-selecao').addEventListener('change', function() {
+         document.body.classList.toggle('show-selection', this.checked);
+       });
+       document.body.classList.add('show-selection');
+     }
+     inject();
+     new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
+   })();
+   </script>
+   ================================================================ */
+
+/* Contêiner do toggle (fica inline ao lado do h2) */
+.toggle-selecao {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+.toggle-selecao input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.toggle-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: rgba(150,150,150,0.25);
+  border-radius: 20px;
+  border: 1.5px solid rgba(150,150,150,0.3);
+  transition: background .22s ease, border-color .22s ease, box-shadow .22s ease;
+  flex-shrink: 0;
+}
+.toggle-selecao input:checked ~ .toggle-track {
+  background: rgba(220,50,40,0.18);
+  border-color: rgba(220,50,40,0.5);
+  box-shadow: 0 0 0 3px rgba(220,50,40,0.12);
+}
+.toggle-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 13px; height: 13px;
+  background: #aaa;
+  border-radius: 50%;
+  transition: transform .22s cubic-bezier(0.34,1.56,0.64,1), background .22s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+.toggle-selecao input:checked ~ .toggle-track .toggle-thumb {
+  transform: translateX(16px);
+  background: #dc3228;
+  box-shadow: 0 1px 6px rgba(220,50,40,0.4);
+}
+.toggle-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  transition: color .2s ease;
+}
+.toggle-selecao:has(input:checked) .toggle-label { color: #dc3228; }
+.toggle-selecao:hover .toggle-track { box-shadow: 0 0 0 4px rgba(150,150,150,0.1); }
+
+/* ── Contorno vermelho nas feições selecionadas ─────────────── */
+/* OCULTO por padrão */
+.leaflet-interactive.selected-feature {
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+}
+/* VISÍVEL quando body.show-selection está ativo */
+body.show-selection .leaflet-interactive.selected-feature {
+  stroke: #e53030 !important;
+  stroke-width: 3px !important;
+  stroke-opacity: 1 !important;
+  filter: drop-shadow(0 0 5px rgba(229,48,48,0.55)) !important;
+  paint-order: stroke fill !important;
+  animation: selectionPulse 2s ease-in-out infinite !important;
+}
+@keyframes selectionPulse {
+  0%, 100% { stroke-opacity: 1; }
+  50%       { stroke-opacity: 0.5; }
+}
+
 /* ── Responsividade ─────────────────────────────────────────── */
 @media (max-width: 900px) {
   #stats-panel,
@@ -1287,6 +1718,8 @@ body.panel-open #map {
 
 @media (max-width: 768px) {
   #map-header {
+  display: none !important;
+  display: none !important;
     font-size: 15.5px;
     padding: 12px 24px;
     top: 14px;
@@ -1338,4 +1771,47 @@ body.panel-open #map {
   }
 }
 
+/* ================================================================
+   FIX: Contorno vermelho — seleção de tipo de propriedade
+   Garante que body:not(.show-selection) SEMPRE esconde o contorno,
+   independente de como stats.js aplica o estilo (classe, setStyle,
+   ou atributo SVG).
+   ================================================================ */
 
+/* Quando show-selection NÃO está ativo: força transparent em qualquer
+   elemento com selected-feature, independente de onde a classe está */
+body:not(.show-selection) .selected-feature,
+body:not(.show-selection) .selected-feature path,
+body:not(.show-selection) .selected-feature .leaflet-interactive,
+body:not(.show-selection) .leaflet-interactive.selected-feature {
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+  stroke-opacity: 0 !important;
+  filter: none !important;
+  animation: none !important;
+  -webkit-animation: none !important;
+}
+
+/* Garante que o contorno vermelho só aparece com show-selection ativo */
+body.show-selection .selected-feature path,
+body.show-selection .selected-feature .leaflet-interactive,
+body.show-selection .leaflet-interactive.selected-feature,
+body.show-selection path.selected-feature {
+  stroke: #e53030 !important;
+  stroke-width: 3px !important;
+  stroke-opacity: 1 !important;
+  filter: drop-shadow(0 0 5px rgba(229,48,48,0.55)) !important;
+  paint-order: stroke fill !important;
+  animation: selectionPulse 2s ease-in-out infinite !important;
+}
+/* ── Correção extra: garante que presentation attributes SVG não vazem ────── */
+body:not(.show-selection) .leaflet-interactive.selected-feature,
+body:not(.show-selection) .leaflet-interactive.selected-feature path,
+body:not(.show-selection) path.selected-feature,
+body:not(.show-selection) .selected-feature .leaflet-interactive {
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+  stroke-opacity: 0 !important;
+  animation: none !important;
+  filter: none !important;
+}

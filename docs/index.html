@@ -7054,6 +7054,154 @@
             }  
         });       
         setBounds();
-        </script>        
-    </body>
+        </script>   
+
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////INÍCIO DOS SCRIPTS PERSONALIZADOS (consolidado)-->         
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////COPIAR DAQUI 3-->
+
+<script>
+(function applyLayerColors() {
+  const colorMap = [
+    { text: 'Propriedades Aderidas',              cls: 'layer-aderidas'     },
+    { text: 'Propriedades em Processo de Adesão', cls: 'layer-processo'     },
+    { text: 'Propriedades interessadas',          cls: 'layer-interessadas' },
+    { text: 'Manifesto',                          cls: 'layer-interessadas' },
+  ];
+  function colorize() {
+    document.querySelectorAll('.leaflet-layerstree-header-pointer')
+      .forEach(el => {
+        const txt = el.textContent.trim();
+        const match = colorMap.find(m => txt.includes(m.text));
+        el.classList.remove('layer-aderidas','layer-processo','layer-interessadas');
+        if (match) el.classList.add(match.cls);
+      });
+  }
+  colorize();
+  new MutationObserver(colorize).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////ATE AQUI 3-->
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////COPIAR DAQUI 4-->
+
+        <script>
+(function injectSelecaoToggle() {
+
+  /* ─── Limpa completamente os estilos inline de stroke em um elemento ──────
+     Dispatchar mouseout primeiro reseta o estado interno do Leaflet; depois
+     removeProperty elimina qualquer stroke definido por stats.js via setProperty.
+  */
+  function clearInlineStroke(el) {
+    try { el.dispatchEvent(new MouseEvent('mouseout', {bubbles:true, cancelable:true})); } catch(e){}
+    el.style.removeProperty('stroke');
+    el.style.removeProperty('stroke-width');
+    el.style.removeProperty('stroke-opacity');
+    el.style.removeProperty('animation');
+    el.style.removeProperty('filter');
+  }
+
+  /* ─── Coleta todos os elementos SVG relacionados à seleção ───────────────── */
+  function getSelectedEls() {
+    return Array.from(document.querySelectorAll(
+      '.leaflet-interactive.selected-feature,' +
+      '.selected-feature .leaflet-interactive,' +
+      '.selected-feature path,' +
+      '.leaflet-interactive.selected-feature path'
+    ));
+  }
+
+  /* ─── Aplica / remove seleção visual ─────────────────────────────────────── */
+  function applyToggle(checked) {
+    document.body.classList.toggle('show-selection', checked);
+
+    if (!checked) {
+      /* Passo 1 – simula passagem rápida do mouse em todos os shapes
+         (exatamente a abordagem sugerida: salva posição, "passa" em cada shape
+          via evento sintético, e o Leaflet reseta seu estado de hover/select). */
+      getSelectedEls().forEach(clearInlineStroke);
+
+      /* Passo 2 – MutationObserver garante que qualquer re-desenho posterior
+         feito pelo stats.js também seja neutralizado enquanto o toggle está off. */
+      _startObserver();
+    } else {
+      _stopObserver();
+    }
+  }
+
+  /* ─── MutationObserver: intercepta stats.js re-aplicando stroke inline ────── */
+  var _obs = null;
+  function _startObserver() {
+    if (_obs) return;          // já rodando
+    var root = document.getElementById('map') || document.body;
+    _obs = new MutationObserver(function(mutations) {
+      var cb = document.getElementById('toggle-selecao');
+      if (cb && cb.checked) { _stopObserver(); return; }
+      mutations.forEach(function(m) {
+        if (m.type !== 'attributes') return;
+        var el = m.target;
+        /* Só nos importa se o elemento faz parte de uma seleção */
+        var isSelected = el.classList.contains('selected-feature') ||
+                         el.closest && el.closest('.selected-feature');
+        if (!isSelected) return;
+        var s = el.style;
+        /* Se stats.js voltou a colocar stroke vermelho, remove */
+        if (s.stroke && s.stroke !== 'transparent' && s.stroke !== 'none') {
+          el.style.removeProperty('stroke');
+          el.style.removeProperty('stroke-width');
+          el.style.removeProperty('stroke-opacity');
+          el.style.removeProperty('animation');
+        }
+      });
+    });
+    _obs.observe(root, { attributes:true, attributeFilter:['style'], subtree:true });
+  }
+  function _stopObserver() {
+    if (_obs) { _obs.disconnect(); _obs = null; }
+  }
+
+  /* ─── Reaplica toggle após mudança de grupo (stats.js re-desenha) ─────────── */
+  function hookGroupSelect() {
+    var sel = document.getElementById('group-select');
+    if (!sel || sel._selToggleHooked) return;
+    sel._selToggleHooked = true;
+    sel.addEventListener('change', function() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          var cb = document.getElementById('toggle-selecao');
+          if (cb) applyToggle(cb.checked);
+        });
+      });
+    });
+  }
+
+  /* ─── Injeta o toggle no painel ───────────────────────────────────────────── */
+  function inject() {
+    hookGroupSelect();
+    var h2 = document.querySelector('#stats-panel h2');
+    if (!h2 || document.getElementById('toggle-selecao')) return;
+
+    var lbl = document.createElement('label');
+    lbl.className = 'toggle-selecao';
+    lbl.innerHTML =
+      '<input type="checkbox" id="toggle-selecao" checked>' +
+      '<span class="toggle-track"><span class="toggle-thumb"></span></span>' +
+      '<span class="toggle-label">Seleção visível</span>';
+    h2.appendChild(lbl);
+
+    document.getElementById('toggle-selecao').addEventListener('change', function() {
+      applyToggle(this.checked);
+    });
+    applyToggle(true);
+  }
+
+  inject();
+  new MutationObserver(inject).observe(document.body, {childList:true, subtree:true});
+})();
+</script>
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////ATÉ AQUI 4-->
+
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////FIM DOS SCRIPTS PERSONALIZADOS-->
+</body>
 </html>
