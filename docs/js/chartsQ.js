@@ -43,20 +43,25 @@
   let chartInstance = null;
   let currentChartType = "comparacaoGeral";
 
-  // ============ ADICIONAR ESTE OBJETO ============
+  // ============================================================
+  // VALORES MANUAIS — atualizar aqui sempre que necessário
+  // NÃO buscar do stats.js, DOM ou qualquer outra fonte dinâmica
+  // ============================================================
   window.chartFixedValues = {
     credenciado: {
-      total: 2979.51,     // Área total das propriedades credenciadas
-      verde: 2965.36,       // Área verde total das propriedades credenciadas
-      contratada: 159.28   // Área contratada das propriedades credenciadas
+      propriedadesAderidas: 17,      // ← Número de propriedades aderidas (MANUAL)
+      total: 2979.51,                // ← Área total das propriedades credenciadas (ha) (MANUAL)
+      verde: 2965.36,                // ← Área verde total das propriedades credenciadas (ha) (MANUAL)
+      contratada: 159.28,            // ← Área contratada das propriedades credenciadas (ha) (MANUAL)
+      valorMedioPorHa: 330.00        // ← Valor médio por hectare (R$/ha) (MANUAL)
     },
     programa: {
-      total: 36608.07,      // Área total do programa (editais)
-      verde: 30164.30,      // Área verde total estimada do programa
-      contratada: 159.28   // Área total contratada do programa (será sobrescrita)
+      total: 36608.07,               // ← Área total do programa — editais (ha) (MANUAL)
+      verde: 30164.30,               // ← Área verde total estimada do programa (ha) (MANUAL)
+      contratada: 159.28             // ← Área total contratada do programa (ha) (MANUAL)
     }
   };
-  // ================================================
+  // ============================================================
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Aqui sera preciso atualizar com a nova data de adesão da propriedades aderida/////
@@ -78,33 +83,10 @@
 // Função específica para o gráfico de comparação GERAL do Programa
 // DADOS DO PROGRAMA COMPLETO (editais + propriedades)
     function desenharComparacaoGeral(ctx){
-  // USAR VALORES FIXOS DO OBJETO GLOBAL
-  const totalPrograma = window.chartFixedValues.programa.total;
-  const greenPrograma = window.chartFixedValues.programa.verde;
-  
-  // Apenas a área contratada pode ser dinâmica (buscar do stats.js)
-  let contractedPrograma = window.chartFixedValues.programa.contratada;
-  
-  try {
-    if (window.webmapStats && window.webmapStats.statsData) {
-      contractedPrograma = window.webmapStats.statsData.contracted || window.chartFixedValues.programa.contratada;
-    } else {
-      const contratadaEl = Array.from(document.querySelectorAll('.stats-item')).find(item =>
-        item.querySelector('.stats-label')?.textContent.includes('Área contratada')
-      )?.querySelector('.stats-value');
-      
-      if (contratadaEl) {
-        contractedPrograma = parseFloat(
-          contratadaEl.textContent.replace(/\./g, '').replace(',', '.')
-        ) || window.chartFixedValues.programa.contratada;
-      }
-    }
-  } catch (e) {
-    contractedPrograma = window.chartFixedValues.programa.contratada;
-  }
-  
-  // Atualizar o valor no objeto global (para consistência)
-  window.chartFixedValues.programa.contratada = contractedPrograma;
+  // TODOS OS VALORES SÃO MANUAIS — definidos em window.chartFixedValues
+  const totalPrograma      = window.chartFixedValues.programa.total;
+  const greenPrograma      = window.chartFixedValues.programa.verde;
+  const contractedPrograma = window.chartFixedValues.programa.contratada;
   
   return new Chart(ctx, {
     type: 'bar',
@@ -162,20 +144,7 @@
 // Função específica para o gráfico de comparação CREDENCIADO
 // DADOS DAS PROPRIEDADES CREDENCIADAS (ADERIDAS) APENAS
     function desenharComparacaoCredenciado(ctx){
-  console.log('=== DESENHANDO GRÁFICO CREDENCIADO ===');
-  console.log('Valores fixos disponíveis:', window.chartFixedValues);
-  
-  // USAR VALORES FIXOS DO OBJETO GLOBAL
-  const totalCredenciado = window.chartFixedValues.credenciado.total;
-  const greenCredenciado = window.chartFixedValues.credenciado.verde;
-  const contractedCredenciado = window.chartFixedValues.credenciado.contratada;
-  
-  console.log('Valores usados no gráfico:', {
-    total: totalCredenciado,
-    verde: greenCredenciado,
-    contratada: contractedCredenciado
-  });
-  // USAR VALORES FIXOS DO OBJETO GLOBAL - NÃO BUSCAR DO STATS.JS
+  // TODOS OS VALORES SÃO MANUAIS — definidos em window.chartFixedValues
   const valores = window.chartFixedValues.credenciado;
   
   return new Chart(ctx, {
@@ -393,8 +362,6 @@
         chartInstance.destroy();
       }
 
-      console.log(`Renderizando gráfico: ${currentChartType}`);
-      
       switch(currentChartType) {
         case "comparacaoGeral":
           chartInstance = desenharComparacaoGeral(ctx);

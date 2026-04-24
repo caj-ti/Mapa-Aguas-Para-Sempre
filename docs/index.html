@@ -154,13 +154,13 @@
           
           <div class="stats-item">
             <span class="stats-label"><strong>Área total das propriedades:</strong></span>
-            <span class="stats-value" id="total-area">0</span>
+            <span class="stats-value">3044</span>
             <span class="stats-unit">ha</span>
           </div>
           
           <div class="stats-item">
-            <span class="stats-label"><strong>Área verde total das propriedades:</strong></span>
-            <span class="stats-value" id="total-green">0</span>
+            <span class="stats-label"><strong>Área verde total das propriedades:</span>
+            <span class="stats-value">2965,36</span>
             <span class="stats-unit">ha</span>
           </div>
           
@@ -171,7 +171,7 @@
           </div>
           
           <div class="stats-item">
-            <span class="stats-label" id="avg-green"><strong>Média da área verde total:</strong> — ha</span>
+            <span class="stats-label" id="avg-green"><strong>Média da área verde total:</strong></span>
           </div>
           
           <div class="stats-divider"></div>
@@ -180,13 +180,13 @@
 
           <div class="stats-item">
             <span class="stats-label"><strong>Área contratada:</strong></span>
-            <span class="stats-value">160,1727</span>
+            <span class="stats-value">162,4</span>
             <span class="stats-unit">ha</span>
           </div>
           
           <div class="stats-item">
             <span class="stats-label"><strong>Valor médio/ha:</strong></span>
-            <span class="stats-value">R$ 670,28</span>
+            <span class="stats-value">R$ 657,90</span>
             <span class="stats-unit">/ha</span>
           </div>
         </div>
@@ -251,21 +251,6 @@
         transition: all 0.2s ease;
       }
       </style>
-
- <div class="list-controls" style="margin-top:10px; display:none;">
-        <button id="sort-green" style="margin-right:6px;">Ordenar por Área Verde</button>
-        <button id="sort-total">Ordenar por Área Total</button>
-   </div>
-   <table id="props-table" style="margin-top:10px; border-collapse: collapse; width: 100%;">
-    <thead>
-      <tr>
-        <th style="border: 1px solid #ccc; padding:4px;">ID</th>
-        <th style="border: 1px solid #ccc; padding:4px;">Área (ha)</th>
-        <th style="border: 1px solid #ccc; padding:4px;">Área Verde (ha)</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
 </div>
 <!--////////////////////////////////////////////////////////////////////////////////////////////////////-->
 <!-- Até aqui COPIA 1--> 
@@ -427,7 +412,7 @@
     <script src="js/stats.js"></script>
     <script src="js/chartsQ.js"></script>
     <script>
-        (function(){
+                (function(){
           const openBtn = document.getElementById('stats-btn');
           const panel = document.getElementById('stats-panel');
           const closeBtn = document.getElementById('close-panel');
@@ -438,15 +423,6 @@
           openBtn.addEventListener('click', show);
           closeBtn.addEventListener('click', hide);
           document.addEventListener('keydown', function(e){ if (e.key === 'Escape') hide(); });
-
-          document.getElementById('sort-green').addEventListener('click', function(){ 
-          if (window.webmapStats && typeof window.webmapStats.updateStats === 'function') 
-          window.webmapStats.updateStats('areaverd'); 
-        });
-         document.getElementById('sort-total').addEventListener('click', function(){ 
-         if (window.webmapStats && typeof window.webmapStats.updateStats === 'function') 
-         window.webmapStats.updateStats('area'); 
-        });
 
         })();
 

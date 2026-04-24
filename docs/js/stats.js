@@ -15,10 +15,6 @@
     return isNaN(n) ? 0 : n;
   }
  
-  // Índices de layerName por grupo — baseados no overlaysTree do index.html
-  // "Propriedades Aderidas"        → layer_XXXXX_68  até  layer_XXXXX_94  (27 camadas)
-  // "Propriedades em Processo"     → layer_XXXXX_60  até  layer_XXXXX_67  (8 camadas)
-  // "Propriedades Interessadas"    → layer_XXXXX_24  até  layer_XXXXX_59
   const GROUP_LAYER_INDICES = {
     'propriedades aderidas': { min: 68, max: 94 },
     'processo':              { min: 60, max: 67 },
@@ -142,7 +138,8 @@
     }
   }
  
-  function updateStats(orderBy = null){
+  // ALTERAÇÃO: Removido o parâmetro orderBy
+  function updateStats(){
     const map = window.map || window._map || null;
     if (!map) {
       console.warn('Mapa não encontrado');
@@ -197,60 +194,58 @@
       }
     });
  
-    // Cálculos totais
-    const totalAreaSum = contributions.reduce((sum, c) => sum + (c.area != null ? c.area : 0), 0);
-    const totalGreenSum = contributions.reduce((sum, c) => sum + (c.areaverd != null ? c.areaverd : 0), 0);
-    const totalContractedSum = contributions.reduce((sum, c) => sum + (c.areacontr != null ? c.areacontr : 0), 0);
-    const countAreaNonNull = contributions.reduce((n, c) => n + (c.area != null ? 1 : 0), 0);
-    const countGreenNonNull = contributions.reduce((n, c) => n + (c.areaverd != null ? 1 : 0), 0);
-    const countContractedNonNull = contributions.reduce((n, c) => n + (c.areacontr != null ? 1 : 0), 0);
+    // Cálculos totais iniciais
+    let totalAreaSum = contributions.reduce((sum, c) => sum + (c.area != null ? c.area : 0), 0);
+    let totalGreenSum = contributions.reduce((sum, c) => sum + (c.areaverd != null ? c.areaverd : 0), 0);
+    let totalContractedSum = contributions.reduce((sum, c) => sum + (c.areacontr != null ? c.areacontr : 0), 0);
+    let countAreaNonNull = contributions.reduce((n, c) => n + (c.area != null ? 1 : 0), 0);
+    let countGreenNonNull = contributions.reduce((n, c) => n + (c.areaverd != null ? 1 : 0), 0);
+    let countContractedNonNull = contributions.reduce((n, c) => n + (c.areacontr != null ? 1 : 0), 0);
+ 
+    // ALTERAÇÃO: Se for "Propriedades Aderidas", usar valores MANUAIS do chartFixedValues
+    if (selectedGroup === 'propriedades aderidas' && window.chartFixedValues && window.chartFixedValues.credenciado) {
+      const fix = window.chartFixedValues.credenciado;
+      totalAreaSum = fix.total;
+      totalGreenSum = fix.verde;
+      totalContractedSum = fix.contratada;
+      // Força o número de propriedades para 17 (ou o valor fixo definido)
+      const fixedCount = fix.propriedadesAderidas || 17;
+      countAreaNonNull = fixedCount;
+      countGreenNonNull = fixedCount;
+      countContractedNonNull = fixedCount;
+      // Para manter a lista de contribuições com o tamanho correto (evita zeros)
+      contributions = Array.from({ length: fixedCount }, (_, i) => ({
+        id: `fixa_${i+1}`,
+        area: totalAreaSum / fixedCount,
+        areaverd: totalGreenSum / fixedCount,
+        areacontr: totalContractedSum / fixedCount
+      }));
+    }
  
     window.totalAreaSum = totalAreaSum;
     window.totalGreenSum = totalGreenSum;
     window.totalContractedSum = totalContractedSum;
     window.manualValue = window.manualValue ?? 0;
-    // ============ PASSO 5: SINCRONIZAR COM VALORES FIXOS DO GRÁFICO ============
-try {
-  // Verificar se o objeto de valores fixos existe (criado pelo chartsq.js)
-  if (!window.chartFixedValues) {
-    // Se não existe, criar com valores padrão
-    window.chartFixedValues = {
-      credenciado: {
-        total: 2982.9212,
-        verde: 2900.55,
-        contratada: 162.209
-      },
-      programa: {
-        total: 36608.07,
-        verde: 30164.30,
-        contratada: 162.209
+ 
+    try {
+      if (!window.chartFixedValues) {
+        window.chartFixedValues = {
+          credenciado: {
+            total: 2982.9212,
+            verde: 2900.55,
+            contratada: 162.209
+          },
+          programa: {
+            total: 36608.07,
+            verde: 30164.30,
+            contratada: 162.209
+          }
+        };
       }
-    };
-    console.log('chartFixedValues criado no stats.js com valores padrão');
-  } else {
-    console.log('chartFixedValues já existe, usando valores:', window.chartFixedValues);
-  }
-  
-  // OPÇÃO 1: Sobrescrever os valores calculados com os fixos (RECOMENDADO)
-  // Comente esta seção se quiser manter os valores calculados dinâmicos
-  /*
-  window.totalAreaSum = window.chartFixedValues.credenciado.total;
-  window.totalGreenSum = window.chartFixedValues.credenciado.verde;
-  console.log('Valores sobrescritos com valores fixos do gráfico');
-  */
-  
-  // OPÇÃO 2: Apenas logar a diferença (para debug)
-  console.log('Comparação de valores:');
-  console.log('- Calculado vs Fixo - Área total:', totalAreaSum, 'vs', window.chartFixedValues.credenciado.total);
-  console.log('- Calculado vs Fixo - Área verde:', totalGreenSum, 'vs', window.chartFixedValues.credenciado.verde);
-  console.log('- Calculado vs Fixo - Área contratada:', totalContractedSum, 'vs', window.chartFixedValues.credenciado.contratada);
-  
-} catch (error) {
-  console.warn('Erro ao sincronizar com valores fixos:', error);
-}
-// ===========================================================================
+    } catch (error) {
+      console.warn('Erro ao sincronizar com valores fixos:', error);
+    }
     
-    // Usando o valor fixo para Área Total Contratada
     const contractedtotal = FIXED_CONTRACTED_TOTAL;
  
     document.dispatchEvent(new CustomEvent('stats:ready', {
@@ -296,7 +291,6 @@ try {
     setAverageElement(document.getElementById('avg-area'), 'Média das áreas das propriedades:', avgArea);
     setAverageElement(document.getElementById('avg-green'), 'Média da área verde das propriedades:', avgGreen);
     
-    // Adicionar elemento para média da área contratada se existir
     const avgContrEl = document.getElementById('avg-contr');
     if (avgContrEl) {
       setAverageElement(avgContrEl, 'Média da área contratada das propriedades:', avgContracted);
@@ -321,97 +315,31 @@ try {
       }
     });
  
-    if(orderBy === 'area') {
-      contributions.sort((a,b) => (b.area || 0) - (a.area || 0));
-    } else if(orderBy === 'areaverd') {
-      contributions.sort((a,b) => (b.areaverd || 0) - (a.areaverd || 0));
-    } else if(orderBy === 'areacontr') {
-      contributions.sort((a,b) => (b.areacontr || 0) - (a.areacontr || 0));
-    }
-   
+    // ALTERAÇÃO: Apenas atualiza os cards, sem tabela
     updateStatsPanel(contributions, totalAreaSum, totalGreenSum, totalContractedSum);
   }
  
+  // ALTERAÇÃO: Removida toda a manipulação da tabela
   function updateStatsPanel(contributions, totalAreaSum, totalGreenSum, totalContractedSum) {
     const totalPropsEl = document.getElementById('total-props');
     const totalAreaEl = document.getElementById('total-area');
     const totalGreenEl = document.getElementById('total-green');
     const totalContractedEl = document.getElementById('total-contr');
-    const propsTableEl = document.getElementById('props-table');
  
     if (contributions.length === 0){
       [totalPropsEl, totalAreaEl, totalGreenEl, totalContractedEl].forEach(el => {
         if (el && el.parentElement) el.parentElement.style.display = 'none';
       });
-     
-      if (propsTableEl) {
-        const tbody = propsTableEl.querySelector('tbody');
-        if (tbody) tbody.innerHTML = '';
-      }
-     
-      const avgAreaEl = document.getElementById('avg-area');
-      const avgGreenEl = document.getElementById('avg-green');
-      const avgContrEl = document.getElementById('avg-contr');
-      if (avgAreaEl) avgAreaEl.innerHTML = `<strong>Área média:</strong> —`;
-      if (avgGreenEl) avgGreenEl.innerHTML = `<strong>Área Verde Média:</strong> —`;
-      if (avgContrEl) avgContrEl.innerHTML = `<strong>Área Contratada Média:</strong> —`;
+    } else {
+      [totalPropsEl, totalAreaEl, totalGreenEl, totalContractedEl].forEach(el => {
+        if (el && el.parentElement) el.parentElement.style.display = '';
+      });
+      if (totalPropsEl) totalPropsEl.textContent = String(contributions.length);
+      if (totalAreaEl) totalAreaEl.textContent = totalAreaSum.toLocaleString('pt-BR');
+      if (totalGreenEl) totalGreenEl.textContent = totalGreenSum.toLocaleString('pt-BR');
+      if (totalContractedEl) totalContractedEl.textContent = totalContractedSum.toLocaleString('pt-BR');
     }
-   
-    [totalPropsEl, totalAreaEl, totalGreenEl, totalContractedEl].forEach(el => {
-      if (el && el.parentElement) el.parentElement.style.display = '';
-    });
- 
-    if (totalPropsEl) totalPropsEl.textContent = String(contributions.length);
-    if (totalAreaEl) totalAreaEl.textContent = totalAreaSum.toLocaleString('pt-BR');
-    if (totalGreenEl) totalGreenEl.textContent = totalGreenSum.toLocaleString('pt-BR');
-    if (totalContractedEl) totalContractedEl.textContent = totalContractedSum.toLocaleString('pt-BR');
-   
-    if (propsTableEl){
-      const tbody = propsTableEl.querySelector('tbody');
-      if (tbody) {
-        tbody.innerHTML = '';
-       
-        contributions.forEach(c => {
-          const tr = document.createElement('tr');
-         
-          tr.style.cursor = 'pointer';
-          tr.style.transition = 'background-color 0.2s';
-         
-          tr.addEventListener('mouseenter', () => {
-            tr.style.backgroundColor = '#f0f0f0';
-          });
-          tr.addEventListener('mouseleave', () => {
-            tr.style.backgroundColor = '';
-          });
-         
-          tr.innerHTML = `
-            <td style="border: 1px solid #ccc; padding: 4px; font-size: 12px;">${c.id}</td>
-            <td style="border: 1px solid #ccc; padding: 4px; font-size: 12px; text-align: right;">${c.area.toLocaleString('pt-BR')}</td>
-            <td style="border: 1px solid #ccc; padding: 4px; font-size: 12px; text-align: right;">${c.areaverd.toLocaleString('pt-BR')}</td>
-            <td style="border: 1px solid #ccc; padding: 4px; font-size: 12px; text-align: right;">${c.areacontr.toLocaleString('pt-BR')}</td>
-          `;
-         
-          tr.addEventListener('click', () => {
-            const map = window.map || window._map;
-            if (map) {
-              const layer = findLayerById(map, c.id);
-              if (layer) {
-                focusOnLayer(map, layer);
-               
-                tr.style.backgroundColor = '#d4edda';
-                setTimeout(() => {
-                  tr.style.backgroundColor = '';
-                }, 1000);
-              } else {
-                console.warn(`Layer não encontrada para ID: ${c.id}`);
-              }
-            }
-          });
-         
-          tbody.appendChild(tr);
-        });
-      }
-    }
+    // Tabela removida completamente
   }
  
   function updateScaleLeaflet() {
@@ -478,9 +406,7 @@ try {
     const btn = document.getElementById("stats-btn");
     const panel = document.getElementById("stats-panel");
     const closeBtn = document.getElementById("close-panel");
-    const sortAreaBtn = document.getElementById("sort-total");
-    const sortGreenBtn = document.getElementById("sort-green");
-    const sortContrBtn = document.getElementById("sort-contr");
+    // ALTERAÇÃO: removidos sortAreaBtn, sortGreenBtn, sortContrBtn
     const groupSelect = document.getElementById('group-select');
  
     if (btn && panel) {
@@ -496,18 +422,8 @@ try {
       closeBtn.addEventListener('click', () => panel.classList.add('hidden'));
     }
  
-    if (sortAreaBtn) {
-      sortAreaBtn.addEventListener('click', () => updateStats('area'));
-    }
- 
-    if (sortGreenBtn) {
-      sortGreenBtn.addEventListener('click', () => updateStats('areaverd'));
-    }
- 
-    if (sortContrBtn) {
-      sortContrBtn.addEventListener('click', () => updateStats('areacontr'));
-    }
-   
+    // ALTERAÇÃO: removidos listeners de ordenação
+    
     if (groupSelect) {
       groupSelect.addEventListener('change', () => updateStats());
     }
@@ -531,18 +447,15 @@ try {
   }
 })();
  
-// Código para o gráfico
+// Código para o gráfico (mantido igual)
 document.addEventListener('stats:ready', function(e) {
   const { totalAreaSum, totalGreenSum, totalContractedSum, contractedtotal } = e.detail;
   
-  // Formatar para mostrar o valor da Área Total Contratada
   console.log('Área Total Contratada (valor fixo):', contractedtotal.toFixed(5), 'ha');
   
-  // Verifica se o Chart.js está disponível
   if (typeof Chart !== 'undefined') {
     const ctx = document.getElementById('areaChart').getContext('2d');
     
-    // Destroi gráfico anterior se existir
     if (window.areaChart instanceof Chart) {
       window.areaChart.destroy();
     }
