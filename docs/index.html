@@ -416,7 +416,116 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
 
     <script src="js/stats.js"></script>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         CONFIGURAÇÃO MANUAL DOS NÚMEROS DOS GRÁFICOS
+         ─────────────────────────────────────────────────────────────────────
+         Edite SOMENTE os números abaixo para atualizar os contadores
+         exibidos nos gráficos. Nenhum outro arquivo precisa ser alterado.
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <script>
+    // ┌──────────────────────────────────────────────────────────────────────┐
+    // │  EDITE AQUI — Número de propriedades por categoria                  │
+    // └──────────────────────────────────────────────────────────────────────┘
+    window.CHART_MANUAL_DATA = {
+      aderidas:    27,  // ← Propriedades Aderidas
+      emProcesso:   7,  // ← Propriedades Em Processo de Adesão
+      interessadas: 38, // ← Propriedades Interessadas / Manifesto
+    };
+    // Total calculado automaticamente a partir dos valores acima
+    window.CHART_MANUAL_DATA.total =
+      window.CHART_MANUAL_DATA.aderidas +
+      window.CHART_MANUAL_DATA.emProcesso +
+      window.CHART_MANUAL_DATA.interessadas;
+    </script>
+
     <script src="js/chartsQ.js"></script>
+
+    <!-- Sobrescreve os dados dos gráficos com os valores de CHART_MANUAL_DATA -->
+    <script>
+    (function() {
+      /* ── Localiza a instância do Chart no canvas #myChart ── */
+      function getChartInstance() {
+        var canvas = document.getElementById('myChart');
+        if (!canvas || typeof Chart === 'undefined') return null;
+        // Chart.js ≥ 3
+        if (typeof Chart.getChart === 'function') return Chart.getChart(canvas);
+        // Chart.js 2.x
+        var keys = Object.keys(Chart.instances || {});
+        for (var i = 0; i < keys.length; i++) {
+          if (Chart.instances[keys[i]].canvas === canvas) return Chart.instances[keys[i]];
+        }
+        return null;
+      }
+
+      /* ── Aplica os valores flat ao gráfico ativo ── */
+      function patchChartData() {
+        var chart = getChartInstance();
+        if (!chart) return;
+
+        var d = window.CHART_MANUAL_DATA;
+        if (!d) return;
+
+        var datasets = chart.data && chart.data.datasets;
+        if (!datasets) return;
+
+        /* Estratégia 1 – dataset com exatamente 3 entradas
+           (ordem típica: interessadas / emProcesso / aderidas) */
+        var patched = false;
+        datasets.forEach(function(ds) {
+          if (Array.isArray(ds.data) && ds.data.length === 3) {
+            ds.data = [d.interessadas, d.emProcesso, d.aderidas];
+            patched = true;
+          }
+        });
+
+        /* Estratégia 2 – dataset com exatamente 1 entrada que representa o total */
+        if (!patched) {
+          datasets.forEach(function(ds) {
+            if (Array.isArray(ds.data) && ds.data.length === 1) {
+              ds.data = [d.total];
+            }
+          });
+        }
+
+        /* Atualiza labels se tiverem exatamente 3 itens e corresponderem às categorias */
+        if (chart.data.labels && chart.data.labels.length === 3) {
+          chart.data.labels = [
+            'Interessadas (' + d.interessadas + ')',
+            'Em Processo (' + d.emProcesso + ')',
+            'Aderidas (' + d.aderidas + ')'
+          ];
+        }
+
+        chart.update('none');
+      }
+
+      /* ── Aplica ao carregar a página ── */
+      window.addEventListener('load', function() {
+        setTimeout(patchChartData, 300);
+        setTimeout(patchChartData, 800);
+        setTimeout(patchChartData, 1600);
+      });
+
+      /* ── Reaplica sempre que o usuário trocar de gráfico no select ── */
+      document.addEventListener('DOMContentLoaded', function() {
+        var sel = document.getElementById('chartSelect');
+        if (sel) {
+          sel.addEventListener('change', function() {
+            setTimeout(patchChartData, 200);
+            setTimeout(patchChartData, 600);
+          });
+        }
+
+        /* ── Também reaplica ao abrir o painel de gráficos ── */
+        var chartBtn = document.getElementById('chart-btn');
+        if (chartBtn) {
+          chartBtn.addEventListener('click', function() {
+            setTimeout(patchChartData, 300);
+          });
+        }
+      });
+    })();
+    </script>
     <script>
                 (function(){
           const openBtn = document.getElementById('stats-btn');
