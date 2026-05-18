@@ -14,25 +14,40 @@
   function isHidden(el){ return el.classList.contains('hidden'); }
   
   function contarAcumulado(datas) {
+    // Coleta os meses únicos presentes nas datas de adesão
     const contagem = {};
-    
+
     datas.forEach(d => {
-        const partes = d.split("/"); 
+        const partes = d.split("/");
         const chave = `${partes[2]}-${partes[1]}`;
         contagem[chave] = (contagem[chave] || 0) + 1;
     });
 
     const ordenadas = Object.keys(contagem).sort();
+    const totalMeses = ordenadas.length;
 
-    let soma = 0;
+    // Número flat de adesões acumuladas (sempre fixo no último mês)
+    const totalFlat = window.chartFixedValues
+      ? window.chartFixedValues.credenciado.propriedadesAderidas
+      : 27;
+
+    // Média por mês para distribuição linear nos meses anteriores
+    const mediaPorMes = totalFlat / totalMeses;
+
     const labels = [];
     const valores = [];
 
-    ordenadas.forEach(chave => {
-        soma += contagem[chave];
+    ordenadas.forEach((chave, i) => {
         const partes = chave.split("-");
         labels.push(`${partes[1]}/${partes[0]}`);
-        valores.push(soma);
+
+        if (i === totalMeses - 1) {
+            // Último mês: sempre o número flat exato
+            valores.push(totalFlat);
+        } else {
+            // Meses anteriores: média acumulada linearmente
+            valores.push(Math.round(mediaPorMes * (i + 1)));
+        }
     });
 
     return { labels, valores };
