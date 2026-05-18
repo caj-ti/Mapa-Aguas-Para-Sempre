@@ -49,7 +49,7 @@
   // ============================================================
   window.chartFixedValues = {
     credenciado: {
-      propriedadesAderidas: 17,      // ← Número de propriedades aderidas (MANUAL)
+      propriedadesAderidas: 27,      // ← Número de propriedades aderidas (MANUAL)
       total: 2979.51,                // ← Área total das propriedades credenciadas (ha) (MANUAL)
       verde: 2965.36,                // ← Área verde total das propriedades credenciadas (ha) (MANUAL)
       contratada: 159.28,            // ← Área contratada das propriedades credenciadas (ha) (MANUAL)
