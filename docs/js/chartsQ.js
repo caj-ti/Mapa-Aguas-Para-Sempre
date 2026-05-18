@@ -68,7 +68,7 @@
 // Aqui sera preciso atualizar com a nova data de adesão da propriedades aderida/////
 // Linha do tempo das adesões
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const datasAdesao = [
+     const datasAdesao = [
       "25/08/2022","29/08/2022","12/05/2023",
       "24/11/2023","18/01/2024","28/05/2024",
       "24/09/2024","30/09/2024","31/10/2024",
@@ -76,6 +76,8 @@
       "21/07/2025","25/07/2025","30/07/2025",
       "19/11/2025","04/12/2025","05/12/2025","06/12/2025","07/12/2025","08/12/2025","09/12/2025","10/12/2025","11/12/2025","12/12/2025","13/12/2025","14/12/2025"
     ];
+
+
     
     // Inicializar variáveis globais para evitar erros
    
@@ -250,46 +252,33 @@
       { date: '04/11/2025', amount: 'R$ 3.748,68' }
     ];
 
-    function parseBRNumber(s){
-      if (!s && s !== 0) return 0;
-      return parseFloat(String(s).replace(/[R$\s\.]/g,'').replace(',','.')) || 0;
-    }
-    
-    function parseBRDate(d){
-      const p = String(d).trim().split('/');
-      return new Date(+p[2], +p[1]-1, +p[0]);
-    }
-    
-// Função de criação do gráfico de pagamentos p/ano
-    function agruparPagamentosPorAno(){
-      // Variáveis com nomes exclusivos para evitar conflito com dados de stats (proprietários)
-      const mapaPag = {};
-      pagamentosRaw.forEach(function(r) {
-        const dt = parseBRDate(r.date);
-        if (isNaN(dt.getTime())) return; // ignora datas inválidas
-        const anoPag = String(dt.getFullYear());
-        mapaPag[anoPag] = (mapaPag[anoPag] || 0) + parseBRNumber(r.amount);
-      });
-      const anosOrdenados = Object.keys(mapaPag).sort(function(a,b){ return +a - +b; });
-      return {
-        pagLabels: anosOrdenados,                                   // anos: ["2023","2024","2025"]
-        pagValores: anosOrdenados.map(function(a){ return +mapaPag[a].toFixed(2); }) // totais em R$
-      };
-    }
-    
     function desenharPagamentos(ctx){
-      // Desestruturação com nomes exclusivos — não colide com "labels"/"valores" do stats.js
-      const resultado = agruparPagamentosPorAno();
-      const pagLabels  = resultado.pagLabels;   // ex: ["2023","2024","2025"]
-      const pagValores = resultado.pagValores;  // ex: [4725.93, 14181.75, 36235.85]
+      // Computação 100% inline — isolada de stats.js e de qualquer variável global
+      const _raw = pagamentosRaw;
+      const _mapa = {};
+
+      for (let _i = 0; _i < _raw.length; _i++) {
+        const _partes = String(_raw[_i].date).trim().split('/');
+        const _dt = new Date(+_partes[2], +_partes[1] - 1, +_partes[0]);
+        if (isNaN(_dt.getTime())) continue;
+        const _ano = String(_dt.getFullYear());
+        const _val = parseFloat(
+          String(_raw[_i].amount).replace(/[R$\s.]/g, '').replace(',', '.')
+        ) || 0;
+        _mapa[_ano] = (_mapa[_ano] || 0) + _val;
+      }
+
+      const _anos = Object.keys(_mapa).sort(function(a, b){ return +a - +b; });
+      const _labsPag = _anos.slice();                                        // ex: ["2023","2024","2025"]
+      const _valsPag = _anos.map(function(a){ return +_mapa[a].toFixed(2); }); // ex: [4725.93, ...]
 
       return new Chart(ctx, {
         type: 'line',
         data: {
-          labels: pagLabels,    // eixo X = anos (nunca categorias de proprietários)
+          labels: _labsPag,
           datasets:[{
             label: 'Pagamentos por ano (R$)',
-            data: pagValores,   // eixo Y = somatório dos valores pagos em R$
+            data: _valsPag,
             borderColor: 'rgb(15,92,143)',
             backgroundColor: 'rgba(15,92,143,0.15)',
             tension: 0.25,
