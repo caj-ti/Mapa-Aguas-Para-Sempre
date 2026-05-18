@@ -261,28 +261,34 @@
     
 // Função de criação do gráfico de pagamentos p/ano
     function agruparPagamentosPorAno(){
-      const mapa = {};
-      pagamentosRaw.forEach(r => {
+      // Variáveis com nomes exclusivos para evitar conflito com dados de stats (proprietários)
+      const mapaPag = {};
+      pagamentosRaw.forEach(function(r) {
         const dt = parseBRDate(r.date);
-        const ano = String(dt.getFullYear());
-        mapa[ano] = (mapa[ano] || 0) + parseBRNumber(r.amount);
+        if (isNaN(dt.getTime())) return; // ignora datas inválidas
+        const anoPag = String(dt.getFullYear());
+        mapaPag[anoPag] = (mapaPag[anoPag] || 0) + parseBRNumber(r.amount);
       });
-      const anos = Object.keys(mapa).sort((a,b)=> +a - +b);
+      const anosOrdenados = Object.keys(mapaPag).sort(function(a,b){ return +a - +b; });
       return {
-        labels: anos,
-        valores: anos.map(a => +mapa[a].toFixed(2))
+        pagLabels: anosOrdenados,                                   // anos: ["2023","2024","2025"]
+        pagValores: anosOrdenados.map(function(a){ return +mapaPag[a].toFixed(2); }) // totais em R$
       };
     }
     
     function desenharPagamentos(ctx){
-      const {labels, valores} = agruparPagamentosPorAno();
+      // Desestruturação com nomes exclusivos — não colide com "labels"/"valores" do stats.js
+      const resultado = agruparPagamentosPorAno();
+      const pagLabels  = resultado.pagLabels;   // ex: ["2023","2024","2025"]
+      const pagValores = resultado.pagValores;  // ex: [4725.93, 14181.75, 36235.85]
+
       return new Chart(ctx, {
         type: 'line',
         data: {
-          labels,
+          labels: pagLabels,    // eixo X = anos (nunca categorias de proprietários)
           datasets:[{
             label: 'Pagamentos por ano (R$)',
-            data: valores,
+            data: pagValores,   // eixo Y = somatório dos valores pagos em R$
             borderColor: 'rgb(15,92,143)',
             backgroundColor: 'rgba(15,92,143,0.15)',
             tension: 0.25,
@@ -297,8 +303,8 @@
             legend:{position:'bottom'},
             tooltip:{
               callbacks:{
-                label: function(ctx){
-                  const v = Number(ctx.parsed.y || 0);
+                label: function(tooltipCtx){
+                  const v = Number(tooltipCtx.parsed.y || 0);
                   return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
                 }
               }
@@ -315,6 +321,7 @@
               title:{display:true,text:'R$'}
             },
             x:{
+              type: 'category',           // força uso das pagLabels como categorias fixas
               title:{display:true,text:'Ano'}
             }
           }
