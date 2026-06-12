@@ -259,27 +259,23 @@
 
       for (let _i = 0; _i < _raw.length; _i++) {
         const _partes = String(_raw[_i].date).trim().split('/');
-        if (_partes.length !== 3) continue;
         const _dt = new Date(+_partes[2], +_partes[1] - 1, +_partes[0]);
         if (isNaN(_dt.getTime())) continue;
         const _ano = String(_dt.getFullYear());
-        // Remove "R$", espaços e pontos de milhar; substitui vírgula decimal por ponto
+        // Remove "R$", espaços e pontos de milhar; troca vírgula decimal por ponto
         const _val = parseFloat(
-          String(_raw[_i].amount).replace('R$', '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.')
+          String(_raw[_i].amount)
+            .replace('R$', '')
+            .replace(/\s/g, '')
+            .replace(/\./g, '')
+            .replace(',', '.')
         ) || 0;
         _mapa[_ano] = (_mapa[_ano] || 0) + _val;
       }
 
       const _anos = Object.keys(_mapa).sort(function(a, b){ return +a - +b; });
-      const _labsPag = _anos.slice();                                          // ex: ["2023","2024","2025"]
+      const _labsPag = _anos.slice();                                        // ex: ["2023","2024","2025"]
       const _valsPag = _anos.map(function(a){ return +_mapa[a].toFixed(2); }); // ex: [4725.93, ...]
-
-      // Limpar completamente o canvas antes de criar novo gráfico
-      // evita herdar labels/escalas de gráficos anteriores
-      const _canvas = ctx.canvas;
-      const _w = _canvas.width;
-      const _h = _canvas.height;
-      ctx.clearRect(0, 0, _w, _h);
 
       return new Chart(ctx, {
         type: 'line',
@@ -302,12 +298,9 @@
             legend:{position:'bottom'},
             tooltip:{
               callbacks:{
-                title: function(items){
-                  return 'Ano: ' + items[0].label;
-                },
                 label: function(tooltipCtx){
                   const v = Number(tooltipCtx.parsed.y || 0);
-                  return ' Total: ' + v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+                  return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
                 }
               }
             }
@@ -323,8 +316,7 @@
               title:{display:true,text:'R$'}
             },
             x:{
-              type: 'category',  // força labels como categorias fixas (anos)
-              labels: _labsPag,  // garante que os labels do eixo X sejam os anos
+              type: 'category',           // força uso das pagLabels como categorias fixas
               title:{display:true,text:'Ano'}
             }
           }
@@ -362,18 +354,24 @@
         return;
       }
 
-      // Destruir instância anterior ANTES de recriar o canvas
+      // Destruir instância própria
       if (chartInstance) {
         chartInstance.destroy();
         chartInstance = null;
       }
 
-      // Recriar o canvas para eliminar qualquer estado residual de escala/labels
-      // (evita que o Chart.js herde eixos X de gráficos anteriores)
+      // Destruir QUALQUER outro Chart.js registrado neste canvas
+      // (ex: gráfico criado pelo stats.js que usa o mesmo canvas)
+      const existing = Chart.getChart(canvas);
+      if (existing) {
+        existing.destroy();
+      }
+
+      // Substituir o elemento canvas por um novo — apaga todo estado interno
+      // do Chart.js (scales, labels, datasets) que possa ter ficado em memória
       const parent = canvas.parentNode;
       const newCanvas = document.createElement('canvas');
       newCanvas.id = 'myChart';
-      newCanvas.style.cssText = canvas.style.cssText;
       parent.replaceChild(newCanvas, canvas);
       canvas = newCanvas;
 
