@@ -262,13 +262,8 @@
         const _dt = new Date(+_partes[2], +_partes[1] - 1, +_partes[0]);
         if (isNaN(_dt.getTime())) continue;
         const _ano = String(_dt.getFullYear());
-        // Remove "R$", espaços e pontos de milhar; troca vírgula decimal por ponto
         const _val = parseFloat(
-          String(_raw[_i].amount)
-            .replace('R$', '')
-            .replace(/\s/g, '')
-            .replace(/\./g, '')
-            .replace(',', '.')
+          String(_raw[_i].amount).replace(/[R$\s.]/g, '').replace(',', '.')
         ) || 0;
         _mapa[_ano] = (_mapa[_ano] || 0) + _val;
       }
@@ -348,37 +343,20 @@
     }
 
     function renderizarGrafico(){
-      let canvas = document.getElementById('myChart');
+      const canvas = document.getElementById('myChart');
       if (!canvas) {
         console.error('Canvas não encontrado!');
         return;
       }
-
-      // Destruir instância própria
-      if (chartInstance) {
-        chartInstance.destroy();
-        chartInstance = null;
-      }
-
-      // Destruir QUALQUER outro Chart.js registrado neste canvas
-      // (ex: gráfico criado pelo stats.js que usa o mesmo canvas)
-      const existing = Chart.getChart(canvas);
-      if (existing) {
-        existing.destroy();
-      }
-
-      // Substituir o elemento canvas por um novo — apaga todo estado interno
-      // do Chart.js (scales, labels, datasets) que possa ter ficado em memória
-      const parent = canvas.parentNode;
-      const newCanvas = document.createElement('canvas');
-      newCanvas.id = 'myChart';
-      parent.replaceChild(newCanvas, canvas);
-      canvas = newCanvas;
-
+      
       const ctx = canvas.getContext('2d');
       if (!ctx) {
         console.error('Contexto 2D não disponível!');
         return;
+      }
+      
+      if (chartInstance) {
+        chartInstance.destroy();
       }
 
       switch(currentChartType) {

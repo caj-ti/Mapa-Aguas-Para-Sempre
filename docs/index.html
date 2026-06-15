@@ -524,6 +524,14 @@
         var datasets = chart.data && chart.data.datasets;
         if (!datasets) return;
 
+        /* NÃO aplicar patch no gráfico de Pagamentos por ano.
+           Ele tem 3 labels de anos (2023/2024/2025) que seriam
+           confundidos com as categorias Interessadas/Em Processo/Aderidas. */
+        var isPagamentos = datasets.some(function(ds) {
+          return ds.label && ds.label.indexOf('Pagamentos') !== -1;
+        });
+        if (isPagamentos) return;
+
         /* Estratégia 1 – dataset com exatamente 3 entradas
            (ordem típica: interessadas / emProcesso / aderidas) */
         var patched = false;
@@ -543,7 +551,8 @@
           });
         }
 
-        /* Atualiza labels se tiverem exatamente 3 itens e corresponderem às categorias */
+        /* Atualiza labels somente se NÃO for o gráfico de Pagamentos
+           (anos 2023/2024/2025 têm exatamente 3 itens e seriam sobrescritos) */
         if (chart.data.labels && chart.data.labels.length === 3) {
           chart.data.labels = [
             'Interessadas (' + d.interessadas + ')',
@@ -7419,4 +7428,3 @@
 <!--////////////////////////////////////////////////////////////////////////////////////////////////////FIM DOS SCRIPTS PERSONALIZADOS-->
 </body>
 </html>
-
