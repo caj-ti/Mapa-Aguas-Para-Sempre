@@ -1,0 +1,1817 @@
+/* ================================================================
+   style.css — Mapa do Programa Águas para Sempre
+   ================================================================
+   REDESIGN PREMIUM — "Cartografia Viva"
+   Paleta: floresta esmeralda × água profunda × pergaminho dourado
+   Tipografia: Playfair Display + DM Sans
+   ----------------------------------------------------------------
+   NOVA FUNCIONALIDADE: Clicar fora de qualquer painel/modal fecha.
+   Adicione ao seu HTML antes de </body>:
+
+   <div id="panel-overlay"></div>
+
+   E no seu JS (ou num <script> no final do body):
+
+   (() => {
+     const overlay = document.getElementById('panel-overlay');
+     const closeables = [
+       { panel: document.getElementById('stats-panel'),   btn: document.getElementById('close-panel') },
+       { panel: document.getElementById('painelchart'),   btn: document.getElementById('close-painelchart') },
+       { panel: document.getElementById('popup'),         btn: document.getElementById('close-popup') },
+     ];
+
+     function openPanel(panel) {
+       panel.classList.remove('hidden');
+       overlay.classList.add('active');
+       document.body.classList.add('panel-open');
+     }
+
+     function closeAll() {
+       closeables.forEach(({ panel }) => panel && panel.classList.add('hidden'));
+       overlay.classList.remove('active');
+       document.body.classList.remove('panel-open');
+     }
+
+     overlay.addEventListener('click', closeAll);
+
+     // Fechar com ESC
+     document.addEventListener('keydown', e => {
+       if (e.key === 'Escape') closeAll();
+     });
+
+     // Interceptar cliques nos botões originais de fechar
+     document.querySelectorAll('#close-panel, #close-painelchart, #close-popup')
+       .forEach(btn => btn.addEventListener('click', closeAll));
+   })();
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* ── Variáveis ───────────────────────────────────────────────── */
+:root {
+  /* Fundo — pergaminho envelhecido com profundidade */
+  --bg-1: #f2ead8;
+  --bg-2: #d6c9b0;
+  --bg-deep: #e8ddc7;
+
+  /* Painéis — porcelana acetinada */
+  --panel-bg:          rgba(252, 247, 238, 0.99);
+  --panel-radius:      26px;
+  --panel-shadow:
+    0 32px 72px -12px rgba(6, 28, 14, 0.42),
+    0 8px 28px rgba(0, 0, 0, 0.1),
+    inset 0 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  --panel-border:      1px solid rgba(60, 110, 75, 0.14);
+
+  /* Texto */
+  --text-primary:   #0f1f12;
+  --text-secondary: #28422f;
+  --text-muted:     #526b5b;
+
+  /* Acentos — esmeralda profundo × água × âmbar dourado */
+  --accent-green:   #1a7c42;
+  --accent-blue:    #156480;
+  --accent-teal:    #0c7272;
+  --accent-gold:    #a07820;
+  --accent-gold-lt: #c49a2a;
+  --accent-line:    rgba(26, 124, 66, 0.18);
+  --accent-glow:    rgba(26, 124, 66, 0.22);
+
+  /* Gradientes principais */
+  --grad-green:     linear-gradient(145deg, #1f9450 0%, #126134 50%, #0d4a27 100%);
+  --grad-teal:      linear-gradient(145deg, #0f8888 0%, #096060 100%);
+  --grad-blue:      linear-gradient(145deg, #1b6890 0%, #0d3e56 100%);
+  --grad-gold:      linear-gradient(135deg, #c49a2a 0%, #8a6510 100%);
+  --grad-header:    linear-gradient(160deg, rgba(252,247,238,0.99) 0%, rgba(232,245,236,0.99) 100%);
+
+  /* Banner do popup — profundidade florestal */
+  --grad-banner:
+    radial-gradient(ellipse at 20% 60%, rgba(120, 230, 170, 0.3) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 40%, rgba(22, 130, 170, 0.28) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(160, 120, 32, 0.2) 0%, transparent 40%),
+    linear-gradient(145deg, #1a8545 0%, #0f5e30 60%, #093d1e 100%);
+
+  /* Botões */
+  --btn-primary-bg:       var(--grad-green);
+  --btn-primary-color:    #ffffff;
+  --btn-primary-shadow:   0 12px 32px rgba(18, 100, 50, 0.5), 0 4px 12px rgba(0,0,0,0.2);
+  --btn-secondary-bg:     rgba(252, 247, 238, 0.99);
+  --btn-secondary-color:  #0f1f12;
+  --btn-secondary-shadow: 0 8px 22px rgba(10, 38, 20, 0.14);
+
+  /* Transições */
+  --transition-fast:   0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-base:   0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-spring: 0.48s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-smooth: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Decoração */
+  --stripe-size: 3px;
+}
+
+/* ── Reset & Base ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'DM Sans', 'Open Sans', sans-serif;
+  background:
+    radial-gradient(ellipse at 8% 5%, rgba(80, 175, 120, 0.15) 0%, transparent 48%),
+    radial-gradient(ellipse at 92% 95%, rgba(21, 100, 128, 0.12) 0%, transparent 48%),
+    radial-gradient(ellipse at 50% 50%, rgba(160, 120, 32, 0.05) 0%, transparent 70%),
+    linear-gradient(155deg, var(--bg-1) 0%, var(--bg-deep) 50%, var(--bg-2) 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Mapa ────────────────────────────────────────────────────── */
+#map {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+/* Oculta o painel de info padrão do Leaflet/qgis2web */
+.info.leaflet-control,
+.info.leaflet-control *,
+h2.__web-inspector-hide-shortcut__ {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ── Utilitário de visibilidade ─────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+/* ── Animações ──────────────────────────────────────────────── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(-22px) scale(0.91); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes panelSlideIn {
+  from { opacity: 0; transform: translateX(-28px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes panelReveal {
+  0%   { opacity: 0; transform: translateY(18px) scale(0.95); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(26, 124, 66, 0); }
+  50%       { box-shadow: 0 0 0 8px rgba(26, 124, 66, 0.12); }
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes overlayOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Overlay backdrop (clicar fora para fechar) ─────────────── */
+#panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: transparent;
+  pointer-events: none;
+  cursor: default;
+  transition: background var(--transition-base);
+}
+
+#panel-overlay.active {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Dica visual sutil quando algum painel está aberto */
+body.panel-open #map {
+  filter: brightness(0.96) saturate(0.92);
+  transition: filter var(--transition-smooth);
+}
+
+/* ── Cabeçalho do mapa ───────────────────────────────────────── */
+#map-header {
+  display: none !important;
+  display: none !important;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--grad-header);
+  backdrop-filter: blur(24px) saturate(2.2);
+  -webkit-backdrop-filter: blur(24px) saturate(2.2);
+  padding: 15px 40px 15px 36px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 19px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--text-primary);
+  border-radius: 60px;
+  border: 1px solid rgba(80, 150, 100, 0.22);
+  box-shadow:
+    0 14px 40px rgba(10, 40, 20, 0.2),
+    0 3px 10px rgba(10, 40, 20, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  white-space: nowrap;
+  z-index: 1000;
+  letter-spacing: 0.4px;
+  animation: fadeSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+  /* Linha dourada sutil na borda */
+  outline: 1.5px solid rgba(160, 120, 32, 0.12);
+  outline-offset: 2px;
+}
+
+#map-header::before {
+  content: '💧';
+  margin-right: 12px;
+  font-size: 19px;
+  filter: drop-shadow(0 3px 6px rgba(21, 100, 128, 0.4));
+  font-style: normal;
+}
+
+#map-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(26, 124, 66, 0.35), transparent);
+  border-radius: 0 0 60px 60px;
+}
+
+/* ── Grupo de botões laterais ───────────────────────────────── */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: absolute;
+  top: 120px;
+  left: 20px;
+  z-index: 1000;
+  animation: panelSlideIn 0.7s 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.button-group button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 22px;
+  height: 52px;
+  width: 178px;
+  border: none;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.25px;
+  cursor: pointer;
+  transition:
+    transform    var(--transition-spring),
+    box-shadow   var(--transition-base),
+    filter       var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Brilho no hover */
+.button-group button::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.button-group button:hover::before {
+  left: 160%;
+}
+
+.button-group button img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: transform var(--transition-spring);
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.12));
+}
+
+.button-group button:hover img {
+  transform: scale(1.22) rotate(-8deg);
+}
+
+.button-group button:active {
+  transform: translateY(3px) scale(0.97) !important;
+}
+
+/* Botão primário — Painel */
+#stats-btn {
+  background: #66FFFF;
+  color: #0a2a1a;
+  box-shadow: 0 10px 28px rgba(102,255,255,0.45);
+}
+
+#stats-btn:hover {
+  box-shadow: 0 16px 36px rgba(102,255,255,0.65);
+  transform: translateY(-4px);
+  filter: brightness(1.06);
+}
+
+/* Botões secundários */
+#chart-btn,
+#details-btn {
+  background: #66FFFF;
+  color: #0a2a1a;
+  border: 1px solid rgba(0,180,180,0.4);
+  box-shadow: 0 6px 18px rgba(102,255,255,0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+#chart-btn:hover,
+#details-btn:hover {
+  background: #4de8e8;
+  box-shadow: 0 14px 32px rgba(102,255,255,0.55);
+  transform: translateY(-5px);
+  border-color: rgba(60, 115, 80, 0.32);
+}
+
+/* ── Base comum dos painéis flutuantes ──────────────────────── */
+#stats-panel,
+#painelchart {
+  position: absolute;
+  top: 110px;
+  left: 20px;
+  width: 560px;
+  max-width: calc(100vw - 36px);
+  max-height: 82vh;
+  padding: 36px 34px 34px;
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  border-radius: var(--panel-radius);
+  border: var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  overflow-y: auto;
+  overflow-x: hidden;
+  backdrop-filter: blur(24px) saturate(2);
+  -webkit-backdrop-filter: blur(24px) saturate(2);
+  font-family: 'DM Sans', 'Open Sans', sans-serif;
+  animation: panelReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* Linha dourada na borda esquerda */
+  border-left: 3px solid;
+  border-image: var(--grad-gold) 1;
+  border-image-slice: 1;
+}
+
+/* Scrollbar dos painéis */
+#stats-panel::-webkit-scrollbar,
+#painelchart::-webkit-scrollbar {
+  width: 6px;
+}
+
+#stats-panel::-webkit-scrollbar-thumb,
+#painelchart::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(26, 124, 66, 0.55), rgba(26, 124, 66, 0.18));
+  border-radius: 10px;
+}
+
+#stats-panel::-webkit-scrollbar-track,
+#painelchart::-webkit-scrollbar-track {
+  background: rgba(26, 124, 66, 0.04);
+  border-radius: 10px;
+}
+
+/* Faixa decorativa no topo dos painéis */
+#stats-panel::before,
+#painelchart::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--grad-green);
+  border-radius: var(--panel-radius) var(--panel-radius) 0 0;
+}
+
+/* Motivo decorativo de água no canto inferior direito */
+#stats-panel::after,
+#painelchart::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background:
+    radial-gradient(ellipse at 100% 100%, rgba(21, 100, 128, 0.08) 0%, transparent 70%);
+  border-radius: 0 0 var(--panel-radius) 0;
+  pointer-events: none;
+}
+
+/* Cabeçalho dos painéis */
+#stats-panel h2,
+#painelchart h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 22px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--accent-line);
+  letter-spacing: 0.2px;
+  line-height: 1.35;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.85);
+  position: relative;
+}
+
+/* Sublinha colorida do título */
+#stats-panel h2::after,
+#painelchart h2::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 48px;
+  height: 3px;
+  background: var(--grad-green);
+  border-radius: 3px;
+}
+
+/* Botão fechar (compartilhado) */
+#close-panel,
+#close-painelchart {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(60, 110, 75, 0.2);
+  background: rgba(252, 247, 238, 0.9);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  outline: none;
+  border-radius: 12px;
+  transition:
+    background  var(--transition-fast),
+    transform   var(--transition-spring),
+    box-shadow  var(--transition-fast),
+    border-color var(--transition-fast);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+  z-index: 10;
+}
+
+#close-panel:hover,
+#close-painelchart:hover {
+  background: rgba(220, 80, 60, 0.1);
+  transform: scale(1.12) rotate(6deg);
+  border-color: rgba(200, 60, 50, 0.3);
+  box-shadow: 0 6px 18px rgba(200, 60, 50, 0.18);
+}
+
+#close-panel img,
+#close-painelchart img {
+  width: 16px;
+  height: 16px;
+  display: block;
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+#close-panel:hover img,
+#close-painelchart:hover img {
+  opacity: 1;
+}
+
+/* ── Painel de estatísticas ──────────────────────────────────── */
+#stats-panel {
+  z-index: 3000;
+}
+
+/* Select de grupo */
+#group-select-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+#group-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 13px 48px 13px 18px;
+  font-size: 14.5px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+  background:
+    linear-gradient(135deg, rgba(26, 124, 66, 0.06) 0%, rgba(21, 100, 128, 0.04) 100%);
+  border: 1.5px solid rgba(26, 124, 66, 0.22);
+  border-radius: 14px;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background   var(--transition-fast),
+    box-shadow   var(--transition-fast);
+  box-sizing: border-box;
+  letter-spacing: 0.2px;
+}
+
+#group-select:hover {
+  border-color: rgba(26, 124, 66, 0.48);
+  background: linear-gradient(135deg, rgba(26, 124, 66, 0.1) 0%, rgba(21, 100, 128, 0.06) 100%);
+}
+
+#group-select:focus {
+  border-color: var(--accent-green);
+  background: rgba(255, 255, 255, 0.95);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(26, 124, 66, 0.14), 0 3px 10px rgba(0,0,0,0.06);
+}
+
+#group-select-container::after {
+  content: '▾';
+  font-size: 18px;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-green);
+  pointer-events: none;
+  font-weight: 700;
+}
+
+/* ── Stats list ─────────────────────────────────────────────── */
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.stats-item {
+  display: flex;
+  align-items: center;
+  padding: 13px 16px;
+  background: rgba(26, 124, 66, 0.04);
+  border-radius: 13px;
+  border-left: 4px solid var(--accent-green);
+  font-size: 13.5px;
+  gap: 12px;
+  transition:
+    background    var(--transition-fast),
+    transform     var(--transition-spring),
+    border-color  var(--transition-fast),
+    box-shadow    var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Microdetalhe decorativo no hover */
+.stats-item::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-green), var(--accent-teal));
+  border-radius: 0 13px 13px 0;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.stats-item:hover {
+  background: rgba(26, 124, 66, 0.1);
+  transform: translateX(5px);
+  box-shadow: 0 5px 16px rgba(26, 124, 66, 0.13);
+  border-left-color: var(--accent-teal);
+}
+
+.stats-item:hover::after {
+  opacity: 1;
+}
+
+.stats-item.no-accent {
+  border-left-color: transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.stats-label {
+  color: var(--text-secondary);
+  flex: 1;
+  line-height: 1.5;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.stats-value {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-right: 4px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: 14.5px;
+  letter-spacing: -0.3px;
+}
+
+.stats-unit {
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  letter-spacing: 0.4px;
+  text-transform: lowercase;
+}
+
+.stats-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-line), transparent);
+  margin: 8px 0;
+  border: none;
+}
+
+/* Botões dentro do painel */
+#stats-panel button:not(#close-panel) {
+  background: linear-gradient(135deg, rgba(26, 124, 66, 0.1) 0%, rgba(21, 100, 128, 0.07) 100%);
+  border: 1.5px solid rgba(26, 124, 66, 0.22);
+  color: var(--accent-green);
+  padding: 9px 18px;
+  border-radius: 11px;
+  font-size: 13.5px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background  var(--transition-fast),
+    transform   var(--transition-spring),
+    box-shadow  var(--transition-fast);
+  letter-spacing: 0.2px;
+}
+
+#stats-panel button:not(#close-panel):hover {
+  background: rgba(26, 124, 66, 0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(26, 124, 66, 0.24);
+  border-color: rgba(26, 124, 66, 0.4);
+}
+
+/* ── Painel de gráficos ──────────────────────────────────────── */
+#painelchart {
+  z-index: 9999;
+}
+
+#myChart {
+  margin-top: 22px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.06),
+    inset 0 0 0 1px rgba(26, 124, 66, 0.08);
+}
+
+/* Select de gráfico */
+#chartSelectPanel {
+  position: relative;
+  width: 100%;
+  margin-top: 16px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid rgba(26, 124, 66, 0.22);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow   var(--transition-fast);
+  background: rgba(26, 124, 66, 0.04);
+}
+
+#chartSelectPanel:hover,
+#chartSelectPanel:focus-within {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 4px rgba(26, 124, 66, 0.12);
+}
+
+#chartSelectPanel select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 13px 48px 13px 18px;
+  font-size: 14.5px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  letter-spacing: 0.2px;
+}
+
+#chartSelectPanel::after {
+  content: '▾';
+  font-size: 18px;
+  font-weight: 700;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-green);
+  pointer-events: none;
+}
+
+/* ── Popup de boas-vindas ────────────────────────────────────── */
+#popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 18, 9, 0.72);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(10px) saturate(1.9);
+  -webkit-backdrop-filter: blur(10px) saturate(1.9);
+  animation: fadeIn 0.4s ease both;
+  /* O #popup em si já age como overlay — clicar nele (fora do content) fecha */
+  cursor: pointer;
+}
+
+#popup-content {
+  position: relative;
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  padding: 0;
+  width: 620px;
+  max-width: 95%;
+  max-height: 88vh;
+  overflow: hidden;
+  border-radius: 30px;
+  font-family: 'DM Sans', 'Open Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.72;
+  box-shadow:
+    0 40px 90px rgba(4, 18, 9, 0.5),
+    0 10px 28px rgba(4, 18, 9, 0.22),
+    inset 0 2px 0 rgba(255, 255, 255, 0.98),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  border: 1px solid rgba(80, 150, 100, 0.15);
+  animation: fadeSlideIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
+  display: flex;
+  flex-direction: column;
+  /* Impede que clique no conteúdo feche o popup (propaga para o overlay) */
+  cursor: default;
+}
+
+/* Barra de acento dourado na borda esquerda do popup */
+#popup-content::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 30px;
+  bottom: 30px;
+  width: 3px;
+  background: var(--grad-gold);
+  border-radius: 0 3px 3px 0;
+  opacity: 0.7;
+}
+
+/* Banner decorativo do popup — floresta profunda */
+#popup-content::before {
+  content: '';
+  display: block;
+  flex-shrink: 0;
+  height: 108px;
+  background: var(--grad-banner);
+  border-radius: 30px 30px 0 0;
+  position: relative;
+  z-index: 0;
+  /* Grade fina sobre o banner */
+  background-image:
+    var(--grad-banner),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 1px,
+      transparent 1px,
+      transparent 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 1px,
+      transparent 1px,
+      transparent 20px
+    );
+}
+
+/* Conteúdo interno do popup */
+#popup-inner {
+  padding: 30px 38px 38px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Fallback */
+#popup-content > *:not(#popup-inner):not(::before):not(::after) {
+  padding-left: 38px;
+  padding-right: 38px;
+}
+
+#popup-content h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 23px;
+  font-weight: 700;
+  margin: 0 0 22px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--accent-line);
+  letter-spacing: 0.2px;
+  color: var(--text-primary);
+  line-height: 1.35;
+  position: relative;
+}
+
+#popup-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 42px;
+  height: 3px;
+  background: var(--grad-green);
+  border-radius: 3px;
+}
+
+#popup-content p {
+  margin: 0 0 16px 0;
+  color: var(--text-secondary);
+  font-size: 14.5px;
+}
+
+#close-popup {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition:
+    background  var(--transition-fast),
+    transform   var(--transition-spring),
+    border-color var(--transition-fast),
+    box-shadow  var(--transition-fast);
+  z-index: 10;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+#close-popup:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.15) rotate(8deg);
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+}
+
+#close-popup img {
+  width: 16px;
+  height: 16px;
+  display: block;
+  pointer-events: none;
+  filter: brightness(10) opacity(0.92);
+  transition: opacity var(--transition-fast);
+}
+
+#close-popup:hover img {
+  opacity: 1;
+}
+
+/* Botões de demonstração dentro do popup */
+.fakePainel-btn,
+.fakeGrafícos-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 15px;
+  height: 34px;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: middle;
+  cursor: default;
+  letter-spacing: 0.25px;
+}
+
+.fakePainel-btn {
+  background: var(--grad-green);
+  color: #fff;
+  box-shadow:
+    0 5px 14px rgba(18, 100, 50, 0.42),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.fakeGrafícos-btn {
+  background: rgba(252, 247, 238, 0.99);
+  color: var(--text-primary);
+  border: 1.5px solid rgba(60, 110, 75, 0.22);
+  box-shadow: 0 5px 14px rgba(10, 38, 20, 0.1), inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+.fakePainel-btn img,
+.fakeGrafícos-btn img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+/* ── Elementos fixos de rodapé ──────────────────────────────── */
+.glass-pill {
+  background: rgba(252, 247, 238, 0.99);
+  border: 1px solid rgba(60, 110, 75, 0.16);
+  border-radius: 14px;
+  box-shadow:
+    0 10px 30px rgba(10, 40, 20, 0.15),
+    inset 0 1px 0 rgba(255,255,255,0.98),
+    inset 0 -1px 0 rgba(0,0,0,0.03);
+  backdrop-filter: blur(18px) saturate(2);
+  -webkit-backdrop-filter: blur(18px) saturate(2);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+/* ── Logo ──────────────────────────────────────────────────── */
+#logo-link {
+  position: fixed;
+  left: 20px;
+  bottom: 24px;
+  z-index: 2000;
+  display: inline-block;
+  pointer-events: auto;
+}
+
+#logo-link img#map-logo {
+  width: 136px;
+  height: auto;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0.97;
+  filter:
+    drop-shadow(0 6px 18px rgba(10, 40, 20, 0.22))
+    drop-shadow(0 2px 5px rgba(10, 40, 20, 0.1));
+  transition:
+    opacity      var(--transition-fast),
+    filter       var(--transition-fast),
+    transform    var(--transition-spring);
+}
+
+#logo-link:hover img#map-logo {
+  opacity: 1;
+  filter:
+    drop-shadow(0 12px 28px rgba(10, 40, 20, 0.32))
+    drop-shadow(0 4px 8px rgba(10, 40, 20, 0.14));
+  transform: translateY(-5px);
+}
+
+/* ── GitHub ─────────────────────────────────────────────────── */
+#github-link {
+  position: fixed;
+  left: 10%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: inline-block;
+  text-decoration: none;
+}
+
+#github-logo {
+  width: 54px;
+  height: 54px;
+  display: block;
+  object-fit: contain;
+  background: rgba(252, 247, 238, 0.99);
+  padding: 10px;
+  border-radius: 15px;
+  border: 1px solid rgba(60, 110, 75, 0.18);
+  box-shadow:
+    0 8px 24px rgba(10, 40, 20, 0.14),
+    inset 0 1px 0 rgba(255,255,255,0.98);
+  transition:
+    transform  var(--transition-spring),
+    box-shadow var(--transition-base);
+}
+
+#github-link:hover #github-logo,
+#github-link:focus #github-logo {
+  transform: translateY(-6px) rotate(-8deg);
+  box-shadow:
+    0 20px 42px rgba(10, 40, 20, 0.26),
+    inset 0 1px 0 rgba(255,255,255,0.98);
+}
+
+/* ── Bússola ────────────────────────────────────────────────── */
+#compass-container {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 10000;
+  width: 60px;
+  height: 60px;
+  background: rgba(252, 247, 238, 0.99);
+  border-radius: 50%;
+  border: 1px solid rgba(60, 110, 75, 0.18);
+  box-shadow:
+    0 10px 28px rgba(10, 40, 20, 0.17),
+    inset 0 1px 0 rgba(255,255,255,0.98),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-spring), box-shadow var(--transition-base);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+#compass-container:hover {
+  transform: translateX(-50%) translateY(-6px);
+  box-shadow:
+    0 20px 42px rgba(10, 40, 20, 0.28),
+    inset 0 1px 0 rgba(255,255,255,0.98);
+}
+
+#compass {
+  max-width: 78%;
+  max-height: 78%;
+  display: block;
+  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Escala ─────────────────────────────────────────────────── */
+.scale-control {
+  position: fixed;
+  bottom: 24px;
+  left: calc(50% - 228px);
+  background: rgba(252, 247, 238, 0.99);
+  border: 1px solid rgba(60, 110, 75, 0.18);
+  border-radius: 14px;
+  padding: 11px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  z-index: 1000;
+  box-shadow:
+    0 10px 26px rgba(10, 40, 20, 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.scale-bar {
+  height: 9px;
+  min-width: 138px;
+  margin-bottom: 5px;
+  border: 1.5px solid rgba(26, 124, 66, 0.45);
+  border-radius: 5px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--accent-green)   0%,   var(--accent-green)   25%,
+    rgba(252,247,238,0.9) 25%,  rgba(252,247,238,0.9) 50%,
+    var(--accent-green)   50%,  var(--accent-green)   75%,
+    rgba(252,247,238,0.9) 75%,  rgba(252,247,238,0.9) 100%
+  );
+  overflow: hidden;
+}
+
+.scale-text {
+  text-align: center;
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* ── Coordenadas ─────────────────────────────────────────────── */
+#coords {
+  position: fixed;
+  bottom: 24px;
+  left: calc(50% + 64px);
+  background: rgba(252, 247, 238, 0.99);
+  padding: 11px 18px;
+  border: 1px solid rgba(60, 110, 75, 0.18);
+  border-radius: 14px;
+  font-family: 'DM Sans', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  box-shadow:
+    0 10px 26px rgba(10, 40, 20, 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.98);
+  pointer-events: none;
+  z-index: 1000;
+  letter-spacing: 0.4px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ── Controle de camadas do Leaflet ─────────────────────────── */
+.leaflet-control-layers {
+  background: rgba(252, 247, 238, 0.99) !important;
+  border-radius: 20px !important;
+ box-shadow:
+    0 18px 44px rgba(10, 40, 20, 0.22),
+    inset 0 1px 0 rgba(255,255,255,0.98) !important;
+  padding: 14px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  border: var(--panel-border) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.leaflet-control-layers-list {
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 8px;
+  resize: both;
+  overflow: auto;
+  min-width: 240px;
+  min-height: 180px;
+  max-width: 90vw;
+  max-height: 90vh;
+  border: 1.5px solid rgba(26, 124, 66, 0.22);
+  border-radius: 13px;
+}
+
+.leaflet-layerstree-header-pointer {
+  background: var(--grad-green);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.3px;
+  transition:
+    filter    var(--transition-fast),
+    transform var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(18, 100, 50, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.leaflet-layerstree-header-pointer:hover {
+  filter: brightness(1.12);
+  transform: translateY(-2px);
+}
+
+.leaflet-layerstree-header-label {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  margin: 3px 0;
+  border-radius: 9px;
+  transition: background var(--transition-fast);
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+.leaflet-layerstree-header-label:hover {
+  background: rgba(26, 124, 66, 0.09);
+  color: var(--text-primary);
+}
+
+.leaflet-layerstree-header-name img {
+  width: 22px;
+  height: 22px;
+  margin-right: 9px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.leaflet-control-layers-toggle {
+  width: 42px;
+  height: 42px;
+  background: transparent url("../images/layers1.svg") no-repeat center !important;
+  background-size: 30px 30px !important;
+  border: none !important;
+  display: inline-block;
+  box-sizing: border-box;
+  filter: drop-shadow(0 3px 7px rgba(0,0,0,0.1));
+}
+
+.leaflet-control-measure-toggle {
+  display: none !important;
+}
+
+/* ── Scrollbar customizada (Leaflet layers) ─────────────────── */
+.leaflet-control-layers-list::-webkit-scrollbar { width: 6px; }
+.leaflet-control-layers-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(26,124,66,0.5), rgba(26,124,66,0.18));
+  border-radius: 10px;
+}
+.leaflet-control-layers-list::-webkit-scrollbar-track { background: transparent; }
+
+
+/* ================================================================
+   CORES DAS CAMADAS — Menu lateral direito (Leaflet LayersTree)
+   ================================================================
+   Adicione as classes abaixo nos elementos do menu no seu HTML/JS:
+     .layer-aderidas      → Verde  (propriedades aderidas)
+     .layer-processo      → Amarelo (em processo de adesão)
+     .layer-interessadas  → Roxo   (interessadas / manifesto)
+     Demais camadas       → Azul claro #66FFFF
+   ================================================================ */
+
+/* Todas as camadas-base recebem azul claro por padrão */
+.leaflet-layerstree-header-pointer {
+  background: #66FFFF !important;
+  color: #0a2a1a !important;
+  box-shadow: 0 4px 12px rgba(102, 255, 255, 0.4) !important;
+}
+
+.leaflet-layerstree-header-pointer:hover {
+  background: #4de8e8 !important;
+}
+
+/* ADERIDAS — Verde */
+.leaflet-layerstree-header-pointer.layer-aderidas {
+  background: linear-gradient(145deg, #1f9450 0%, #126134 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(18, 100, 50, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-aderidas:hover {
+  filter: brightness(1.12) !important;
+}
+
+/* EM PROCESSO DE ADESÃO — Amarelo âmbar */
+.leaflet-layerstree-header-pointer.layer-processo {
+  background: linear-gradient(145deg, #e0a800 0%, #a87200 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(200, 150, 0, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-processo:hover {
+  filter: brightness(1.1) !important;
+}
+
+/* INTERESSADAS / MANIFESTO — Roxo */
+.leaflet-layerstree-header-pointer.layer-interessadas {
+  background: linear-gradient(145deg, #7b2fa8 0%, #531a78 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(100, 30, 150, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-interessadas:hover {
+  filter: brightness(1.1) !important;
+}
+
+/* Labels de camada — cor de fundo sutil por categoria */
+.layer-aderidas     > .leaflet-layerstree-header-label,
+.layer-aderidas     .leaflet-layerstree-header-label {
+  border-left: 3px solid #1f9450;
+}
+.layer-processo     > .leaflet-layerstree-header-label,
+.layer-processo     .leaflet-layerstree-header-label {
+  border-left: 3px solid #e0a800;
+}
+.layer-interessadas > .leaflet-layerstree-header-label,
+.layer-interessadas .leaflet-layerstree-header-label {
+  border-left: 3px solid #7b2fa8;
+}
+
+/* Bolinhas coloridas no início de cada label de camada */
+.leaflet-layerstree-header-label::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+  background: #66FFFF;
+  box-shadow: 0 0 0 2px rgba(102, 255, 255, 0.3);
+}
+.layer-aderidas .leaflet-layerstree-header-label::before {
+  background: #1f9450;
+  box-shadow: 0 0 0 2px rgba(31, 148, 80, 0.3);
+}
+.layer-processo .leaflet-layerstree-header-label::before {
+  background: #e0a800;
+  box-shadow: 0 0 0 2px rgba(224, 168, 0, 0.3);
+}
+.layer-interessadas .leaflet-layerstree-header-label::before {
+  background: #7b2fa8;
+  box-shadow: 0 0 0 2px rgba(123, 47, 168, 0.3);
+}
+
+/* ================================================================
+   CHECKBOX "Seleção Visível" — Painel de Acompanhamento
+   ================================================================
+   Estrutura HTML sugerida (ao lado do título do Painel):
+
+   <label class="toggle-selecao" title="Mostrar/ocultar contorno de seleção">
+     <input type="checkbox" id="toggle-selecao" checked>
+     <span class="toggle-track">
+       <span class="toggle-thumb"></span>
+     </span>
+     <span class="toggle-label">Seleção visível</span>
+   </label>
+
+   Script JS sugerido (no final do body):
+   document.getElementById('toggle-selecao')
+     ?.addEventListener('change', function() {
+       document.body.classList.toggle('show-selection', this.checked);
+     });
+   // Ativa por padrão se checkbox começa checked
+   if (document.getElementById('toggle-selecao')?.checked)
+     document.body.classList.add('show-selection');
+   ================================================================ */
+
+/* Contêiner do toggle */
+.toggle-selecao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+/* Esconde o checkbox nativo */
+.toggle-selecao input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Track do toggle */
+.toggle-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: rgba(150, 150, 150, 0.25);
+  border-radius: 20px;
+  border: 1.5px solid rgba(150, 150, 150, 0.3);
+  transition: background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  flex-shrink: 0;
+}
+
+.toggle-selecao input:checked ~ .toggle-track {
+  background: rgba(220, 50, 40, 0.18);
+  border-color: rgba(220, 50, 40, 0.5);
+  box-shadow: 0 0 0 3px rgba(220, 50, 40, 0.12);
+}
+
+/* Bolinha do toggle */
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  background: #aaa;
+  border-radius: 50%;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.22s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+
+.toggle-selecao input:checked ~ .toggle-track .toggle-thumb {
+  transform: translateX(16px);
+  background: #dc3228;
+  box-shadow: 0 1px 6px rgba(220, 50, 40, 0.4);
+}
+
+/* Texto do toggle */
+.toggle-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.toggle-selecao input:checked ~ .toggle-track + .toggle-label,
+.toggle-selecao:has(input:checked) .toggle-label {
+  color: #dc3228;
+}
+
+/* Hover no label inteiro */
+.toggle-selecao:hover .toggle-track {
+  box-shadow: 0 0 0 4px rgba(150, 150, 150, 0.1);
+}
+
+/* ── CONTORNO VERMELHO nas feições selecionadas ──────────────── */
+/*
+  O contorno vermelho aparece APENAS quando body.show-selection está ativo.
+  As feições selecionadas recebem a classe .selected-feature (via JS no click).
+  Veja o script no comment acima para referência.
+*/
+
+/* Oculto por padrão */
+.leaflet-interactive.selected-feature path,
+path.selected-feature,
+.leaflet-interactive.selected-feature {
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+/* Ativado com body.show-selection */
+body.show-selection .leaflet-interactive.selected-feature,
+body.show-selection .leaflet-interactive.selected-feature path,
+body.show-selection path.selected-feature {
+  stroke: #e53030 !important;
+  stroke-width: 3px !important;
+  stroke-opacity: 1 !important;
+  filter: drop-shadow(0 0 5px rgba(229, 48, 48, 0.55)) !important;
+  paint-order: stroke fill !important;
+}
+
+/* Pulse sutil no contorno selecionado */
+@keyframes selectionPulse {
+  0%, 100% { stroke-opacity: 1; }
+  50%       { stroke-opacity: 0.55; }
+}
+
+body.show-selection .leaflet-interactive.selected-feature {
+  animation: selectionPulse 2s ease-in-out infinite;
+}
+
+
+/* ================================================================
+   CORES DAS CAMADAS — Menu lateral direito (Leaflet LayersTree)
+   ================================================================
+   IMPORTANTE: CSS sozinho não consegue selecionar elementos por
+   texto visível. Para que as cores funcionem, adicione o JS abaixo
+   ao final do seu <body> (após o Leaflet carregar):
+
+   <script>
+   (function applyLayerColors() {
+     // Mapeia texto → classe CSS
+     const colorMap = [
+       { text: 'Propriedades Aderidas',              cls: 'layer-aderidas'     },
+       { text: 'Propriedades em Processo de Adesão', cls: 'layer-processo'     },
+       { text: 'Propriedades interessadas',          cls: 'layer-interessadas' },
+       { text: 'Manifesto',                          cls: 'layer-interessadas' },
+     ];
+     function colorize() {
+       document.querySelectorAll('.leaflet-layerstree-header-pointer')
+         .forEach(el => {
+           const txt = el.textContent.trim();
+           const match = colorMap.find(m => txt.includes(m.text));
+           el.classList.remove('layer-aderidas','layer-processo','layer-interessadas');
+           if (match) el.classList.add(match.cls);
+           else el.classList.add('layer-outras');
+         });
+     }
+     colorize();
+     new MutationObserver(colorize).observe(
+       document.body, { childList: true, subtree: true }
+     );
+   })();
+   </script>
+   ================================================================ */
+
+/* BASE: todas as camadas → #66FFFF */
+.leaflet-layerstree-header-pointer {
+  background: #66FFFF !important;
+  color: #0a2a1a !important;
+  box-shadow: 0 4px 12px rgba(0, 200, 200, 0.35) !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+}
+.leaflet-layerstree-header-pointer:hover {
+  background: #33dddd !important;
+  filter: brightness(1.06) !important;
+}
+
+/* ADERIDAS → #33FF33 verde vivo */
+.leaflet-layerstree-header-pointer.layer-aderidas {
+  background: #33FF33 !important;
+  color: #082408 !important;
+  box-shadow: 0 4px 14px rgba(51, 255, 51, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-aderidas:hover {
+  background: #22dd22 !important;
+}
+
+/* EM PROCESSO → #FFFF33 amarelo */
+.leaflet-layerstree-header-pointer.layer-processo {
+  background: #FFFF33 !important;
+  color: #2a2400 !important;
+  box-shadow: 0 4px 14px rgba(255, 255, 51, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-processo:hover {
+  background: #e0e020 !important;
+}
+
+/* INTERESSADAS / MANIFESTO → #9999FF roxo suave */
+.leaflet-layerstree-header-pointer.layer-interessadas {
+  background: #9999FF !important;
+  color: #10082a !important;
+  box-shadow: 0 4px 14px rgba(153, 153, 255, 0.45) !important;
+}
+.leaflet-layerstree-header-pointer.layer-interessadas:hover {
+  background: #7777ee !important;
+}
+
+/* Marcador colorido nos labels das camadas */
+.leaflet-layerstree-header-label {
+  display: flex;
+  align-items: center;
+}
+.leaflet-layerstree-header-label::before {
+  content: '';
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+  background: #66FFFF;
+  box-shadow: 0 0 0 2px rgba(102,255,255,0.3);
+}
+.layer-aderidas     .leaflet-layerstree-header-label::before { background: #33FF33; box-shadow: 0 0 0 2px rgba(51,255,51,0.3); }
+.layer-processo     .leaflet-layerstree-header-label::before { background: #FFFF33; box-shadow: 0 0 0 2px rgba(255,255,51,0.3); }
+.layer-interessadas .leaflet-layerstree-header-label::before { background: #9999FF; box-shadow: 0 0 0 2px rgba(153,153,255,0.3); }
+
+/* ================================================================
+   CHECKBOX "Seleção Visível" — dentro do Painel de Acompanhamento
+   ================================================================
+   Por que não consigo injetar automaticamente no painel:
+   O #stats-panel é gerado/populado por JavaScript (qgis2web/Leaflet).
+   O CSS não pode inserir elementos interativos — só o JS pode fazer isso.
+
+   SOLUÇÃO: cole este JS no final do seu <body>:
+
+   <script>
+   (function injectSelecaoToggle() {
+     function inject() {
+       const h2 = document.querySelector('#stats-panel h2');
+       if (!h2 || document.getElementById('toggle-selecao')) return;
+       const lbl = document.createElement('label');
+       lbl.className = 'toggle-selecao';
+       lbl.title = 'Mostrar/ocultar contorno de seleção';
+       lbl.innerHTML = `
+         <input type="checkbox" id="toggle-selecao" checked>
+         <span class="toggle-track"><span class="toggle-thumb"></span></span>
+         <span class="toggle-label">Seleção visível</span>`;
+       h2.appendChild(lbl);
+       document.getElementById('toggle-selecao').addEventListener('change', function() {
+         document.body.classList.toggle('show-selection', this.checked);
+       });
+       document.body.classList.add('show-selection');
+     }
+     inject();
+     new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
+   })();
+   </script>
+   ================================================================ */
+
+/* Contêiner do toggle (fica inline ao lado do h2) */
+.toggle-selecao {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+.toggle-selecao input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.toggle-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: rgba(150,150,150,0.25);
+  border-radius: 20px;
+  border: 1.5px solid rgba(150,150,150,0.3);
+  transition: background .22s ease, border-color .22s ease, box-shadow .22s ease;
+  flex-shrink: 0;
+}
+.toggle-selecao input:checked ~ .toggle-track {
+  background: rgba(220,50,40,0.18);
+  border-color: rgba(220,50,40,0.5);
+  box-shadow: 0 0 0 3px rgba(220,50,40,0.12);
+}
+.toggle-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 13px; height: 13px;
+  background: #aaa;
+  border-radius: 50%;
+  transition: transform .22s cubic-bezier(0.34,1.56,0.64,1), background .22s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+.toggle-selecao input:checked ~ .toggle-track .toggle-thumb {
+  transform: translateX(16px);
+  background: #dc3228;
+  box-shadow: 0 1px 6px rgba(220,50,40,0.4);
+}
+.toggle-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  transition: color .2s ease;
+}
+.toggle-selecao:has(input:checked) .toggle-label { color: #dc3228; }
+.toggle-selecao:hover .toggle-track { box-shadow: 0 0 0 4px rgba(150,150,150,0.1); }
+
+/* ── Contorno vermelho nas feições selecionadas ─────────────── */
+/* OCULTO por padrão */
+.leaflet-interactive.selected-feature {
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+}
+/* VISÍVEL quando body.show-selection está ativo */
+body.show-selection .leaflet-interactive.selected-feature {
+  stroke: #e53030 !important;
+  stroke-width: 3px !important;
+  stroke-opacity: 1 !important;
+  filter: drop-shadow(0 0 5px rgba(229,48,48,0.55)) !important;
+  paint-order: stroke fill !important;
+  animation: selectionPulse 2s ease-in-out infinite !important;
+}
+@keyframes selectionPulse {
+  0%, 100% { stroke-opacity: 1; }
+  50%       { stroke-opacity: 0.5; }
+}
+
+/* ── Responsividade ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #stats-panel,
+  #painelchart {
+    left: 12px;
+    width: calc(100% - 24px);
+    top: 80px;
+    max-height: 72vh;
+    border-radius: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  #map-header {
+  display: none !important;
+  display: none !important;
+    font-size: 15.5px;
+    padding: 12px 24px;
+    top: 14px;
+    max-width: 74vw;
+    white-space: normal;
+    text-align: center;
+    border-radius: 50px;
+  }
+
+  .scale-control {
+    bottom: 16px;
+    left: calc(50% - 168px);
+    font-size: 12px;
+    padding: 9px 13px;
+  }
+
+  .scale-bar {
+    min-width: 98px;
+    height: 8px;
+  }
+
+  #compass-container {
+    width: 50px;
+    height: 50px;
+    bottom: 16px;
+  }
+
+  .button-group {
+    top: 96px;
+    left: 14px;
+    gap: 10px;
+  }
+
+  .button-group button {
+    height: 48px;
+    width: 158px;
+    font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 700px) {
+  #logo-link { left: 12px; bottom: 14px; }
+  #logo-link img#map-logo { width: 96px; }
+  #github-logo { width: 46px; height: 46px; }
+
+  #popup-content {
+    border-radius: 26px;
+    max-width: 96%;
+  }
+}
+
+/* ================================================================
+   FIX: Contorno vermelho — seleção de tipo de propriedade
+   Garante que body:not(.show-selection) SEMPRE esconde o contorno,
+   independente de como stats.js aplica o estilo (classe, setStyle,
+   ou atributo SVG).
+   ================================================================ */
+
+/* Quando show-selection NÃO está ativo: força transparent em qualquer
+   elemento com selected-feature, independente de onde a classe está */
+body:not(.show-selection) .selected-feature,
+body:not(.show-selection) .selected-feature path,
+body:not(.show-selection) .selected-feature .leaflet-interactive,
+body:not(.show-selection) .leaflet-interactive.selected-feature {
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+  stroke-opacity: 0 !important;
+  filter: none !important;
+  animation: none !important;
+  -webkit-animation: none !important;
+}
+
+/* Garante que o contorno vermelho só aparece com show-selection ativo */
+body.show-selection .selected-feature path,
+body.show-selection .selected-feature .leaflet-interactive,
+body.show-selection .leaflet-interactive.selected-feature,
+body.show-selection path.selected-feature {
+  stroke: #e53030 !important;
+  stroke-width: 3px !important;
+  stroke-opacity: 1 !important;
+  filter: drop-shadow(0 0 5px rgba(229,48,48,0.55)) !important;
+  paint-order: stroke fill !important;
+  animation: selectionPulse 2s ease-in-out infinite !important;
+}
+/* ── Correção extra: garante que presentation attributes SVG não vazem ────── */
+body:not(.show-selection) .leaflet-interactive.selected-feature,
+body:not(.show-selection) .leaflet-interactive.selected-feature path,
+body:not(.show-selection) path.selected-feature,
+body:not(.show-selection) .selected-feature .leaflet-interactive {
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+  stroke-opacity: 0 !important;
+  animation: none !important;
+  filter: none !important;
+}
