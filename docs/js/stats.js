@@ -16,9 +16,8 @@
   }
  
   const GROUP_LAYER_INDICES = {
-    'propriedades aderidas': { min: 68, max: 94 },
-    'processo':              { min: 60, max: 67 },
-    'interessadas':          { min: 24, max: 59 }
+    'propriedades aderidas': { min: 64, max: 97 },
+    'interessadas':          { min: 25, max: 63 }
   };
 
   function layerBelongsToGroup(layer, selectedGroup) {
