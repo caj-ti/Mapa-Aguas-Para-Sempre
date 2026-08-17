@@ -36,6 +36,13 @@
       link: 'https://www.aguasdejoinville.com.br/?servico=programa-aguas-para-sempre'
     },
 
+    /* Ícone e nome que aparecem na aba do navegador.
+       Deixe favicon apontando para um arquivo do próprio projeto.
+       Se preferir puxar do repositório antigo, use:
+       'https://raw.githubusercontent.com/caj-ti/Mapa-Aguas-Para-Sempre/main/docs/images/LOGOPSA.png' */
+    favicon: 'images/LOGOPSA.png',
+    tituloAba: 'Mapa do Programa Águas para Sempre',
+
     github: 'https://github.com/brennobenk1/Novosaguasparasempre',
 
     /* Grupos de propriedade. "casa" é a expressão que localiza o grupo pelo
@@ -46,14 +53,15 @@
       { id: 'interessadas', rotulo: 'Propriedades Interessadas', casa: /interessad|manifest/i, cor: '#7C7CE8' }
     ],
 
-    /* Totais do programa inteiro (editais). Não saem das feições do mapa. */
+    /* Totais do programa inteiro (editais). Não saem das feições do mapa.
+       Não há "contratada" aqui: toda propriedade aderida é 100% contratada,
+       então a área contratada é a própria área do grupo. */
     programa: {
       total: 36608.07,
-      verde: 30164.30,
-      contratada: 159.28
+      verde: 30164.30
     },
 
-    valorMedioPorHa: 673.20,
+    valorMedioPorHa: 330.00,
 
     /* Datas de adesão, DD/MM/AAAA. A linha do tempo conta as adesões reais. */
     datasAdesao: [
@@ -354,17 +362,8 @@
     '#psa-veu{position:fixed;inset:0;z-index:2400;background:rgba(10,26,16,.28);',
     'backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);animation:psaFade .22s ease both}',
 
-    /* Cabeçalho */
-    '#psa-header{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:1000;',
-    'display:flex;align-items:center;gap:10px;background:var(--psa-sup);padding:11px 24px 11px 18px;',
-    'border-radius:999px;border:1px solid var(--psa-borda);box-shadow:var(--psa-sombra2);',
-    'font-family:Fraunces,Georgia,serif;font-size:17px;font-weight:600;color:var(--psa-tinta);',
-    'letter-spacing:-.01em;white-space:nowrap;max-width:calc(100vw - 40px);overflow:hidden;',
-    'text-overflow:ellipsis;animation:psaSobe .5s var(--psa-mola) both}',
-    '#psa-header svg{width:19px;height:19px;flex-shrink:0}',
-
     /* Botões laterais */
-    '#psa-botoes{position:absolute;top:88px;left:16px;z-index:1000;display:flex;flex-direction:column;gap:7px;',
+    '#psa-botoes{position:absolute;top:16px;left:16px;z-index:1000;display:flex;flex-direction:column;gap:7px;',
     'background:var(--psa-sup);padding:7px;border-radius:var(--psa-r);border:1px solid var(--psa-borda);',
     'box-shadow:var(--psa-sombra2);animation:psaSobe .5s .08s var(--psa-mola) both}',
     '#psa-botoes button{display:flex;align-items:center;gap:11px;padding:0 15px 0 12px;height:44px;',
@@ -379,7 +378,7 @@
     '#psa-botoes button:focus-visible{outline:2px solid var(--psa-verde);outline-offset:2px}',
 
     /* Painéis */
-    '.psa-painel{position:absolute;top:88px;left:16px;z-index:2500;width:min(520px,calc(100vw - 32px));',
+    '.psa-painel{position:absolute;top:16px;left:16px;z-index:2500;width:min(520px,calc(100vw - 32px));',
     'max-height:min(78vh,760px);display:flex;flex-direction:column;background:var(--psa-sup);',
     'border-radius:var(--psa-r);border:1px solid var(--psa-borda);box-shadow:var(--psa-sombra);',
     'animation:psaSobe .3s cubic-bezier(.2,.9,.3,1) both;overflow:hidden}',
@@ -525,8 +524,7 @@
 
     /* Telas pequenas */
     '@media (max-width:780px){',
-    '#psa-header{font-size:14px;padding:9px 16px;top:10px}',
-    '#psa-botoes{top:60px;left:10px;padding:5px;gap:4px}',
+    '#psa-botoes{top:10px;left:10px;padding:5px;gap:4px}',
     '#psa-botoes button{min-width:0;width:42px;height:42px;padding:0;justify-content:center}',
     '#psa-botoes .psa-rot{display:none}',
     '.psa-painel{top:auto;bottom:0;left:0;right:0;width:auto;max-height:76vh;',
@@ -555,6 +553,17 @@
      8. MONTAGEM DA INTERFACE
      ========================================================================== */
 
+  function aplicarIdentidadeDaAba() {
+    if (CONFIG.tituloAba) document.title = CONFIG.tituloAba;
+    if (!CONFIG.favicon) return;
+    var antigos = document.querySelectorAll("link[rel~='icon']");
+    Array.prototype.forEach.call(antigos, function (l) { l.parentNode.removeChild(l); });
+    var link = document.createElement('link');
+    link.rel = 'icon';
+    link.href = CONFIG.favicon;
+    document.head.appendChild(link);
+  }
+
   function montarInterface() {
     var estilo = document.createElement('style');
     estilo.id = 'psa-estilo';
@@ -563,8 +572,6 @@
 
     var frag = document.createElement('div');
     frag.innerHTML = [
-      '<div id="psa-header">' + ICO.gota + '<span>' + CONFIG.titulo + '</span></div>',
-
       '<div id="psa-botoes">',
       '<button id="psa-btn-painel" type="button">' + ICO.painel + '<span class="psa-rot">Painel</span></button>',
       '<button id="psa-btn-grafico" type="button">' + ICO.grafico + '<span class="psa-rot">Gráficos</span></button>',
@@ -684,7 +691,6 @@
       '<div class="psa-linhas">' +
       linha('Média da área por propriedade', fmt(r.mediaArea), 'ha') +
       linha('Média da área verde', fmt(r.mediaVerde), 'ha') +
-      linha('Área contratada', fmt(r.contratada), 'ha') +
       linha('Valor médio por hectare', fmtMoeda(CONFIG.valorMedioPorHa), '') +
       '</div>';
 
@@ -837,17 +843,17 @@
 
       if (tipo === 'geral') {
         var pr = CONFIG.programa;
-        dados = { total: pr.total, verde: pr.verde, contratada: pr.contratada };
+        dados = { total: pr.total, verde: pr.verde };
         rotuloEixo = 'Programa completo';
-        textoNota = 'A área contratada é pequena diante do total do programa, ' +
-          'então a barra recebe altura mínima para continuar visível. O valor exato ' +
-          'está escrito acima de cada barra.';
+        textoNota = 'Área total dos editais e a área verde estimada dentro dela. ' +
+          'O valor exato está escrito acima de cada barra.';
       } else {
         var idAderidas = GRUPOS.aderidas ? 'aderidas' : ($('psa-grupo').value || 'aderidas');
         var r = calcular(idAderidas);
-        dados = { total: r.area, verde: r.verde, contratada: r.contratada };
+        dados = { total: r.area, verde: r.verde };
         rotuloEixo = 'Credenciadas (' + r.propriedades + ')';
-        textoNota = 'Calculado a partir das propriedades ativas na legenda. ' +
+        textoNota = 'Calculado a partir das propriedades ativas na legenda — ' +
+          'toda propriedade credenciada é 100% contratada, então a área total já é a área contratada. ' +
           'Desmarcar camadas muda estes números.';
       }
 
@@ -862,9 +868,6 @@
               minBarLength: 6, barPercentage: .72, categoryPercentage: .8 },
             { label: 'Área verde', data: [dados.verde], backgroundColor: CORES.verdeC,
               borderColor: CORES.verde, borderWidth: 1, borderRadius: 5,
-              minBarLength: 6, barPercentage: .72, categoryPercentage: .8 },
-            { label: 'Área contratada', data: [dados.contratada], backgroundColor: CORES.contrC,
-              borderColor: CORES.contr, borderWidth: 1, borderRadius: 5,
               minBarLength: 6, barPercentage: .72, categoryPercentage: .8 }
           ]
         },
@@ -1099,6 +1102,7 @@
   function iniciar() {
     if (!mapa()) { setTimeout(iniciar, 150); return; }
 
+    aplicarIdentidadeDaAba();
     montarInterface();
     GRUPOS = lerGrupos();
     montarSeletorGrupos();
