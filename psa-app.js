@@ -61,7 +61,7 @@
       verde: 30164.30
     },
 
-    valorMedioPorHa: 330.00,
+    valorMedioPorHa: 673.20,
 
     /* Área verde efetivamente contratada nas propriedades credenciadas.
        Aparece como terceira barra na comparação de credenciadas. */
