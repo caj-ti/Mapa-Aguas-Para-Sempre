@@ -63,6 +63,10 @@
 
     valorMedioPorHa: 330.00,
 
+    /* Área verde efetivamente contratada nas propriedades credenciadas.
+       Aparece como terceira barra na comparação de credenciadas. */
+    verdeContratada: 201.759,
+
     /* Datas de adesão, DD/MM/AAAA. A linha do tempo conta as adesões reais. */
     datasAdesao: [
       '25/08/2022', '29/08/2022', '12/05/2023', '24/11/2023', '18/01/2024',
@@ -71,6 +75,14 @@
       '19/11/2025', '04/12/2025', '05/12/2025', '06/12/2025', '07/12/2025',
       '08/12/2025', '09/12/2025', '10/12/2025', '11/12/2025', '12/12/2025',
       '13/12/2025', '14/12/2025'
+    ],
+
+    /* Pontos manuais no fim da linha do tempo, para quando você já sabe o
+       total acumulado mas ainda não tem as datas exatas de cada adesão.
+       Assim que as datas entrarem em datasAdesao, apague o marco daqui.
+       Deixe [] para não usar nenhum. */
+    marcosAdesao: [
+      { mes: '08/2026', total: 34 }
     ],
 
     pagamentos: [
@@ -787,7 +799,7 @@
     };
   }
 
-  function acumuladoPorMes(datas) {
+  function acumuladoPorMes(datas, marcos) {
     var porMes = {};
     datas.forEach(function (d) {
       var p = String(d).split('/');
@@ -795,14 +807,25 @@
       porMes[p[2] + '-' + ('0' + p[1]).slice(-2)] = (porMes[p[2] + '-' + ('0' + p[1]).slice(-2)] || 0) + 1;
     });
     var chaves = Object.keys(porMes).sort();
-    var rotulos = [], valores = [], soma = 0;
+    var rotulos = [], valores = [], soma = 0, nMarcos = 0;
     chaves.forEach(function (k) {
       soma += porMes[k];
       var p = k.split('-');
       rotulos.push(p[1] + '/' + p[0].slice(2));
       valores.push(soma);
     });
-    return { rotulos: rotulos, valores: valores, total: soma };
+
+    /* Marcos manuais: o total informado é absoluto, não incremental. */
+    (marcos || []).forEach(function (mk) {
+      var p = String(mk.mes).split('/');
+      if (p.length !== 2) return;
+      rotulos.push(p[0] + '/' + String(p[1]).slice(-2));
+      valores.push(mk.total);
+      soma = mk.total;
+      nMarcos++;
+    });
+
+    return { rotulos: rotulos, valores: valores, total: soma, marcos: nMarcos };
   }
 
   function somaPagamentosPorAno(lista) {
@@ -850,26 +873,41 @@
       } else {
         var idAderidas = GRUPOS.aderidas ? 'aderidas' : ($('psa-grupo').value || 'aderidas');
         var r = calcular(idAderidas);
-        dados = { total: r.area, verde: r.verde };
+        dados = { total: r.area, verde: r.verde, verdeContratada: CONFIG.verdeContratada };
         rotuloEixo = 'Credenciadas (' + r.propriedades + ')';
-        textoNota = 'Calculado a partir das propriedades ativas na legenda — ' +
-          'toda propriedade credenciada é 100% contratada, então a área total já é a área contratada. ' +
-          'Desmarcar camadas muda estes números.';
+        textoNota = 'Área total e área verde saem das propriedades ativas na legenda; ' +
+          'desmarcar camadas muda esses dois números. A área verde contratada é um ' +
+          'valor manual, definido em CONFIG.verdeContratada.';
       }
+
+      var series = [
+        { label: 'Área total', data: [dados.total], backgroundColor: CORES.totalC,
+          borderColor: CORES.total },
+        { label: 'Área verde', data: [dados.verde], backgroundColor: CORES.verdeC,
+          borderColor: CORES.verde }
+      ];
+
+      if (dados.verdeContratada != null) {
+        series.push({
+          label: 'Área verde contratada', data: [dados.verdeContratada],
+          backgroundColor: CORES.contrC, borderColor: CORES.contr
+        });
+      }
+
+      series.forEach(function (s) {
+        s.borderWidth = 1;
+        s.borderRadius = 5;
+        s.minBarLength = 6;
+        s.barPercentage = .72;
+        s.categoryPercentage = .8;
+      });
 
       instanciaChart = new Chart(ctx, {
         type: 'bar',
         plugins: [pluginRotulos],
         data: {
           labels: [rotuloEixo],
-          datasets: [
-            { label: 'Área total', data: [dados.total], backgroundColor: CORES.totalC,
-              borderColor: CORES.total, borderWidth: 1, borderRadius: 5,
-              minBarLength: 6, barPercentage: .72, categoryPercentage: .8 },
-            { label: 'Área verde', data: [dados.verde], backgroundColor: CORES.verdeC,
-              borderColor: CORES.verde, borderWidth: 1, borderRadius: 5,
-              minBarLength: 6, barPercentage: .72, categoryPercentage: .8 }
-          ]
+          datasets: series
         },
         options: baseBarra(dados.total)
       });
@@ -877,7 +915,7 @@
       if (nota) nota.textContent = textoNota;
 
     } else if (tipo === 'linha') {
-      var ac = acumuladoPorMes(CONFIG.datasAdesao);
+      var ac = acumuladoPorMes(CONFIG.datasAdesao, CONFIG.marcosAdesao);
       instanciaChart = new Chart(ctx, {
         type: 'line',
         plugins: [pluginRotulos],
@@ -917,8 +955,9 @@
           }
         }
       });
-      if (nota) nota.textContent = 'Total de ' + ac.total + ' adesões, contadas mês a mês ' +
-        'a partir das datas em CONFIG.datasAdesao.';
+      if (nota) nota.textContent = 'Total de ' + ac.total + ' adesões. ' +
+        'Os pontos vêm das datas em CONFIG.datasAdesao, contadas mês a mês' +
+        (ac.marcos ? ', mais ' + ac.marcos + ' ponto(s) informado(s) manualmente em CONFIG.marcosAdesao.' : '.');
 
     } else if (tipo === 'pagamentos') {
       var pg = somaPagamentosPorAno(CONFIG.pagamentos);
