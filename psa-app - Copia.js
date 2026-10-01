@@ -13,10 +13,6 @@
 
      Ao reexportar do QGIS, sobrescreva tudo e recoloque essa linha.
 
-   NOVIDADES DA v3
-     - Pesquisa por shape / número do CAR (abaixo dos botões Painel/Gráficos/Detalhes).
-     - Botões de zoom (- e +) movidos para o canto inferior esquerdo.
-
    NOVIDADES DA v2
      - Barras minúsculas agora aparecem: altura mínima + valor escrito em cima.
      - Painel redesenhado com cartões de destaque em vez de lista repetitiva.
@@ -379,8 +375,7 @@
     'backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);animation:psaFade .22s ease both}',
 
     /* Botões laterais */
-    '#psa-topo{position:absolute;top:16px;left:16px;z-index:1000;display:flex;flex-direction:column;gap:8px;align-items:flex-start}',
-    '#psa-botoes{position:relative;display:flex;flex-direction:column;gap:7px;',
+    '#psa-botoes{position:absolute;top:16px;left:16px;z-index:1000;display:flex;flex-direction:column;gap:7px;',
     'background:var(--psa-sup);padding:7px;border-radius:var(--psa-r);border:1px solid var(--psa-borda);',
     'box-shadow:var(--psa-sombra2);animation:psaSobe .5s .08s var(--psa-mola) both}',
     '#psa-botoes button{display:flex;align-items:center;gap:11px;padding:0 15px 0 12px;height:44px;',
@@ -393,39 +388,6 @@
     'border-color:rgba(18,122,69,.22)}',
     '#psa-botoes svg{width:19px;height:19px;flex-shrink:0}',
     '#psa-botoes button:focus-visible{outline:2px solid var(--psa-verde);outline-offset:2px}',
-
-
-    /* Pesquisa (shape / CAR) */
-    '#psa-busca{position:relative;width:min(330px,calc(100vw - 20px));animation:psaSobe .5s .14s var(--psa-mola) both}',
-    '#psa-busca-caixa{display:flex;align-items:center;gap:8px;height:44px;padding:0 8px 0 13px;background:var(--psa-sup);',
-    'border:1px solid var(--psa-borda);border-radius:var(--psa-r2);box-shadow:var(--psa-sombra2);',
-    'transition:border-color var(--psa-suave),box-shadow var(--psa-suave)}',
-    '#psa-busca-caixa:focus-within{border-color:var(--psa-verde);box-shadow:0 0 0 3px rgba(18,122,69,.13),var(--psa-sombra2)}',
-    '#psa-busca-caixa>svg{width:18px;height:18px;flex-shrink:0;color:var(--psa-tinta3)}',
-    '#psa-busca-input{flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;',
-    'font-family:Inter,sans-serif;font-size:13.5px;color:var(--psa-tinta)}',
-    '#psa-busca-input::placeholder{color:var(--psa-tinta3)}',
-    '#psa-busca-limpar{flex-shrink:0;width:28px;height:28px;border:0;border-radius:8px;background:transparent;',
-    'cursor:pointer;display:flex;align-items:center;justify-content:center}',
-    '#psa-busca-limpar:hover{background:var(--psa-sup2)}',
-    '#psa-busca-limpar svg{width:12px;height:12px}',
-    '#psa-busca-lista{margin-top:6px;max-height:min(56vh,430px);overflow-y:auto;background:var(--psa-sup);',
-    'border:1px solid var(--psa-borda);border-radius:var(--psa-r2);box-shadow:var(--psa-sombra);padding:5px}',
-    '#psa-busca-lista::-webkit-scrollbar{width:7px}',
-    '#psa-busca-lista::-webkit-scrollbar-thumb{background:var(--psa-borda2);border-radius:8px}',
-    '.psa-res{display:block;width:100%;text-align:left;border:0;background:transparent;cursor:pointer;',
-    'padding:9px 10px;border-radius:9px;font-family:Inter,sans-serif;transition:background var(--psa-suave)}',
-    '.psa-res:hover,.psa-res.psa-res-ativo{background:var(--psa-sup2)}',
-    '.psa-res-camada{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.02em;color:var(--psa-verde);',
-    'background:rgba(18,122,69,.09);border-radius:6px;padding:2px 7px;margin-bottom:4px;max-width:100%;',
-    'overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
-    '.psa-res-tit{display:block;font-size:13px;font-weight:600;color:var(--psa-tinta);word-break:break-all}',
-    '.psa-res-sub{display:block;font-size:11.5px;color:var(--psa-tinta3);margin-top:2px;word-break:break-all}',
-    '.psa-res-sub mark{background:rgba(233,176,8,.35);color:inherit;border-radius:3px;padding:0 1px}',
-    '.psa-busca-vazio{padding:12px 10px;font-size:12.5px;color:var(--psa-tinta3);line-height:1.45}',
-    '.psa-busca-mais{padding:8px 10px 6px;font-size:11.5px;color:var(--psa-tinta3)}',
-    '@keyframes psaPulso{0%,100%{stroke-opacity:1}50%{stroke-opacity:.25}}',
-    '.psa-pulso{animation:psaPulso 1.1s ease-in-out 4}',
 
     /* Painéis */
     '.psa-painel{position:absolute;top:16px;left:16px;z-index:2500;width:min(520px,calc(100vw - 32px));',
@@ -530,11 +492,11 @@
     '.psa-pilula{background:var(--psa-sup);border:1px solid var(--psa-borda);border-radius:var(--psa-r2);',
     'box-shadow:var(--psa-sombra2);font-family:Inter,sans-serif;font-size:12px;font-weight:500;',
     'color:var(--psa-tinta2)}',
-    '#psa-logo{position:fixed;left:68px;bottom:16px;z-index:1500;display:block}',
+    '#psa-logo{position:fixed;left:16px;bottom:16px;z-index:1500;display:block}',
     '#psa-logo img{width:118px;height:auto;display:block;filter:drop-shadow(0 4px 12px rgba(18,36,26,.2));',
     'transition:transform var(--psa-mola)}',
     '#psa-logo:hover img{transform:translateY(-3px)}',
-    '#psa-github{position:fixed;left:202px;bottom:16px;z-index:1500;width:38px;height:38px;',
+    '#psa-github{position:fixed;left:150px;bottom:16px;z-index:1500;width:38px;height:38px;',
     'display:flex;align-items:center;justify-content:center;transition:transform var(--psa-mola)}',
     '#psa-github:hover{transform:translateY(-3px)}',
     '#psa-github svg{width:20px;height:20px;display:block}',
@@ -568,22 +530,18 @@
     'border:1px solid var(--psa-borda)!important;background:var(--psa-sup)!important;',
     'box-shadow:var(--psa-sombra2)!important}',
     '.leaflet-control-zoom a:hover{background:var(--psa-sup2)!important}',
-    '.leaflet-bottom.leaflet-left .leaflet-control-zoom{margin-left:16px;margin-bottom:16px;z-index:1600}',
     '.leaflet-popup-content-wrapper{border-radius:var(--psa-r2)!important;',
     'box-shadow:var(--psa-sombra2)!important;font-family:Inter,sans-serif!important}',
     '.leaflet-popup-content table{font-size:12.5px;color:var(--psa-tinta2)}',
 
     /* Telas pequenas */
     '@media (max-width:780px){',
-    '#psa-topo{top:10px;left:10px}',
-    '#psa-botoes{padding:5px;gap:4px}',
-    '.leaflet-bottom.leaflet-left .leaflet-control-zoom{margin-left:10px;margin-bottom:10px}',
+    '#psa-botoes{top:10px;left:10px;padding:5px;gap:4px}',
     '#psa-botoes button{min-width:0;width:42px;height:42px;padding:0;justify-content:center}',
     '#psa-botoes .psa-rot{display:none}',
     '.psa-painel{top:auto;bottom:0;left:0;right:0;width:auto;max-height:76vh;',
     'border-radius:var(--psa-r) var(--psa-r) 0 0;border-bottom:none}',
     '#psa-rodape,#psa-github{display:none}',
-    '#psa-logo{left:64px;bottom:12px}',
     '#psa-logo img{width:92px}}'
   ].join('');
 
@@ -598,7 +556,6 @@
     painel: '<svg viewBox="0 0 24 24" ' + TR + '><path d="M4 20V4"/><path d="M4 20h16"/><rect x="7.5" y="12" width="3.2" height="5"/><rect x="13" y="8" width="3.2" height="9"/><rect x="18.5" y="14.5" width="0" height="0"/></svg>',
     grafico: '<svg viewBox="0 0 24 24" ' + TR + '><path d="M4 16.5l4.5-5 3.5 3.2 6-7.2"/><path d="M18 7.5h-3.2M18 7.5v3.2"/><path d="M4 20h16"/></svg>',
     detalhes: '<svg viewBox="0 0 24 24" ' + TR + '><circle cx="12" cy="12" r="8.5"/><path d="M12 11.2v5"/><circle cx="12" cy="8.1" r=".9" fill="currentColor" stroke="none"/></svg>',
-    lupa: '<svg viewBox="0 0 24 24" ' + TR + '><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg>',
     fechar: '<svg viewBox="0 0 24 24" fill="none" stroke="#3B5446" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     bussola: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5l3 8.2-3-1.8-3 1.8z" fill="#C6362F"/><path d="M12 21.5l-3-8.2 3 1.8 3-1.8z" fill="#3B5446"/></svg>',
     github: '<svg viewBox="0 0 24 24" fill="#3B5446"><path d="M12 .5C5.7.5.6 5.6.6 11.9c0 5 3.3 9.3 7.8 10.8.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6a11.4 11.4 0 0 0 7.8-10.8C23.4 5.6 18.3.5 12 .5z"/></svg>'
@@ -627,21 +584,10 @@
 
     var frag = document.createElement('div');
     frag.innerHTML = [
-      '<div id="psa-topo">',
       '<div id="psa-botoes">',
       '<button id="psa-btn-painel" type="button">' + ICO.painel + '<span class="psa-rot">Painel</span></button>',
       '<button id="psa-btn-grafico" type="button">' + ICO.grafico + '<span class="psa-rot">Gráficos</span></button>',
       '<button id="psa-btn-detalhes" type="button">' + ICO.detalhes + '<span class="psa-rot">Detalhes</span></button>',
-      '</div>',
-
-      '<div id="psa-busca" role="search">',
-      '<div id="psa-busca-caixa">' + ICO.lupa,
-      '<input id="psa-busca-input" type="text" autocomplete="off" spellcheck="false" ',
-      'placeholder="Buscar shape ou número do CAR" aria-label="Buscar shape ou número do CAR">',
-      '<button id="psa-busca-limpar" type="button" class="psa-oculto" aria-label="Limpar busca">' + ICO.fechar + '</button>',
-      '</div>',
-      '<div id="psa-busca-lista" class="psa-oculto" role="listbox"></div>',
-      '</div>',
       '</div>',
 
       '<div id="psa-rodape">',
@@ -1098,378 +1044,6 @@
     });
   }
 
-
-  /* ==========================================================================
-     10b. PESQUISA POR SHAPE / CAR  +  ZOOM NO CANTO INFERIOR ESQUERDO
-     --------------------------------------------------------------------------
-     A pesquisa varre TODAS as camadas vetoriais do mapa (inclusive a camada
-     CarDentroDoLimite e as que estão desmarcadas na legenda) e compara o texto
-     digitado com o valor de todos os campos de cada feição. Pontuação, hífen,
-     espaço e maiúscula/minúscula são ignorados:
-         SC-4209102-0CBDF49E146F43D094D28A8FB5A6E66F
-         SC42091020CBDF49E146F43D094D28A8FB5A6E66F
-     encontram a mesma feição.
-     ========================================================================== */
-
-  var BUSCA = {
-    indice: null,        /* [{f, fonte, rotulo, campos:[...]}] */
-    resultados: [],
-    ativo: -1,
-    realce: null,
-    timerRealce: null,
-    maxLista: 40
-  };
-
-  function esc(t) {
-    return String(t === null || t === undefined ? '' : t)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  /* Campos que parecem identificadores (casam com prioridade maior) */
-  var RE_ID = /^(id|fid|oid|objectid|cod|car|shape|matric|inscr|nome|name|proces|protoc|imovel|num|nro|registro|ident)/;
-  /* Campos medidos: só casam por valor idêntico (evita ruído em 25687.34...) */
-  var RE_MEDIDA = /(area|leng|perim|hect)/;
-
-  function rotuloDaCamada(nomeVar) {
-    return String(nomeVar || '')
-      .replace(/^layer_/, '').replace(/_\d+$/, '').replace(/_/g, ' ').trim() || 'Camada';
-  }
-
-  function coletarFontes() {
-    var fontes = [], vistos = {};
-
-    function pode(c) { return c && typeof c.eachLayer === 'function'; }
-    function add(camada, rotulo) {
-      if (!pode(camada)) return;
-      var id = L.stamp(camada);
-      if (vistos[id]) return;
-      vistos[id] = true;
-      fontes.push({ camada: camada, rotulo: rotulo });
-    }
-
-    function folhas(no) {
-      if (!no) return;
-      if (Array.isArray(no)) { no.forEach(folhas); return; }
-      if (no.layer) {
-        var r = String(no.label || '').replace(/<[^>]*>/g, '').trim();
-        add(no.layer, r);
-      }
-      if (no.children) folhas(no.children);
-    }
-    folhas(window.overlaysTree);
-
-    /* qgis2web declara cada camada como variável global layer_Nome_N */
-    Object.keys(window).forEach(function (k) {
-      if (!/^layer_/.test(k)) return;
-      var c;
-      try { c = window[k]; } catch (e) { return; }
-      add(c, rotuloDaCamada(k));
-    });
-
-    return fontes;
-  }
-
-  function textoValor(v) {
-    if (v === null || v === undefined) return '';
-    if (typeof v === 'object') { try { return JSON.stringify(v); } catch (e) { return ''; } }
-    var t = String(v).trim();
-    if (/^\d+\.0+$/.test(t)) t = t.replace(/\.0+$/, '');
-    return t;
-  }
-
-  function construirIndice() {
-    var fontes = coletarFontes();
-    var vistos = {};
-    var lista = [];
-
-    function visitar(no, fonte) {
-      if (!no) return;
-      if (no.feature && no.feature.properties) {
-        var id = L.stamp(no);
-        if (vistos[id]) return;
-        vistos[id] = true;
-        var props = no.feature.properties, campos = [];
-        for (var k in props) {
-          if (!Object.prototype.hasOwnProperty.call(props, k)) continue;
-          var t = textoValor(props[k]);
-          if (t === '') continue;
-          var nk = normalizar(k), nv = normalizar(t);
-          if (!nv) continue;
-          campos.push({
-            k: k, v: t, nv: nv,
-            id: RE_ID.test(nk) && !RE_MEDIDA.test(nk),
-            medida: RE_MEDIDA.test(nk)
-          });
-        }
-        lista.push({ f: no, fonte: fonte, rotulo: fonte.rotulo, campos: campos });
-        return;
-      }
-      if (typeof no.eachLayer === 'function') {
-        no.eachLayer(function (filho) { visitar(filho, fonte); });
-      }
-    }
-
-    fontes.forEach(function (fonte) { visitar(fonte.camada, fonte); });
-    BUSCA.indice = lista;
-    return lista;
-  }
-
-  function pesquisar(texto) {
-    var q = normalizar(texto || '');
-    if (q.length < 2) return [];
-    var indice = BUSCA.indice || construirIndice();
-    var achados = [];
-
-    indice.forEach(function (it) {
-      var melhor = 0, campo = null;
-      for (var i = 0; i < it.campos.length; i++) {
-        var c = it.campos[i], sc = 0;
-        if (c.nv === q) {
-          sc = c.id ? 110 : 100;
-        } else if (!c.medida) {
-          var pos = c.nv.indexOf(q);
-          if (pos === 0) {
-            if (c.id) sc = 75; else if (q.length >= 5) sc = 45;
-          } else if (pos > 0) {
-            if (c.id) sc = 60; else if (q.length >= 6) sc = 30;
-          }
-        }
-        if (sc > melhor) { melhor = sc; campo = c; }
-      }
-      if (melhor > 0) achados.push({ it: it, score: melhor, campo: campo });
-    });
-
-    achados.sort(function (a, b) {
-      return b.score - a.score || String(a.it.rotulo).localeCompare(String(b.it.rotulo));
-    });
-    return achados;
-  }
-
-  /* Melhor título da feição: primeiro campo identificador preenchido */
-  function tituloDaFeicao(it) {
-    for (var i = 0; i < it.campos.length; i++) if (it.campos[i].id) return it.campos[i].v;
-    return it.campos.length ? it.campos[0].v : '(sem atributos)';
-  }
-
-  function marcarTrecho(valor, textoDigitado) {
-    var q = normalizar(textoDigitado), v = String(valor), nv = '', mapaIdx = [];
-    for (var i = 0; i < v.length; i++) {
-      var ch = normalizar(v.charAt(i));
-      if (ch) { nv += ch; for (var j = 0; j < ch.length; j++) mapaIdx.push(i); }
-    }
-    var pos = nv.indexOf(q);
-    if (pos < 0 || !q) return esc(v);
-    var ini = mapaIdx[pos], fim = mapaIdx[pos + q.length - 1] + 1;
-    return esc(v.slice(0, ini)) + '<mark>' + esc(v.slice(ini, fim)) + '</mark>' + esc(v.slice(fim));
-  }
-
-  function desenharResultados(texto) {
-    var lista = $('psa-busca-lista');
-    var achados = BUSCA.resultados;
-    BUSCA.ativo = -1;
-
-    if (normalizar(texto).length < 2) { lista.classList.add('psa-oculto'); lista.innerHTML = ''; return; }
-
-    if (!achados.length) {
-      lista.innerHTML = '<div class="psa-busca-vazio">Nada encontrado para <strong>' + esc(texto) +
-        '</strong>. Confira o número ou digite só um trecho dele.</div>';
-      lista.classList.remove('psa-oculto');
-      return;
-    }
-
-    var html = '';
-    achados.slice(0, BUSCA.maxLista).forEach(function (a, i) {
-      html += '<button type="button" class="psa-res" role="option" data-i="' + i + '">' +
-        '<span class="psa-res-camada">' + esc(a.it.rotulo) + '</span>' +
-        '<span class="psa-res-tit">' + esc(tituloDaFeicao(a.it)) + '</span>' +
-        '<span class="psa-res-sub">' + esc(a.campo.k) + ': ' + marcarTrecho(a.campo.v, texto) + '</span>' +
-        '</button>';
-    });
-    if (achados.length > BUSCA.maxLista) {
-      html += '<div class="psa-busca-mais">Mostrando ' + BUSCA.maxLista + ' de ' + achados.length +
-        ' resultados. Digite mais caracteres para refinar.</div>';
-    }
-    lista.innerHTML = html;
-    lista.classList.remove('psa-oculto');
-  }
-
-  function limparRealce() {
-    clearTimeout(BUSCA.timerRealce);
-    var m = mapa();
-    if (BUSCA.realce && m) { try { m.removeLayer(BUSCA.realce); } catch (e) {} }
-    BUSCA.realce = null;
-  }
-
-  function realcarFeicao(f) {
-    var m = mapa();
-    limparRealce();
-    if (!m || typeof f.toGeoJSON !== 'function') return;
-    try {
-      if (!m.getPane('psa-busca')) {
-        var pn = m.createPane('psa-busca');
-        pn.style.zIndex = 650;
-        pn.style.pointerEvents = 'none';
-      }
-      var est = { color: '#00B8D9', weight: 4, opacity: 1, fillColor: '#00B8D9', fillOpacity: .14,
-                  pane: 'psa-busca', interactive: false, className: 'psa-pulso' };
-      BUSCA.realce = L.geoJSON(f.toGeoJSON(), {
-        style: function () { return est; },
-        pointToLayer: function (ft, ll) {
-          return L.circleMarker(ll, { radius: 16, color: '#00B8D9', weight: 4, fillColor: '#00B8D9',
-                                      fillOpacity: .18, pane: 'psa-busca', interactive: false });
-        }
-      }).addTo(m);
-      BUSCA.timerRealce = setTimeout(limparRealce, 15000);
-    } catch (e) {}
-  }
-
-  function popupPadrao(it) {
-    var linhas = it.campos.map(function (c) {
-      return '<tr><th style="text-align:left;padding:2px 10px 2px 0;font-weight:600">' + esc(c.k) +
-        '</th><td style="padding:2px 0">' + esc(c.v) + '</td></tr>';
-    }).join('');
-    return '<div style="max-height:300px;overflow:auto"><strong>' + esc(it.rotulo) + '</strong>' +
-      '<table style="margin-top:6px">' + linhas + '</table></div>';
-  }
-
-  function irParaResultado(i) {
-    var a = BUSCA.resultados[i], m = mapa();
-    if (!a || !m) return;
-    var it = a.it, f = it.f;
-
-    /* Se a camada estava desmarcada na legenda, liga para o local aparecer */
-    try { if (!m.hasLayer(it.fonte.camada)) m.addLayer(it.fonte.camada); } catch (e) {}
-
-    var largo = window.innerWidth > 780;
-    var centro = null, limites = null;
-    try {
-      if (typeof f.getBounds === 'function') {
-        limites = f.getBounds();
-        centro = limites.getCenter();
-      } else if (typeof f.getLatLng === 'function') {
-        centro = f.getLatLng();
-      }
-    } catch (e) {}
-    if (!centro) return;
-
-    if (limites && limites.isValid && limites.isValid()) {
-      m.fitBounds(limites, {
-        maxZoom: 18, paddingTopLeft: [largo ? 380 : 40, 40], paddingBottomRight: [40, 40]
-      });
-    } else {
-      m.setView(centro, Math.max(m.getZoom(), 17));
-    }
-    realcarFeicao(f);
-
-    setTimeout(function () {
-      try {
-        if (typeof f.getPopup === 'function' && f.getPopup()) {
-          f.openPopup(centro);
-        } else {
-          L.popup({ maxWidth: 360 }).setLatLng(centro).setContent(popupPadrao(it)).openOn(m);
-        }
-      } catch (e) {
-        try { L.popup({ maxWidth: 360 }).setLatLng(centro).setContent(popupPadrao(it)).openOn(m); } catch (e2) {}
-      }
-    }, 450);
-
-    $('psa-busca-lista').classList.add('psa-oculto');
-    if (!largo) $('psa-busca-input').blur();
-  }
-
-  function destacarAtivo(novo) {
-    var itens = $('psa-busca-lista').querySelectorAll('.psa-res');
-    if (!itens.length) return;
-    if (novo < 0) novo = itens.length - 1;
-    if (novo >= itens.length) novo = 0;
-    Array.prototype.forEach.call(itens, function (el, idx) {
-      el.classList.toggle('psa-res-ativo', idx === novo);
-    });
-    BUSCA.ativo = novo;
-    itens[novo].scrollIntoView({ block: 'nearest' });
-  }
-
-  function ligarBusca() {
-    var entrada = $('psa-busca-input'), lista = $('psa-busca-lista'), limpar = $('psa-busca-limpar');
-    if (!entrada) return;
-    var timer = null;
-
-    function executar() {
-      var t = entrada.value;
-      limpar.classList.toggle('psa-oculto', !t);
-      BUSCA.resultados = pesquisar(t);
-      desenharResultados(t);
-    }
-
-    entrada.addEventListener('focus', function () {
-      if (!BUSCA.indice) construirIndice();
-      if (entrada.value) executar();
-    });
-    entrada.addEventListener('input', function () {
-      clearTimeout(timer);
-      timer = setTimeout(executar, 120);
-    });
-    entrada.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowDown') { e.preventDefault(); destacarAtivo(BUSCA.ativo + 1); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); destacarAtivo(BUSCA.ativo - 1); }
-      else if (e.key === 'Enter') {
-        e.preventDefault();
-        clearTimeout(timer);
-        if (!BUSCA.resultados.length || lista.classList.contains('psa-oculto')) executar();
-        if (BUSCA.resultados.length) irParaResultado(BUSCA.ativo >= 0 ? BUSCA.ativo : 0);
-      } else if (e.key === 'Escape') {
-        e.stopPropagation();
-        lista.classList.add('psa-oculto');
-        entrada.blur();
-      }
-    });
-
-    lista.addEventListener('click', function (e) {
-      var b = e.target.closest ? e.target.closest('.psa-res') : null;
-      if (b) irParaResultado(parseInt(b.getAttribute('data-i'), 10));
-    });
-
-    limpar.addEventListener('click', function () {
-      entrada.value = '';
-      limpar.classList.add('psa-oculto');
-      lista.classList.add('psa-oculto');
-      lista.innerHTML = '';
-      BUSCA.resultados = [];
-      limparRealce();
-      entrada.focus();
-    });
-
-    document.addEventListener('mousedown', function (e) {
-      var caixa = $('psa-busca');
-      if (caixa && !caixa.contains(e.target)) lista.classList.add('psa-oculto');
-    });
-
-    /* Isola o mapa dos eventos feitos sobre a busca */
-    var topo = $('psa-topo');
-    if (topo && window.L && L.DomEvent) {
-      L.DomEvent.disableClickPropagation(topo);
-      L.DomEvent.disableScrollPropagation($('psa-busca'));
-    }
-  }
-
-  /* Zoom (+ / −) no canto inferior esquerdo */
-  function moverZoom() {
-    var m = mapa();
-    if (!m) return;
-    try {
-      if (m.zoomControl && typeof m.zoomControl.setPosition === 'function') {
-        m.zoomControl.setPosition('bottomleft');
-        return;
-      }
-    } catch (e) {}
-    /* Plano B: o mapa não guardou a referência do controle */
-    try {
-      var el = document.querySelector('.leaflet-control-zoom');
-      var canto = m._controlCorners && m._controlCorners.bottomleft;
-      if (el && canto) canto.appendChild(el);
-    } catch (e) {}
-  }
-
   /* ==========================================================================
      12. INICIALIZAÇÃO
      ========================================================================== */
@@ -1572,8 +1146,6 @@
     GRUPOS = lerGrupos();
     montarSeletorGrupos();
     ligarEventos();
-    ligarBusca();
-    moverZoom();
     ligarCoordenadas();
     atualizarEscala();
     setTimeout(atualizarEscala, 600);
@@ -1598,13 +1170,7 @@
       grupos: function () { return GRUPOS; },
       calcular: calcular,
       atualizar: atualizarPainel,
-      redesenhar: desenharGrafico,
-      pesquisar: function (t) {
-        return pesquisar(t).map(function (a) {
-          return { camada: a.it.rotulo, titulo: tituloDaFeicao(a.it), campo: a.campo.k, valor: a.campo.v, score: a.score };
-        });
-      },
-      reindexar: function () { BUSCA.indice = null; return construirIndice().length; }
+      redesenhar: desenharGrafico
     };
   }
 
