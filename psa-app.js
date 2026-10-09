@@ -144,8 +144,7 @@
        hífens, pontos, espaços e quebras de linha. */
     carsComCredenciamentoOutrosProgramas: [
       'SC-4216206-2C8B1A838B9441F488DF822B0E80DCEB',
-      'SC-4209102-7876F01E3C974C9E893CC2CD46421D7B0.7058',
-      'SC-4209102-7876F01E3C974C9E893CC2CD46421D7B07058'
+      'SC-4209102-C29672AA498943138F213A6050AF73AC'
     ]
   };
 
@@ -1606,7 +1605,10 @@
       marca.title = 'CAR já credenciado em outro programa';
       marca.style.cssText = 'text-align:right;font-size:26px;line-height:1;margin-top:6px;cursor:default';
       no.appendChild(marca);
-      popup.update();
+      /* Não usar popup.update(): ele recria o conteúdo e apaga o ⛔.
+         Só recalcula o tamanho e a posição do balão. */
+      if (popup._updateLayout) popup._updateLayout();
+      if (popup._updatePosition) popup._updatePosition();
     } catch (err) {}
   }
 
