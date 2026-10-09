@@ -135,7 +135,17 @@
       'fica de fora. As propriedades do grupo aparecem destacadas em vermelho. Passar o ' +
       'cursor sobre uma feição altera só a visualização, não os números.</p>' +
       '<p>O botão <strong>Gráficos</strong> abre as comparações do programa, a linha do ' +
-      'tempo das adesões e o histórico de pagamentos.</p>'
+      'tempo das adesões e o histórico de pagamentos.</p>',
+
+    /* CARs que já possuem credenciamento em outros programas.
+       NÃO aparece no site: serve só para marcar o painelzinho (popup) do CAR
+       com ⛔ quando a pessoa clica nele no mapa. Para incluir outro, basta
+       acrescentar o número entre aspas. A comparação ignora maiúsculas,
+       hífens, pontos, espaços e quebras de linha. */
+    carsComCredenciamentoOutrosProgramas: [
+      'SC-4216206-2C8B1A838B9441F488DF822B0E80DCEB',
+      'SC-4209102-C29672AA498943138F213A6050AF73AC'
+    ]
   };
 
   /* ==========================================================================
@@ -1564,8 +1574,45 @@
     }
   }
 
+  /* ==========================================================================
+     CAR COM CREDENCIAMENTO EM OUTROS PROGRAMAS  →  ⛔ no popup
+     ========================================================================== */
+
+  function normalizarCar(t) {
+    return String(t == null ? '' : t).toUpperCase().replace(/[^A-Z0-9]/g, '');
+  }
+
+  function carJaCredenciado(texto) {
+    var base = normalizarCar(texto);
+    if (!base) return false;
+    var lista = CONFIG.carsComCredenciamentoOutrosProgramas || [];
+    for (var i = 0; i < lista.length; i++) {
+      var c = normalizarCar(lista[i]);
+      if (c && base.indexOf(c) !== -1) return true;
+    }
+    return false;
+  }
+
+  function marcarPopupCredenciado(e) {
+    try {
+      var popup = e && e.popup;
+      var no = popup && popup._contentNode;
+      if (!no || no.querySelector('.psa-car-bloqueado')) return;
+      if (!carJaCredenciado(no.textContent)) return;
+      var marca = document.createElement('div');
+      marca.className = 'psa-car-bloqueado';
+      marca.textContent = '\u26D4';
+      marca.title = 'CAR já credenciado em outro programa';
+      marca.style.cssText = 'text-align:right;font-size:26px;line-height:1;margin-top:6px;cursor:default';
+      no.appendChild(marca);
+      popup.update();
+    } catch (err) {}
+  }
+
   function iniciar() {
     if (!mapa()) { setTimeout(iniciar, 150); return; }
+
+    mapa().on('popupopen', marcarPopupCredenciado);
 
     aplicarIdentidadeDaAba();
     montarInterface();
